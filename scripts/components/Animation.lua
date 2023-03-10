@@ -1,7 +1,7 @@
 require "scripts.base.Component"
 
 ---@class Animation : Component 动画组件
----@field public image love.Texture 用于创建动画的序列帧位图
+---@field image love.Texture 用于创建动画的序列帧位图
 ---@field width number 单帧对象宽度
 ---@field height number 单帧对象高度
 ---@field quad table 视图窗口
@@ -181,7 +181,7 @@ end
 
 ---获取目标帧上的事件
 ---@param key number 目标帧
----@return function 事件处理器
+---@return function #事件处理器
 function Animation:getEvent(key)
     return self.eventList[key]
 end

@@ -3,6 +3,7 @@ require "scripts.base.GameObject"
 require "scripts.base.Game"
 require "scripts.components.CollisionBox"
 require "scripts.base.Component"
+require "scripts.enums.Direction"
 
 ---@class Role : Component 角色组件
 ---@field name string | nil 角色名称

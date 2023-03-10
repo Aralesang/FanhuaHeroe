@@ -4,6 +4,7 @@ require "scripts.base.GameObject"
 require "scripts.components.CollisionCircular"
 require "scripts.utils.Debug"
 require "scripts.base.Component"
+require "scripts.enums.Direction"
 
 --子弹图片
 local bulletImage
