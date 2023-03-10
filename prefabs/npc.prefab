@@ -1,0 +1,7 @@
+require "scripts.components.Role"
+require "scripts.manager.RoleManager"
+require "scripts.components.PlayerController"
+require "scripts.base.GameObject"
+
+local role = RoleManager.createRole("image/npc.png", "npc", 200, 0);
+return role

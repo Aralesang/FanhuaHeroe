@@ -1,0 +1,42 @@
+{
+    "maps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "prefabs": [
+        {
+            "name": "player",
+            "property": {
+                "Role": {
+                    "speed": 100
+                },
+                "GameObject": {
+                    "position": {
+                        "x": 0,
+                        "y": 0
+                    }
+                }
+            }
+        },
+        {
+            "name": "npc",
+            "property": {
+                "GameObject": {
+                    "position": {
+                        "x": 0,
+                        "y": 100
+                    }
+                }
+            }
+        }
+    ]
+}
