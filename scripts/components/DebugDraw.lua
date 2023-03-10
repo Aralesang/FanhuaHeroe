@@ -1,6 +1,7 @@
 require "scripts.base.Component"
 
----@class DebugDraw : Component 绘制调试组件，用于可视化游戏内的各种坐标和检测范围，方便调试
+---绘制调试组件，用于可视化游戏内的各种坐标和检测范围，方便调试
+---@class DebugDraw : Component
 ---@field drawCentral boolean 是否显示中心点
 DebugDraw = {
     componentName = "DebugDraw",

@@ -1,4 +1,5 @@
----@class Vector2 向量_2D
+---向量_2D
+---@class Vector2
 ---@field x number
 ---@field y number
 Vector2={

@@ -5,7 +5,8 @@ require "scripts.components.CollisionBox"
 require "scripts.base.Component"
 require "scripts.enums.Direction"
 
----@class Role : Component 角色组件
+---角色组件
+---@class Role : Component
 ---@field name string | nil 角色名称
 ---@field speed number 角色速度
 ---@field moveDir Direction 角色移动方向
@@ -81,7 +82,7 @@ function Role:attack()
     if collision == nil then
         return
     end
-    collision:setScale(30,20)
+    collision:setWH(30,20)
     --TODO:检查攻击区域
 
     collision.onBeginCollision = function(collision)

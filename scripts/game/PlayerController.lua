@@ -9,7 +9,8 @@ require "scripts.enums.Direction"
 --子弹图片
 local bulletImage
 
----@class PlayerController : Component 玩家控制器
+---玩家控制器
+---@class PlayerController : Component
 ---@field role Role | nil 玩家组件
 PlayerController = {
     componentName = "PlayerController",
@@ -106,7 +107,7 @@ function PlayerController:fire()
     ---@type CollisionCircular | nil
     local collision = bulletObj:addComponent(CollisionCircular)
     if collision == nil then return end
-    collision:setScale(10)
+    collision:setRadius(10)
 
     --附加子弹组件
     ---@type Bullet | nil

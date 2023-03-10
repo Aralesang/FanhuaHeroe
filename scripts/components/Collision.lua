@@ -1,6 +1,7 @@
 require "scripts.base.Component"
 
----@class Collision : Component 碰撞器基类
+---碰撞器基类
+---@class Collision : Component
 ---@field position Vector2 碰撞器位置
 ---@field debug boolean 是否启用debug模式,启用后将在游戏中绘制出碰撞器的轮廓
 ---@field collisions Collision[] | nil 当前正在碰撞的对象列表

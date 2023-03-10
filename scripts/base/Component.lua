@@ -1,4 +1,5 @@
----@class Component 组件基类
+---组件基类
+---@class Component
 ---@field componentName string | nil 组件名称
 ---@field gameObject GameObject | nil 组件所附加到的游戏物体
 ---@field isLoad boolean 是否已经调用过初始化函数

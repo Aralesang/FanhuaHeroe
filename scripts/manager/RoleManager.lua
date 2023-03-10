@@ -4,7 +4,8 @@ require "scripts.components.Animation"
 require "scripts.game.Role"
 require "scripts.components.DebugDraw"
 
----@class RoleManager 角色管理器
+---角色管理器
+---@class RoleManager
 RoleManager = {}
 
 ---创建一个玩家
@@ -31,7 +32,7 @@ function RoleManager.createRole(imagePath,roleName,x,y)
      ---@type CollisionBox | nil
      local collision = roleObj:addComponent(CollisionBox)
      if collision == nil then return nil end
-     collision:setScale(32,48)
+     collision:setWH(32,48)
  
      --附加角色组件
      ---@type Role | nil

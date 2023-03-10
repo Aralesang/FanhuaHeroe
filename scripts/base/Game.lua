@@ -1,4 +1,5 @@
----@class Game 游戏对象全局变量合集
+---游戏对象全局变量合集
+---@class Game
 ---@field public gameObjects GameObject[] 游戏对象集合
 Game =
 {

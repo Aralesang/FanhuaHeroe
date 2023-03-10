@@ -2,7 +2,8 @@ require "scripts.base.Game"
 require "scripts.base.Component"
 require "scripts.components.Collision"
 
----@class CollisionCircular : Collision 碰撞器_圆形
+---碰撞器_圆形
+---@class CollisionCircular : Collision
 ---@field debug boolean 绘制形状
 ---@field radius number 半径
 CollisionCircular = {
@@ -80,7 +81,7 @@ function CollisionCircular:draw()
     end
 end
 
----设置碰撞器体积
-function CollisionCircular:setScale(radius)
+---设置碰撞器半径
+function CollisionCircular:setRadius(radius)
     self.radius = radius
 end

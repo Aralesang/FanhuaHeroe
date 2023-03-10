@@ -3,7 +3,8 @@ require "scripts.base.Component"
 require "scripts.utils.Debug"
 require "scripts.components.Collision"
 
----@class CollisionBox : Collision 碰撞器_盒状
+---碰撞器_盒状
+---@class CollisionBox : Collision
 ---@field width number 碰撞器的宽度
 ---@field height number 碰撞器的高度
 ---@field isCollision boolean 如果当前碰撞器处于碰撞中,则为true
@@ -62,8 +63,8 @@ function CollisionBox:draw()
     end
 end
 
----设置碰撞器体积
-function CollisionBox:setScale(w, h)
+---设置碰撞器宽高
+function CollisionBox:setWH(w, h)
     self.width = w
     self.height = h
 end

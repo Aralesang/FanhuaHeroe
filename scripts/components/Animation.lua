@@ -1,6 +1,7 @@
 require "scripts.base.Component"
 
----@class Animation : Component 动画组件
+---动画组件
+---@class Animation : Component
 ---@field image love.Texture 用于创建动画的序列帧位图
 ---@field width number 单帧对象宽度
 ---@field height number 单帧对象高度

@@ -6,7 +6,8 @@ require "scripts.game.Role"
 require "scripts.base.Vector2"
 require "scripts.components.DebugDraw"
 
----@class Bullet : Component 子弹组件
+---子弹组件
+---@class Bullet : Component
 ---@field animation Animation | nil
 ---@field speed number 子弹飞行速度
 ---@field master string 子弹的发射者

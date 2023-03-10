@@ -1,6 +1,6 @@
----@type Game
+---游戏对象基本类
 require "scripts.base.Game"
----@class GameObject 游戏对象基本类
+---@class GameObject
 ---@field gameObjectName string | nil 对象名称
 ---@field animation Animation | nil 对象动画组件
 ---@field position Vector2 | nil 对象所在空间坐标{x,y}
