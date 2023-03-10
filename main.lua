@@ -25,6 +25,7 @@ function love.load()
     love.graphics.setFont(myFont)
     --更改图像过滤方式，以显示高清马赛克
     love.graphics.setDefaultFilter("nearest", "nearest")
+    --加载场景
     SceneManager.load("main")
     --加载背景图片
     --backgroundImage = love.graphics.newImage("image/background.jpg")
@@ -39,6 +40,7 @@ function love.load()
     --playerController = PlayerController:new(player)
 end
 
+--绘制
 function love.draw()
     Camera:set()
     --绘制对象

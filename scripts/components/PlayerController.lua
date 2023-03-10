@@ -9,44 +9,49 @@ require "scripts.base.Component"
 local bulletImage
 
 ---@class PlayerController : Component 玩家控制器
+---@field role Role | nil 玩家组件
 PlayerController = {
     componentName = "PlayerController",
+    role = nil
 }
 
----@return PlayerController
----@param player Role 要控制的目标玩家
+---@return PlayerController | Component
 function PlayerController:new()
-    ---@type PlayerController
+    ---@type Component
     local o = Component:new()
     setmetatable(o, {__index = self})
 
     return o
 end
 
+function PlayerController: load()
+    self.role = self.gameObject:getComponent(Role)
+end
+
 function PlayerController:update(dt)
     local player = self.gameObject
     local width, height = love.window.getMode()
-    if player then
-        Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
+    if player == nil then
+        return
     end
+    Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
 
     local key
     if love.keyboard.isDown("left") then
-        key = "left"
+        key = Direction.LEFT
     elseif love.keyboard.isDown("right") then
-        key = "right"
+        key = Direction.RIGHT
     elseif love.keyboard.isDown("up") then
-        key = "up"
+        key = Direction.UP
     elseif love.keyboard.isDown("down") then
-        key = "down"
+        key = Direction.DONW
     end
 
     local animation = player:getComponent(Animation)
-    local role = player:getComponent(Role)
 
     if key ~= nil then
-        if player.orientation ~= key then
-            role:setDir(key) --设置角色面向
+        if self.role.direction ~= key then
+            self.role:setDir(key) --设置角色面向
         end
         if animation.status ~= "playing" then
             animation:play(1)
@@ -70,7 +75,7 @@ end
 ---普通攻击
 function PlayerController:attack()
     --TODO:实现普通攻击逻辑
-    self.player:attack()
+    self.gameObject:attack()
 end
 
 ---发射子弹
@@ -78,8 +83,11 @@ function PlayerController:fire()
     if bulletImage == nil then
         bulletImage = love.graphics.newImage("image/bullet.png")
     end
-
-    local playerPosition = self.player.gameObject:getPosition()
+    local player = self.gameObject
+    if player == nil then
+        return
+    end
+    local playerPosition = player:getPosition()
     
     --创建子弹对象
     local bulletObj = GameObject:new()
@@ -87,27 +95,31 @@ function PlayerController:fire()
     bulletObj:setScale(0.2, 0.2)
     bulletObj:setPosition(playerPosition.x,playerPosition.y)
     --附加动画组件
-    ---@type Animation
+    ---@type Animation | nil
     local animation = bulletObj:addComponent(Animation)
+    if animation == nil then
+        return
+    end
     animation:init(bulletImage, 1, 1, 0)
 
     --为子弹附加碰撞组件
     local collision = bulletObj:addComponent(CollisionCircular)
+    if collision == nil then return end
     collision:setScale(10)
 
     --附加子弹组件
-    ---@type Bullet
+    ---@type Bullet | nil
     local bullet = bulletObj:addComponent(Bullet)
-    bullet.master = self.player.name
-    local playerDir = self.player.orientation
+    bullet.master = self.role.name
+    local playerDir = self.role.direction
     local dir = Vector2.zero()
-    if playerDir == "up" then
+    if playerDir == Direction.UP then
         dir = Vector2.up()
-    elseif playerDir == "down" then
+    elseif playerDir == Direction.DONW then
         dir = Vector2.down()
-    elseif playerDir == "left" then
+    elseif playerDir == Direction.LEFT then
         dir = Vector2.left()
-    elseif playerDir == "right" then
+    elseif playerDir == Direction.RIGHT then
         dir = Vector2.right()
     end
     
@@ -122,22 +134,25 @@ end
 function PlayerController:keyreleased(key)
 end
 
+---玩家移动
+---@param dt number 距离上一帧的间隔时间
+---@param dir Direction 移动方向
 function PlayerController:move(dt, dir)
     local player = self.gameObject
-    local role = player:getComponent(Role)
+    if player == nil then return end
 
     local position = player:getPosition()
     local x = position.x
     local y = position.y
-    local distance = math.modf(dt * role.speed)
+    local distance = math.modf(dt * self.role.speed)
 
-    if dir == "left" then
+    if dir == Direction.LEFT then
         x = x - distance
-    elseif dir == "right" then
+    elseif dir == Direction.RIGHT then
         x = x + distance
-    elseif dir == "up" then
+    elseif dir == Direction.UP then
         y = y - distance
-    elseif dir == "down" then
+    elseif dir == Direction.DONW then
         y = y + distance
     end
     player:setPosition(x, y)

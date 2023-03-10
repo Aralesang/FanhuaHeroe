@@ -3,8 +3,7 @@ require "scripts.base.Component"
 require "scripts.utils.Debug"
 require "scripts.components.Collision"
 
----碰撞器_盒状
----@class CollisionBox : Collision
+---@class CollisionBox : Collision 碰撞器_盒状
 ---@field width number 碰撞器的宽度
 ---@field height number 碰撞器的高度
 ---@field isCollision boolean 如果当前碰撞器处于碰撞中，则为true

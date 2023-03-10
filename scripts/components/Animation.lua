@@ -1,6 +1,6 @@
 require "scripts.base.Component"
 
----@class Animation : Component
+---@class Animation : Component 动画组件
 ---@field public image love.Texture 用于创建动画的序列帧位图
 ---@field width number 单帧对象宽度
 ---@field height number 单帧对象高度
@@ -48,7 +48,7 @@ function Animation:draw()
     self:drawAnimation(x, y, gameObject.rotate, gameObject.scale.x, gameObject.scale.y,0,0)
 end
 
----创建一个新的动画对象
+--创建一个新的动画对象
 ---@return Animation | Component
 function Animation:new ()
     local o = Component:new()
@@ -66,7 +66,8 @@ function Animation:new ()
     return o
 end
 
----动画组件初始化
+--动画组件初始化
+---@overload fun (image,xCount,yCount,timeInterval)
 ---@param image love.Texture 用于创建动画的序列帧位图
 ---@param xCount number x轴帧数量
 ---@param yCount number y轴帧数量

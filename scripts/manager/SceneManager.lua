@@ -1,8 +1,7 @@
 local JSON = require "scripts.base.JSON"
 require "scripts.utils.Debug"
 
----场景管理器
----@class SceneManager
+---@class SceneManager 场景管理器
 ---@field scenes Scene[] 场景对象集合
 SceneManager = {
     scenes = {}

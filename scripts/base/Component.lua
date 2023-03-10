@@ -2,10 +2,12 @@
 ---@field componentName string | nil 组件名称
 ---@field gameObject GameObject | nil 组件所附加到的游戏物体
 ---@field isLoad boolean 是否已经调用过初始化函数
+---@field orientation string 对象方向
 Component = {
     componentName = nil,
     gameObject = nil,
-    isLoad = false
+    isLoad = false,
+    orientation = "down"
 }
 
 function Component:new()
@@ -22,7 +24,7 @@ end
 function Component:awake()
 end
 
----组件附加到对象后，刷新帧之前调用一次
+--组件附加到对象后，刷新帧之前调用一次
 function Component:load()
 end
 
@@ -35,7 +37,7 @@ end
 function Component:draw()
 end
 
----组件销毁前一帧率调用
+--组件销毁前一帧率调用
 function Component:onDestroy()
 end
 

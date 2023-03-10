@@ -1,7 +1,6 @@
 ---@type Game
 require "scripts.base.Game"
----游戏对象基本类
----@class GameObject
+---@class GameObject 游戏对象基本类
 ---@field gameObjectName string | nil 对象名称
 ---@field animation Animation | nil 对象动画组件
 ---@field position Vector2 | nil 对象所在空间坐标{x,y}
@@ -78,8 +77,8 @@ end
 
 ---附加一个组件
 ---@generic T : Component
----@param componentType Component 组件对象
----@return Component | nil
+---@param componentType T 组件对象
+---@return T | nil
 function GameObject:addComponent(componentType)
     local component = componentType:new()
     local componentName = component.componentName
@@ -96,8 +95,8 @@ end
 
 ---获取组件对象
 ---@generic T : Component
----@param componentType Component 组件类型
----@return Component
+---@param componentType T 组件类型
+---@return T
 function GameObject:getComponent(componentType)
     local component = self.components[componentType.componentName]
     return component

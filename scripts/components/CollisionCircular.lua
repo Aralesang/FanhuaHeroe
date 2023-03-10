@@ -2,8 +2,7 @@ require "scripts.base.Game"
 require "scripts.base.Component"
 require "scripts.components.Collision"
 
----碰撞器_圆形
----@class CollisionCircular : Collision
+---@class CollisionCircular : Collision 碰撞器_圆形
 ---@field debug boolean 绘制形状
 ---@field radius number 半径
 CollisionCircular = {
@@ -52,7 +51,7 @@ function CollisionCircular:update(dt)
         --对四边形的碰撞
         ---@type CollisionBox | Collision
         local otherCollisionBox = otherCollision
-        if otherCollision.componentName == "CollisionBox" and tostring(collision) ~= tostring(otherCollisionBox) then
+        if otherCollision.componentName == "CollisionBox" then
             if
                 math.abs(self.position.x - otherCollisionBox.position.x) <= otherCollisionBox.width / 2 + self.radius and
                     math.abs(self.position.y - otherCollisionBox.position.y) <= otherCollisionBox.height / 2 + self.radius

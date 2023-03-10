@@ -4,8 +4,7 @@ require "scripts.components.Animation"
 require "scripts.components.Role"
 require "scripts.components.DebugDraw"
 
----角色管理器
----@class RoleManager
+---@class RoleManager 角色管理器
 RoleManager = {}
 
 ---创建一个玩家
