@@ -991,7 +991,7 @@ local function grok_object(self, text, start, options)
    local text_len = text:len()
    while i <= text_len do
       local key, new_i = grok_string(self, text, i, options)
-
+      if key == nil then return end
       i = skip_whitespace(text, new_i)
 
       if text:sub(i, i) ~= ':' then

@@ -1,7 +1,7 @@
 require "scripts.base.GameObject"
 require "scripts.components.CollisionBox"
 require "scripts.components.Animation"
-require "scripts.components.Role"
+require "scripts.game.Role"
 require "scripts.components.DebugDraw"
 
 ---@class RoleManager 角色管理器
@@ -12,7 +12,7 @@ RoleManager = {}
 ---@param roleName string 角色名称
 ---@param x number 角色初始位置x
 ---@param y number 角色初始位置y
----@return Role
+---@return Role | nil
 function RoleManager.createRole(imagePath,roleName,x,y)
      --创建角色
      local roleObj = GameObject:new()
@@ -21,16 +21,20 @@ function RoleManager.createRole(imagePath,roleName,x,y)
      roleObj:setCentral(32 / 2,48 / 2)
  
      --附加动画组件
-     ---@type Animation
+     ---@type Animation | nil
      local animation = roleObj:addComponent(Animation)
+     if animation == nil then return nil end
      local image = love.graphics.newImage(imagePath)
      animation:init(image,4,4,0.3)
  
      --附加碰撞器组件
+     ---@type CollisionBox | nil
      local collision = roleObj:addComponent(CollisionBox)
+     if collision == nil then return nil end
      collision:setScale(32,48)
  
      --附加角色组件
+     ---@type Role | nil
      local role = roleObj:addComponent(Role)
      role.name = roleName or ""
 

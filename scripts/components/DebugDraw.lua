@@ -7,8 +7,8 @@ DebugDraw = {
     drawCentral = false
 }
 
+---@return DebugDraw | Component
 function DebugDraw:new()
-    ---@type DebugDraw
     local o = Component:new()
     setmetatable(o, {__index = self})
     o.drawCentral = true

@@ -77,7 +77,7 @@ end
 
 ---附加一个组件
 ---@generic T : Component
----@param componentType T 组件对象
+---@param componentType Component 组件对象
 ---@return T | nil
 function GameObject:addComponent(componentType)
     local component = componentType:new()
@@ -95,7 +95,7 @@ end
 
 ---获取组件对象
 ---@generic T : Component
----@param componentType T 组件类型
+---@param componentType Component 组件类型
 ---@return T
 function GameObject:getComponent(componentType)
     local component = self.components[componentType.componentName]

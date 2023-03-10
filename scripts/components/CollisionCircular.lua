@@ -11,8 +11,8 @@ CollisionCircular = {
 }
 
 ---创建一个新碰撞器
+---@return CollisionCircular | Collision | Component
 function CollisionCircular:new()
-    ---@type CollisionCircular | Collision
     local o = Collision:new()
     setmetatable(o, {__index = self})
     self.radius = 0

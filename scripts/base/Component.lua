@@ -24,11 +24,11 @@ end
 function Component:awake()
 end
 
---组件附加到对象后，刷新帧之前调用一次
+---组件附加到对象后，刷新帧之前调用一次
 function Component:load()
 end
 
----组件附加到对象后，每一帧调用一次
+--组件附加到对象后，每一帧调用一次
 ---@param delayTime number 距离上一帧的间隔时间
 function Component:update(delayTime)
 end

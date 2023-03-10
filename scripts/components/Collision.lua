@@ -2,18 +2,21 @@ require "scripts.base.Component"
 
 ---@class Collision : Component 碰撞器基类
 ---@field position Vector2 碰撞器位置
----@field debug boolean 是否启用debug模式，启用后将在游戏中绘制出碰撞器的轮廓
----@field collisions Collision[] 当前正在碰撞的对象列表
+---@field debug boolean 是否启用debug模式,启用后将在游戏中绘制出碰撞器的轮廓
+---@field collisions Collision[] | nil 当前正在碰撞的对象列表
 ---@field isCollision boolean 当前碰撞器是否处于碰撞中
+---@field onBeginCollision function 碰撞开始
+---@field onEndCollision function 碰撞结束
 Collision = {
-    position = nil,
+    position = {x = 0, y = 0},
     debug = false,
     collisions = nil,
     isCollision = false
 }
 
+---@return Collision | Component
 function Collision:new()
-    ---@type Collision
+    ---@type Component
     local o = Component:new()
     setmetatable(o, {__index = self})
     table.insert(Game.controllers,o)
@@ -29,7 +32,7 @@ function Collision:new()
 end
 
 ---获取碰撞器所在位置
----@return Vector2 碰撞器所在坐标
+---@return Vector2 # 碰撞器所在坐标
 function Collision:getPosition()
     return self.position
 end
@@ -41,11 +44,13 @@ function Collision:setPosition(x, y)
 end
 
 ---碰撞开始
+---@param otherColl CollisionBox 接触到的另外一个碰撞器
 function Collision:onBeginCollision(otherColl)
     table.insert(self.collisions, otherColl)
     self.isCollision = true
 
     --对象上所有组件触发碰撞事件
+    ---@param v Collision | Component
     for _, v in pairs(self.gameObject.components) do
         if v.componentName ~= "CollisionBox" and v.componentName ~= "CollisionCircular" and v.onBeginCollision then
             v:onBeginCollision(otherColl)
@@ -70,7 +75,7 @@ function Collision:onEndCollision(otherColl)
     if count == 0 then
         self.isCollision = false
     end
-
+    ---@param v Collision | Component
     for _, v in pairs(self.gameObject.components) do
         if v.componentName ~= "CollisionBox" and v.componentName ~= "CollisionCircular" and v.onEndCollision then
             v:onEndCollision(otherColl)

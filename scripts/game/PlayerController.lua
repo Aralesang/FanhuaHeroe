@@ -31,9 +31,7 @@ end
 function PlayerController:update(dt)
     local player = self.gameObject
     local width, height = love.window.getMode()
-    if player == nil then
-        return
-    end
+    if player == nil then return end
     Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
 
     local key
@@ -47,6 +45,7 @@ function PlayerController:update(dt)
         key = Direction.DONW
     end
 
+    ---@type Animation
     local animation = player:getComponent(Animation)
 
     if key ~= nil then
@@ -75,7 +74,7 @@ end
 ---普通攻击
 function PlayerController:attack()
     --TODO:实现普通攻击逻辑
-    self.gameObject:attack()
+    self.role:attack()
 end
 
 ---发射子弹
@@ -88,7 +87,7 @@ function PlayerController:fire()
         return
     end
     local playerPosition = player:getPosition()
-    
+
     --创建子弹对象
     local bulletObj = GameObject:new()
     bulletObj:setCentral(bulletImage:getWidth() / 2,bulletImage:getHeight() / 2)
@@ -103,6 +102,7 @@ function PlayerController:fire()
     animation:init(bulletImage, 1, 1, 0)
 
     --为子弹附加碰撞组件
+    ---@type CollisionCircular | nil
     local collision = bulletObj:addComponent(CollisionCircular)
     if collision == nil then return end
     collision:setScale(10)
@@ -122,8 +122,8 @@ function PlayerController:fire()
     elseif playerDir == Direction.RIGHT then
         dir = Vector2.right()
     end
-    
-    bullet.dir = dir 
+
+    bullet.dir = dir
 
     --附加动画组件
     bulletObj:addComponent(Animation):init(bulletImage, 1, 1)

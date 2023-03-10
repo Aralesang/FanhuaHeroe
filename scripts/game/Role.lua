@@ -75,7 +75,7 @@ function Role:attack()
     attackRange:setPosition(x,y)
 
     attackRange:addComponent(DebugDraw)
-
+    ---@type CollisionBox | nil
     local collision = attackRange:addComponent(CollisionBox)
     if collision == nil then
         return

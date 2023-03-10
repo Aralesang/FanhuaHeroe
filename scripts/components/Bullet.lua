@@ -2,12 +2,12 @@ require "scripts.base.GameObject"
 require "scripts.components.Animation"
 require "scripts.components.CollisionCircular"
 require "scripts.base.Component"
-require "scripts.components.Role"
+require "scripts.game.Role"
 require "scripts.base.Vector2"
 require "scripts.components.DebugDraw"
 
 ---@class Bullet : Component 子弹组件
----@field animation Animation
+---@field animation Animation | nil
 ---@field speed number 子弹飞行速度
 ---@field master string 子弹的发射者
 ---@field dir Vector2 子弹飞行方向
@@ -19,8 +19,9 @@ Bullet = {
     dir = Vector2.zero()
 }
 
+---@return Bullet | Component
 function Bullet:new()
-    ---@type Bullet
+    ---@type Component
     local o = Component:new()
     setmetatable(o,{__index=self})
 
