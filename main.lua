@@ -27,17 +27,6 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     --加载场景
     SceneManager.load("main")
-    --加载背景图片
-    --backgroundImage = love.graphics.newImage("image/background.jpg")
-    --创建npc
-    --local npc = RoleManager.createRole("image/npc.png", "npc", 0, 0)
-    --roleArr["npc"] = npc
-    --创建玩家
-    --local player = RoleManager.createRole("image/player.png", "player", 50, 0)
-    --roleArr["player"] = player
-
-    --初始化角色控制器
-    --playerController = PlayerController:new(player)
 end
 
 --绘制

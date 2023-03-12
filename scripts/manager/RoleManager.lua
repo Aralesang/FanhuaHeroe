@@ -26,7 +26,7 @@ function RoleManager.createRole(imagePath,roleName,x,y)
      local animation = roleObj:addComponent(Animation)
      if animation == nil then return nil end
      local image = love.graphics.newImage(imagePath)
-     animation:init(image,4,4,0.3)
+     animation:init(image,8,4,0.3)
  
      --附加碰撞器组件
      ---@type CollisionBox | nil

@@ -146,8 +146,8 @@ function PlayerController:move(dt, dir)
     local position = player:getPosition()
     local x = position.x
     local y = position.y
-    local distance = math.modf(dt * self.role.speed)
-
+    --获取移动
+    local distance = dt * self.role.speed
     if dir == Direction.LEFT then
         x = x - distance
     elseif dir == Direction.RIGHT then

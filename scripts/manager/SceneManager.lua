@@ -16,7 +16,7 @@ function SceneManager.load(sceneName)
     local scene = nil
     if SceneManager.scenes[sceneName] == nil then
         --没有场景对象，从文件中加载
-        local path = "scenes/"..sceneName ..".scene"
+        local path = "scenes/"..sceneName ..".json"
         if not love.filesystem.getInfo(path) then
             print("scene "..sceneName.." not find")
             return nil
@@ -40,7 +40,7 @@ function SceneManager.load(sceneName)
     ---@diagnostic disable-next-line: need-check-nil
     for key,prefab in pairs(scene.prefabs) do
        --从文件中加载预制体对象
-       local path = "prefabs/".. prefab.name ..".prefab"
+       local path = "prefabs/".. prefab.name ..".lua"
        if not love.filesystem.getInfo(path) then
            print("prefab [".. prefab.name .."] not find")
        else

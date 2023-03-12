@@ -14,7 +14,7 @@ require "scripts.enums.Direction"
 ---@field animation Animation 动画组件
 Role = {
     name = nil,
-    speed = 100,
+    speed = 1000,
     moveDir = Direction.DONW, --移动方向
     direction = Direction.DONW,
     componentName = "Role"
@@ -42,18 +42,14 @@ function Role:setDir(dir)
     if self.animation == nil then
         self.animation = self:getComponent(Animation)
     end
-
+    self.direction = dir
     if dir == Direction.LEFT then
-        self.orientation = "left"
         self.animation:setRow(1, 1)
-    elseif dir == "right" then
-        self.orientation = "right"
+    elseif dir == Direction.RIGHT then
         self.animation:setRow(2, 1)
-    elseif dir == "up" then
-        self.orientation = "up"
+    elseif dir == Direction.UP then
         self.animation:setRow(3, 1)
-    elseif dir == "down" then
-        self.orientation = "down"
+    elseif dir == Direction.DONW then
         self.animation:setRow(0, 1)
     end
 end
