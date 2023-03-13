@@ -1,3 +1,4 @@
+---摄像机
 ---@class Camera
 Camera = {}
 Camera.x = 0

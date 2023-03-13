@@ -12,7 +12,6 @@ DebugDraw = {
 function DebugDraw:new()
     local o = Component:new()
     setmetatable(o, {__index = self})
-    o.drawCentral = true
     return o
 end
 

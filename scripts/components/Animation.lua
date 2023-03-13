@@ -1,11 +1,12 @@
 require "scripts.base.Component"
+require "scripts.enums.AnimaState"
 
 ---动画组件
 ---@class Animation : Component
----@field image love.Texture 用于创建动画的序列帧位图
+---@field image love.Texture | nil 用于创建动画的序列帧位图
 ---@field width number 单帧对象宽度
 ---@field height number 单帧对象高度
----@field quad table 视图窗口
+---@field quad table | nil 视图窗口
 ---@field frameIndex number 当前动画帧下标
 ---@field frameTime number 当前动画帧所经过的时间
 ---@field frameCount number 帧总数量
@@ -14,13 +15,13 @@ require "scripts.base.Component"
 ---@field timeMultiply number 动画播放速度倍率
 ---@field xCount number x轴帧数量
 ---@field yCount number y轴帧数量
----@field status string 动画状态
----@field eventList {key:function} 动画事件字典 关键帧:程序处理器
+---@field private state AnimationState 动画状态
+---@field eventList function[] | nil 动画事件字典 关键帧:程序处理器
 Animation = {
-    image = {}, --用于创建动画的序列帧位图
+    image = nil, --用于创建动画的序列帧位图
     width = 0, --单帧对象宽度
     height = 0, --单帧对象高度
-    quad = {}, --视图窗口
+    quad = nil, --视图窗口
     frameIndex = 0, --当前动画帧下标
     frameTime = 0, --当前动画帧所经过的时间
     frameCount = 0, --帧数
@@ -29,9 +30,9 @@ Animation = {
     timeMultiply = 1, --动画播放速度倍率
     xCount = 0, --x轴帧数量
     yCount = 0, --y轴帧数量
-    status = "stop", --动画状态
+    state = AnimationState.Stop, --动画状态
     componentName = "Animation",
-    eventList = {} --事件列表
+    eventList = nil --事件列表
 }
 
 function Animation:load()
@@ -63,7 +64,7 @@ function Animation:new ()
     o.timeInterval = 0
     o.frameCount = 0
     o.quad = nil
-    o.eventList = {}
+    o.eventList = nil
     return o
 end
 
@@ -97,13 +98,14 @@ end
 function Animation:drawAnimation(x,y,r,sx,sy,ox,oy,kx,ky)
     local image = self.image
     local quad = self.quad
+    if image == nil or quad == nil then return end
     love.graphics.draw(image,quad,x,y,r,sx,sy,ox,oy,kx,ky)
 end
 
 ---动画帧刷新(按照顺序从左到右播放动画)
 ---@param dt number 所经过的时间间隔
 function Animation:update(dt)
-    if self.status ~= "playing" then
+    if self.state ~= AnimationState.Playing then
         return
     end
     self.frameTime = self.frameTime + dt
@@ -123,8 +125,9 @@ function Animation:update(dt)
 end
 
 ---设置动画行
+---@overload fun(row)
 ---@param row number 目标动画行
----@param animIndex number 从第几帧开始播放
+---@param animIndex number 从第几帧开始播放 默认值0
 function Animation:setRow(row,animIndex)
     self.row = row
     self.frameIndex = animIndex or 0
@@ -133,7 +136,7 @@ end
 
 ---设置动画帧
 function Animation:setFrameIndex(frameIndex)
-    self.frameIndex = frameIndex 
+    self.frameIndex = frameIndex
     self.quad:setViewport(self.frameIndex * self.width, self.row * self.height, self.width, self.height, self.image:getWidth(), self.image:getHeight())
     --当前的动画帧
     local key = self.xCount * self.row + self.frameIndex
@@ -145,38 +148,45 @@ function Animation:setFrameIndex(frameIndex)
 end
 
 ---检查动画状态
----@param status string | "'playing'" | "'pause'"
-function Animation:checkStatus(status)
-    return self.status == status
+---@param state AnimationState
+function Animation:checkState(state)
+    return self.state == state
 end
 
 ---播放动画
----@param frameIndex number 指定开始播放的第一帧
+---@overload fun()
+---@param frameIndex number 指定开始播放的第一帧 默认值: 0
 function Animation:play(frameIndex)
-    self.status = "playing"
-    self:setFrameIndex(frameIndex or 0)
+    frameIndex = frameIndex or 0
+    self.state = AnimationState.Playing
+    self:setFrameIndex(frameIndex)
 end
 ---停止动画
----@param frameIndex number 指定停止后显示的动画帧
+---@overload fun()
+---@param frameIndex number 指定停止后显示的动画帧 默认值: 当前动画帧下标
 function Animation:stop(frameIndex)
-    self.status = "stop"
-    self:setFrameIndex(frameIndex or self.frameIndex)
+    frameIndex = frameIndex or self.frameIndex
+    self.state = AnimationState.Stop
+    self:setFrameIndex(frameIndex)
 end
 
 ---暂停动画
 function Animation:pause()
-    self.status = "pause"
+    self.state = AnimationState.Pause
 end
 
 ---继续上一次暂定的帧和时间继续播放
 function Animation:continue()
-    self.status = "playing"
+    self.state = AnimationState.Playing
 end
 
 ---向动画帧添加事件
 ---@param key number 动画帧
 ---@param event function 事件处理器
 function Animation:addEvent(key,event)
+    if self.eventList == nil then
+        self.eventList = {}
+    end
     self.eventList[key] = event
 end
 
@@ -184,5 +194,8 @@ end
 ---@param key number 目标帧
 ---@return function #事件处理器
 function Animation:getEvent(key)
+    if self.eventList == nil then
+        self.eventList = {}
+    end
     return self.eventList[key]
 end

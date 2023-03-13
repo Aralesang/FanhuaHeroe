@@ -22,6 +22,8 @@ GameObject = {
     central = nil
 }
 
+---构造函数
+---@return GameObject
 function GameObject:new()
     ---@type GameObject
     local o = {}

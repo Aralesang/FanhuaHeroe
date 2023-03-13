@@ -1,9 +1,9 @@
 ---场景对象
 ---@class Scene
----@field maps number[] 地图元件编号集合
+---@field map string 地图文件名称
 ---@field prefabs Prefab[] 预制体集合 
 local Scene = {
-    maps = {},
+    map = "",
     prefabs = {}
 }
 

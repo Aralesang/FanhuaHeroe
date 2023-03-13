@@ -10,7 +10,7 @@ function Debug.log(log)
     table.insert(Debug.text, log)
 end
 
----@private
+---显示帧率到屏幕
 function Debug.draw()
     local text = "FPS:" .. love.timer.getFPS() .. "\n"
     for _, v in pairs(Debug.text) do
@@ -21,6 +21,7 @@ end
 
 ---启用远程断点调试模式,启用该模式后游戏进程将会暂停,等待调试器的连接
 function Debug.debugger()
+    print("Debugger Start...")
     --检查操作系统
     local os = love.system.getOS()
     --库文件地址

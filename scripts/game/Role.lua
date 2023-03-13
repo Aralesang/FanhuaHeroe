@@ -10,14 +10,13 @@ require "scripts.enums.Direction"
 ---@field name string | nil 角色名称
 ---@field speed number 角色速度
 ---@field moveDir Direction 角色移动方向
----@field direction Direction 角色朝向
----@field animation Animation 动画组件
+---@field private direction Direction 角色朝向
 Role = {
     name = nil,
-    speed = 1000,
-    moveDir = Direction.DONW, --移动方向
-    direction = Direction.DONW,
-    componentName = "Role"
+    speed = 100,
+    moveDir = Direction.Donw, --移动方向
+    componentName = "Role",
+    direction = Direction.Donw
 }
 
 ---@return Role | Component
@@ -25,7 +24,6 @@ function Role:new()
     ---@type Component
     local o = Component:new()
     setmetatable(o, {__index = self})
-    
     return o
 end
 
@@ -33,7 +31,12 @@ function Role:load()
 end
 
 function Role:update(dt)
-    
+end
+
+--获取角色方向
+---@return Direction
+function Role:getDir()
+    return self.direction
 end
 
 ---设置角色方向
@@ -43,14 +46,14 @@ function Role:setDir(dir)
         self.animation = self:getComponent(Animation)
     end
     self.direction = dir
-    if dir == Direction.LEFT then
-        self.animation:setRow(1, 1)
-    elseif dir == Direction.RIGHT then
-        self.animation:setRow(2, 1)
-    elseif dir == Direction.UP then
-        self.animation:setRow(3, 1)
-    elseif dir == Direction.DONW then
-        self.animation:setRow(0, 1)
+    if dir == Direction.Left then
+        self.animation:setRow(1)
+    elseif dir == Direction.Right then
+        self.animation:setRow(2)
+    elseif dir == Direction.Up then
+        self.animation:setRow(3)
+    elseif dir == Direction.Donw then
+        self.animation:setRow(0)
     end
 end
 
@@ -84,5 +87,4 @@ function Role:attack()
     collision.onBeginCollision = function(collision)
         print("atk on!".. collision)
     end
-    
 end

@@ -3,12 +3,10 @@
 ---@field componentName string | nil 组件名称
 ---@field gameObject GameObject | nil 组件所附加到的游戏物体
 ---@field isLoad boolean 是否已经调用过初始化函数
----@field orientation string 对象方向
 Component = {
     componentName = nil,
     gameObject = nil,
-    isLoad = false,
-    orientation = "down"
+    isLoad = false
 }
 
 function Component:new()

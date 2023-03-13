@@ -14,7 +14,8 @@ local bulletImage
 ---@field role Role | nil 玩家组件
 PlayerController = {
     componentName = "PlayerController",
-    role = nil
+    role = nil,
+    operate = nil --按键操作
 }
 
 ---@return PlayerController | Component
@@ -36,31 +37,20 @@ function PlayerController:update(dt)
     if player == nil then return end
     Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
 
-    local key
-    if love.keyboard.isDown("left") then
-        key = Direction.LEFT
-    elseif love.keyboard.isDown("right") then
-        key = Direction.RIGHT
-    elseif love.keyboard.isDown("up") then
-        key = Direction.UP
-    elseif love.keyboard.isDown("down") then
-        key = Direction.DONW
-    end
-
     ---@type Animation
     local animation = player:getComponent(Animation)
 
-    if key ~= nil then
-        if self.role.direction ~= key then
-            self.role:setDir(key) --设置角色面向
+    if self.operate ~= nil then --如果有方向键被按下
+        if self.role:getDir() ~= self.operate then
+            self.role:setDir(self.operate) --设置角色面向
         end
-        if animation.status ~= "playing" then
+        if not animation:checkState(AnimationState.Playing)  then --如果当前动画不处于播放中,则从第一帧(初始帧为第0帧)开始播放
             animation:play(1)
         end
-        self:move(dt, key) --移动
-        key = nil
-    else
-        if animation.status == "playing" then
+        self:move(dt, self.operate) --移动
+        self.operate = nil
+    else --如果没有按方向键
+        if animation:checkState(AnimationState.Playing) then --当前如果正在播放动画，则停止播放并定格到第0帧
             animation:stop(0)
         end
     end
@@ -70,6 +60,14 @@ end
 function PlayerController:keypressed(key)
     if key == "space" then
         self:attack()
+    elseif key == "left" then
+        self.operate = Direction.Left
+    elseif key == "right" then
+        self.operate = Direction.Right
+    elseif key == "up" then
+        self.operate = Direction.Up
+    elseif key == "down" then
+        self.operate = Direction.Donw
     end
 end
 
@@ -98,9 +96,7 @@ function PlayerController:fire()
     --附加动画组件
     ---@type Animation | nil
     local animation = bulletObj:addComponent(Animation)
-    if animation == nil then
-        return
-    end
+    if animation == nil then return end
     animation:init(bulletImage, 1, 1, 0)
 
     --为子弹附加碰撞组件
@@ -113,15 +109,15 @@ function PlayerController:fire()
     ---@type Bullet | nil
     local bullet = bulletObj:addComponent(Bullet)
     bullet.master = self.role.name
-    local playerDir = self.role.direction
+    local playerDir = self.role:getDir()
     local dir = Vector2.zero()
-    if playerDir == Direction.UP then
+    if playerDir == Direction.Up then
         dir = Vector2.up()
-    elseif playerDir == Direction.DONW then
+    elseif playerDir == Direction.Donw then
         dir = Vector2.down()
-    elseif playerDir == Direction.LEFT then
+    elseif playerDir == Direction.Left then
         dir = Vector2.left()
-    elseif playerDir == Direction.RIGHT then
+    elseif playerDir == Direction.Right then
         dir = Vector2.right()
     end
 
@@ -148,13 +144,13 @@ function PlayerController:move(dt, dir)
     local y = position.y
     --获取移动
     local distance = dt * self.role.speed
-    if dir == Direction.LEFT then
+    if dir == Direction.Left then
         x = x - distance
-    elseif dir == Direction.RIGHT then
+    elseif dir == Direction.Right then
         x = x + distance
-    elseif dir == Direction.UP then
+    elseif dir == Direction.Up then
         y = y - distance
-    elseif dir == Direction.DONW then
+    elseif dir == Direction.Donw then
         y = y + distance
     end
     player:setPosition(x, y)

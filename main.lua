@@ -9,13 +9,6 @@ require "scripts.manager.SceneManager"
 
 --启用远程调试
 --Debug.debugger()
----@type Role[]
-local roleArr = {}
----@type PlayerController 玩家控制器
-local playerController
---背景图片
----@type love.Texture
-local backgroundImage
 
 function love.load()
     print("game starting...")
@@ -29,7 +22,7 @@ function love.load()
     SceneManager.load("main")
 end
 
---绘制
+--每帧绘制
 function love.draw()
     Camera:set()
     --绘制对象
@@ -45,6 +38,8 @@ function love.draw()
     Debug.draw()
 end
 
+--每帧逻辑处理
+---@param dt number 距离上一帧的间隔时间
 function love.update(dt)
     ---@type number[]
     local destroyPool = {}
@@ -76,9 +71,11 @@ function love.update(dt)
     end
 end
 
+--按键按下
+---@param key number 按下的键值
 function love.keypressed(key)
     --触发对象输入事件
-    for key, value in pairs(Game.gameObjects) do
+    for _, value in pairs(Game.gameObjects) do
         for _, component in pairs(value.components) do
             if component.keypressed then
                 component:keypressed(key)
@@ -87,9 +84,11 @@ function love.keypressed(key)
     end
 end
 
+--按键释放
+---@param key number 释放的键值
 function love.keyreleased(key)
     --触发对象输入事件
-    for key, value in pairs(Game.gameObjects) do
+    for _, value in pairs(Game.gameObjects) do
         for _, component in pairs(value.components) do
             if component.keyreleased then
                 component:keyreleased(key)
