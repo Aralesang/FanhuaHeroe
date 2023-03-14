@@ -8,7 +8,6 @@ require "scripts.enums.AnimaState"
 ---@field height number 单帧对象高度
 ---@field quad table | nil 视图窗口
 ---@field frameIndex number 当前动画帧下标
----@field frameTime number 当前动画帧所经过的时间
 ---@field frameCount number 帧总数量
 ---@field row number 当前所使用的动画行
 ---@field frameInterval number 动画播放帧率间隔
@@ -22,8 +21,8 @@ Animation = {
     width = 0, --单帧对象宽度
     height = 0, --单帧对象高度
     quad = nil, --视图窗口
-    frameIndex = 0, --当前动画帧下标
-    frameTime = 0, --当前动画帧所经过的时间
+    frameInterval = 0, --当前动画帧下标
+    frameLastCount = 0, --当前动画帧所经过的帧率
     frameCount = 0, --帧数
     row = 0, --当前所使用的动画行
     xCount = 0, --x轴帧数量
@@ -113,7 +112,7 @@ function Animation:update(dt)
     if self.frameLastCount < self.frameInterval then
         return
     end
-    self.frameTime = 0
+    self.frameLastCount = 0
     --计算出帧所对应的坐标
     local index = self.frameIndex
     self:setFrameIndex(index)
