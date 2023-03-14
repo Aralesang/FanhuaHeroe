@@ -47,11 +47,11 @@ function Role:setDir(dir)
     end
     self.direction = dir
     if dir == Direction.Left then
-        self.animation:setRow(1)
+        self.animation:setRow(3)
     elseif dir == Direction.Right then
         self.animation:setRow(2)
     elseif dir == Direction.Up then
-        self.animation:setRow(3)
+        self.animation:setRow(1)
     elseif dir == Direction.Donw then
         self.animation:setRow(0)
     end

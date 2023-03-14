@@ -54,7 +54,7 @@ function CollisionBox:update(dt)
 end
 
 function CollisionBox:draw()
-    if self.debug then
+    if Config.ShowCollision then
         if self.isCollision then
             love.graphics.setColor(0.76, 0.18, 0.05)
         end

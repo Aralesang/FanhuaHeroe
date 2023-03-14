@@ -60,7 +60,7 @@ end
 
 ---键盘按下
 ---@param key number 键盘键入值
-function Component: keypressed(key) 
+function Component: keypressed(key)
 end
 
 ---按键释放

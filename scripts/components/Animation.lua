@@ -11,8 +11,8 @@ require "scripts.enums.AnimaState"
 ---@field frameTime number 当前动画帧所经过的时间
 ---@field frameCount number 帧总数量
 ---@field row number 当前所使用的动画行
----@field timeInterval number 动画播放时间间隔
----@field timeMultiply number 动画播放速度倍率
+---@field frameInterval number 动画播放帧率间隔
+---@field frameLastCount number 距离上一帧动画已过去的帧数
 ---@field xCount number x轴帧数量
 ---@field yCount number y轴帧数量
 ---@field private state AnimationState 动画状态
@@ -26,8 +26,6 @@ Animation = {
     frameTime = 0, --当前动画帧所经过的时间
     frameCount = 0, --帧数
     row = 0, --当前所使用的动画行
-    timeInterval = 0, --动画播放时间间隔
-    timeMultiply = 1, --动画播放速度倍率
     xCount = 0, --x轴帧数量
     yCount = 0, --y轴帧数量
     state = AnimationState.Stop, --动画状态
@@ -53,6 +51,7 @@ end
 --创建一个新的动画对象
 ---@return Animation | Component
 function Animation:new ()
+    ---@type Animation | Component
     local o = Component:new()
     setmetatable(o,{__index=self})
     o.image = nil
@@ -61,7 +60,8 @@ function Animation:new ()
     o.width = 0
     o.height = 0
     o.row = 0
-    o.timeInterval = 0
+    o.frameInterval = 0
+    o.frameLastCount = 0
     o.frameCount = 0
     o.quad = nil
     o.eventList = nil
@@ -69,20 +69,20 @@ function Animation:new ()
 end
 
 --动画组件初始化
----@overload fun (image,xCount,yCount,timeInterval)
+---@overload fun (image,xCount,yCount,frameInterval)
 ---@param image love.Texture 用于创建动画的序列帧位图
 ---@param xCount number x轴帧数量
 ---@param yCount number y轴帧数量
----@param timeInterval number 动画播放时间间隔
+---@param frameInterval number 动画播放帧率间隔
 ---@param row number 当前所使用的动画行
-function Animation:init(image,xCount,yCount,timeInterval,row)
+function Animation:init(image,xCount,yCount,frameInterval,row)
     self.image = image or {}
     self.xCount = xCount or 0
     self.yCount = yCount or 0
     self.width = self.image:getWidth() / self.xCount
     self.height = self.image:getHeight() / self.yCount
     self.row = row or 0
-    self.timeInterval = timeInterval or 0
+    self.frameInterval = frameInterval or 0
     self.frameCount = self.image:getWidth() / self.width
     self.quad = love.graphics.newQuad(0,self.row * self.height,self.width, self.height, self.image:getWidth(), self.image:getHeight())
 end
@@ -108,8 +108,9 @@ function Animation:update(dt)
     if self.state ~= AnimationState.Playing then
         return
     end
-    self.frameTime = self.frameTime + dt
-    if self.frameTime < self.timeInterval / self.timeMultiply then
+    self.frameLastCount = self.frameLastCount + 1
+    --已经过去的帧数如果低于间隔则不绘制新动画
+    if self.frameLastCount < self.frameInterval then
         return
     end
     self.frameTime = 0

@@ -15,7 +15,6 @@ local bulletImage
 PlayerController = {
     componentName = "PlayerController",
     role = nil,
-    operate = nil --按键操作
 }
 
 ---@return PlayerController | Component
@@ -40,15 +39,27 @@ function PlayerController:update(dt)
     ---@type Animation
     local animation = player:getComponent(Animation)
 
-    if self.operate ~= nil then --如果有方向键被按下
-        if self.role:getDir() ~= self.operate then
-            self.role:setDir(self.operate) --设置角色面向
+    local key
+    if love.keyboard.isDown("space") then
+        self:attack()
+    end
+    if love.keyboard.isDown("left") then
+        key = Direction.Left
+    elseif love.keyboard.isDown("right") then
+        key = Direction.Right
+    elseif love.keyboard.isDown("up") then
+        key = Direction.Up
+    elseif love.keyboard.isDown("down") then
+        key = Direction.Donw
+    end
+    if key ~= nil then --如果有方向键被按下
+        if self.role:getDir() ~= key then
+            self.role:setDir(key) --设置角色面向
         end
         if not animation:checkState(AnimationState.Playing)  then --如果当前动画不处于播放中,则从第一帧(初始帧为第0帧)开始播放
             animation:play(1)
         end
-        self:move(dt, self.operate) --移动
-        self.operate = nil
+        self:move(dt, key) --移动
     else --如果没有按方向键
         if animation:checkState(AnimationState.Playing) then --当前如果正在播放动画，则停止播放并定格到第0帧
             animation:stop(0)
@@ -58,17 +69,7 @@ end
 
 ---按键检测
 function PlayerController:keypressed(key)
-    if key == "space" then
-        self:attack()
-    elseif key == "left" then
-        self.operate = Direction.Left
-    elseif key == "right" then
-        self.operate = Direction.Right
-    elseif key == "up" then
-        self.operate = Direction.Up
-    elseif key == "down" then
-        self.operate = Direction.Donw
-    end
+    
 end
 
 ---普通攻击

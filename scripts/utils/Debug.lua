@@ -12,6 +12,9 @@ end
 
 ---显示帧率到屏幕
 function Debug.draw()
+    if not Config.ShowFps then
+        return
+    end
     local text = "FPS:" .. love.timer.getFPS() .. "\n"
     for _, v in pairs(Debug.text) do
         text = text .. v .. "\n"

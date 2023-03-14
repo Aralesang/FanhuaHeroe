@@ -5,3 +5,9 @@ function love.conf(t)
     t.console = true
     t.audio.mixwithsystem = false
 end
+
+Config = {
+    ShowFps = false,
+    ShowCollision = false,
+    ShowCentral = false
+}
