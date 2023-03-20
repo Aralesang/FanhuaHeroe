@@ -3,8 +3,8 @@
 Camera = {}
 Camera.x = 0
 Camera.y = 0
-Camera.scaleX = 1
-Camera.scaleY = 1
+Camera.scaleX = 0.5
+Camera.scaleY = 0.5
 Camera.rotation = 0
 
 function Camera:set()
@@ -34,8 +34,8 @@ function Camera:scale(sx, sy)
 end
 
 function Camera:setPosition(x, y)
-    self.x = x or self.x
-    self.y = y or self.y
+    self.x = (x or self.x) * self.scaleX
+    self.y = (y or self.y) * self.scaleX
 end
 
 function Camera:setScale(sx, sy)
