@@ -7,7 +7,7 @@ function love.conf(t)
 end
 
 Config = {
-    ShowFps = false,
+    ShowFps = true,
     ShowCollision = false,
     ShowCentral = false
 }

@@ -98,7 +98,7 @@ function PlayerController:fire()
     ---@type Animation | nil
     local animation = bulletObj:addComponent(Animation)
     if animation == nil then return end
-    animation:init(bulletImage, 1, 1, 0)
+    animation:init(bulletImage, 1, 1, 30)
 
     --为子弹附加碰撞组件
     ---@type CollisionCircular | nil

@@ -21,7 +21,7 @@ Animation = {
     width = 0, --单帧对象宽度
     height = 0, --单帧对象高度
     quad = nil, --视图窗口
-    frameInterval = 0, --当前动画帧下标
+    frameInterval = 0, --动画播放帧率间隔
     frameLastCount = 0, --当前动画帧所经过的帧率
     frameCount = 0, --帧数
     row = 0, --当前所使用的动画行
@@ -61,6 +61,7 @@ function Animation:new ()
     o.row = 0
     o.frameInterval = 0
     o.frameLastCount = 0
+    o.frameIndex = 0
     o.frameCount = 0
     o.quad = nil
     o.eventList = nil

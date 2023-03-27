@@ -10,8 +10,12 @@ require "scripts.manager.SceneManager"
 --启用远程调试
 --Debug.debugger()
 
+--甚至每帧的时间为1/60秒，即帧率为60帧每秒
+local deltaTime = 1/60
+
 function love.load()
     print("game starting...")
+    love.window.setVSync(0)
     --加载中文字体(启动会很缓慢)
     local myFont = love.graphics.newFont("fonts/SourceHanSansCN-Bold.otf", 16)
 
@@ -20,6 +24,20 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     --加载场景
     SceneManager.load("main")
+    tilemap = {
+        {1,1,1,1,1,1,1,1,1,1},
+        {1,0,0,0,5,4,0,0,0,1},
+        {1,0,0,1,1,1,1,0,0,1},
+        {1,0,0,0,2,3,0,0,0,1},
+        {1,1,1,1,1,1,1,1,1,1}
+    }
+    colors = {
+        {1,1,1},
+        {1,0,0},
+        {1,0,1},
+        {0,0,1},
+        {0,1,1}
+    }
 end
 
 --每帧绘制
@@ -36,11 +54,22 @@ function love.draw()
     end
     Camera:unset()
     Debug.draw()
+    for i,row in ipairs(tilemap) do
+        for j,tile in ipairs(row) do
+            if tile ~= 0 then
+                love.graphics.setColor(colors[tile])
+                love.graphics.rectangle("fill", j * 25, i * 25, 25,25)
+            end
+        end
+    end
 end
 
 --每帧逻辑处理
 ---@param dt number 距离上一帧的间隔时间
 function love.update(dt)
+    if dt < deltaTime then
+        love.timer.sleep(deltaTime - dt)
+    end
     ---@type number[]
     local destroyPool = {}
     --触发对象更新
