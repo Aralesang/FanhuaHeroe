@@ -8,5 +8,6 @@ Direction = {
     ---左
     Left = 2,
     ---右
-    Right = 3
+    Right = 3,
+    
 }
