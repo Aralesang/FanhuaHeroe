@@ -24,19 +24,37 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     --加载场景
     SceneManager.load("main")
+    image = love.graphics.newImage("image/tileset.png")
+    local image_width = image:getWidth()
+    local image_height = image:getHeight()
+    width = 32
+    height = 32
+
+
+    width = (image_width / 3) - 2
+    height = (image_height / 2) - 2
+    quads = {}
+
+    for i = 0, 1 do
+        for j = 0, 2 do
+            table.insert(quads, love.graphics.newQuad(
+                1 + j * (width + 2),
+                1 + i * (height + 2),
+                width, height,
+                image_width, image_height
+            ))
+        end
+    end
+
     tilemap = {
-        {1,1,1,1,1,1,1,1,1,1},
-        {1,0,0,0,5,4,0,0,0,1},
-        {1,0,0,1,1,1,1,0,0,1},
-        {1,0,0,0,2,3,0,0,0,1},
-        {1,1,1,1,1,1,1,1,1,1}
-    }
-    colors = {
-        {1,1,1},
-        {1,0,0},
-        {1,0,1},
-        {0,0,1},
-        {0,1,1}
+        {1,6,6,2,1,6,6,2},
+        {3,0,0,4,5,0,0,3},
+        {3,0,0,0,0,0,0,3},
+        {4,2,0,0,0,0,1,5},
+        {1,5,0,0,0,0,4,2},
+        {3,0,0,0,0,0,0,3},
+        {3,0,0,1,2,0,0,3},
+        {4,6,6,5,4,6,6,5}
     }
 end
 
@@ -57,8 +75,7 @@ function love.draw()
     for i,row in ipairs(tilemap) do
         for j,tile in ipairs(row) do
             if tile ~= 0 then
-                love.graphics.setColor(colors[tile])
-                love.graphics.rectangle("fill", j * 25, i * 25, 25,25)
+                love.graphics.draw(image, quads[tile], j * width, i * height)
             end
         end
     end
