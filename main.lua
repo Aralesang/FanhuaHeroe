@@ -12,6 +12,16 @@ require "scripts.manager.SceneManager"
 
 --甚至每帧的时间为1/60秒，即帧率为60帧每秒
 local deltaTime = 1/60
+---@type number
+local width
+---@type number
+local height
+---@type love.Image
+local image
+---@type table
+local quads
+---@type table
+local tilemap
 
 function love.load()
     print("game starting...")
