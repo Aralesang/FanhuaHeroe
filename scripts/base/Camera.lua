@@ -3,15 +3,15 @@
 Camera = {}
 Camera.x = 0
 Camera.y = 0
-Camera.scaleX = 1
-Camera.scaleY = 1
+Camera.scaleX = 0.5
+Camera.scaleY = 0.5
 Camera.rotation = 0
 
 function Camera:set()
     love.graphics.push()
     love.graphics.rotate(-self.rotation)
     love.graphics.scale(1 / self.scaleX, 1 / self.scaleY)
-    --love.graphics.translate(-self.x, -self.y)
+    love.graphics.translate(-self.x, -self.y)
 end
 
 function Camera:unset()

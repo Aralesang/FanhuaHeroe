@@ -42,7 +42,7 @@ function RoleManager.createRole(imagePath,roleName,x,y)
 
      --附加调试组件
      roleObj:addComponent(DebugDraw)
-
+     --print("create role"..roleName)
      return role
 end
 

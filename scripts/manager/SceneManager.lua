@@ -70,9 +70,6 @@ function SceneManager:load(sceneName)
     end
     local scene = Scene:new()
     scene.prefabs = sceneJson.prefabs
-    local map1 = require "scenes.map1"
-    scene.tileTable = map1.layers[1].data
-    scene:loadTile()
     return scene
 end
 

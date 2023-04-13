@@ -5,7 +5,6 @@ require "scripts.components.CollisionCircular"
 require "scripts.utils.Debug"
 require "scripts.base.Component"
 require "scripts.enums.Direction"
-require "scripts.base.Tile"
 
 ---@type love.Image
 --子弹图片
@@ -192,5 +191,4 @@ function PlayerController:move(dt, dir)
         player:setPosition(x, y)
     --end
 end
-
 return PlayerController
