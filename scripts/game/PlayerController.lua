@@ -5,6 +5,7 @@ require "scripts.components.CollisionCircular"
 require "scripts.utils.Debug"
 require "scripts.base.Component"
 require "scripts.enums.Direction"
+require "scripts.base.Tile"
 
 ---@type love.Image
 --子弹图片
@@ -56,6 +57,24 @@ function PlayerController:update(dt)
     if player == nil then return end
     Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
 
+    if love.keyboard.isDown("left") then
+        moveDir = Direction.Left
+        isMove = true
+    elseif love.keyboard.isDown("right") then
+        moveDir = Direction.Right
+        isMove = true
+    elseif love.keyboard.isDown("up") then
+        moveDir = Direction.Up
+        isMove = true
+    elseif love.keyboard.isDown("down") then
+        moveDir = Direction.Donw
+        isMove = true
+    else
+        isMove = false
+    end
+
+    
+
     if isMove then --如果移动被激活
         if role:getDir() ~= moveDir then
             role:setDir(moveDir) --设置角色面向
@@ -63,6 +82,7 @@ function PlayerController:update(dt)
         if not animation:checkState(AnimationState.Playing)  then --如果当前动画不处于播放中,则从第一帧(初始帧为第0帧)开始播放
             animation:play(1)
         end
+        
         self:move(dt, moveDir) --移动
     else --如果没在移动了
         if animation:checkState(AnimationState.Playing) then --当前如果正在播放动画，则停止播放并定格到第0帧
@@ -78,30 +98,13 @@ function PlayerController:keypressed(key)
         self:attack()
     end
 
-    if key == "left" then
-        moveDir = Direction.Left
-        isMove = true
-    elseif key == "right" then
-        moveDir = Direction.Right
-        isMove = true
-    elseif key == "up" then
-        moveDir = Direction.Up
-        isMove = true
-    elseif key == "down" then
-        moveDir = Direction.Donw
-        isMove = true
-    end
+    
 end
 
 ---按键释放
 ---@param key string
 function PlayerController:keyreleased(key)
-    if key == "left"
-    or key == "right"
-    or key == "up"
-    or key == "down" then
-        isMove = false;
-    end
+
 end
 
 ---普通攻击
@@ -185,7 +188,9 @@ function PlayerController:move(dt, dir)
     elseif dir == Direction.Donw then
         y = y + distance
     end
-    player:setPosition(x, y)
+    --if Tile:isEmpty(x, y) then
+        player:setPosition(x, y)
+    --end
 end
 
 return PlayerController

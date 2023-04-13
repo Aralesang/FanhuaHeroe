@@ -1,3 +1,4 @@
+io.stdout:setvbuf("no")
 require "scripts.base.Camera"
 require "scripts.base.GameObject"
 require "scripts.base.Game"
@@ -12,55 +13,28 @@ require "scripts.manager.SceneManager"
 
 --甚至每帧的时间为1/60秒，即帧率为60帧每秒
 local deltaTime = 1/60
+---当前加载的场景
+---@type Scene | nil
+local scene
 
 function love.load()
     print("game starting...")
     love.window.setVSync(0)
     --加载中文字体(启动会很缓慢)
     local myFont = love.graphics.newFont("fonts/SourceHanSansCN-Bold.otf", 16)
-
     love.graphics.setFont(myFont)
     --更改图像过滤方式，以显示高清马赛克
     love.graphics.setDefaultFilter("nearest", "nearest")
     --加载场景
-    SceneManager.load("main")
-    image = love.graphics.newImage("image/tileset.png")
-    local image_width = image:getWidth()
-    local image_height = image:getHeight()
-    width = 32
-    height = 32
-
-
-    width = (image_width / 3) - 2
-    height = (image_height / 2) - 2
-    quads = {}
-
-    for i = 0, 1 do
-        for j = 0, 2 do
-            table.insert(quads, love.graphics.newQuad(
-                1 + j * (width + 2),
-                1 + i * (height + 2),
-                width, height,
-                image_width, image_height
-            ))
-        end
-    end
-
-    tilemap = {
-        {1,6,6,2,1,6,6,2},
-        {3,0,0,4,5,0,0,3},
-        {3,0,0,0,0,0,0,3},
-        {4,2,0,0,0,0,1,5},
-        {1,5,0,0,0,0,4,2},
-        {3,0,0,0,0,0,0,3},
-        {3,0,0,1,2,0,0,3},
-        {4,6,6,5,4,6,6,5}
-    }
+    scene = SceneManager:load("main")
 end
 
 --每帧绘制
 function love.draw()
     Camera:set()
+    if scene then
+        scene:drawTile()
+    end
     --绘制对象
     for _, value in pairs(Game.gameObjects) do
         --触发组件绘制
@@ -70,15 +44,9 @@ function love.draw()
             end
         end
     end
+   
     Camera:unset()
     Debug.draw()
-    for i,row in ipairs(tilemap) do
-        for j,tile in ipairs(row) do
-            if tile ~= 0 then
-                love.graphics.draw(image, quads[tile], j * width, i * height)
-            end
-        end
-    end
 end
 
 --每帧逻辑处理
