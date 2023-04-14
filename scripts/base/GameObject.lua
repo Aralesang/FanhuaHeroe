@@ -1,5 +1,6 @@
 ---游戏对象基本类
 require "scripts.base.Game"
+require "scripts.base.Vector2"
 ---@class GameObject
 ---@field gameObjectName string | nil 对象名称
 ---@field animation Animation | nil 对象动画组件

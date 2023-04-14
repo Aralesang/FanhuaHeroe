@@ -39,11 +39,11 @@ PlayerController = {
 function PlayerController:new()
     ---@type Component
     local o = Component:new()
-    setmetatable(o, {__index = self})
+    setmetatable(o, { __index = self })
     return o
 end
 
-function PlayerController: load()
+function PlayerController:load()
     role = self.gameObject:getComponent(Role)
     player = self.gameObject
     if player == nil then return end
@@ -55,39 +55,40 @@ function PlayerController:update(dt)
     local width, height = love.window.getMode()
     if player == nil then return end
     Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
-
+    if love.keyboard.isDown("up") then
+        moveDir = Direction.Up
+        isMove = true
+    end
+    if love.keyboard.isDown("down") then
+        moveDir = Direction.Donw
+        isMove = true
+    end
     if love.keyboard.isDown("left") then
         moveDir = Direction.Left
         isMove = true
-    elseif love.keyboard.isDown("right") then
+    end
+    if love.keyboard.isDown("right") then
         moveDir = Direction.Right
         isMove = true
-    elseif love.keyboard.isDown("up") then
-        moveDir = Direction.Up
-        isMove = true
-    elseif love.keyboard.isDown("down") then
-        moveDir = Direction.Donw
-        isMove = true
-    else
-        isMove = false
     end
 
-    
-
-    if isMove then --如果移动被激活
+    if isMove then                                               --如果移动被激活
         if role:getDir() ~= moveDir then
-            role:setDir(moveDir) --设置角色面向
+            role:setDir(moveDir)                                 --设置角色面向
         end
-        if not animation:checkState(AnimationState.Playing)  then --如果当前动画不处于播放中,则从第一帧(初始帧为第0帧)开始播放
+        if not animation:checkState(AnimationState.Playing) then --如果当前动画不处于播放中,则从第一帧(初始帧为第0帧)开始播放
+            animation:setImage("image/character/角色_行走.png",6,4)
             animation:play(1)
         end
-        
-        self:move(dt, moveDir) --移动
-    else --如果没在移动了
+        self:move(dt, moveDir)                               --移动
+    else                                                     --如果没在移动了
         if animation:checkState(AnimationState.Playing) then --当前如果正在播放动画，则停止播放并定格到第0帧
+            animation:setImage("image/character/角色_待机.png",1,4)
             animation:stop(0)
         end
     end
+
+    isMove = false
 end
 
 ---按键检测
@@ -96,8 +97,6 @@ function PlayerController:keypressed(key)
     if key == "space" then
         self:attack()
     end
-
-    
 end
 
 ---按键释放
@@ -125,9 +124,9 @@ function PlayerController:fire()
 
     --创建子弹对象
     local bulletObj = GameObject:new()
-    bulletObj:setCentral(bulletImage:getWidth() / 2,bulletImage:getHeight() / 2)
+    bulletObj:setCentral(bulletImage:getWidth() / 2, bulletImage:getHeight() / 2)
     bulletObj:setScale(0.2, 0.2)
-    bulletObj:setPosition(playerPosition.x,playerPosition.y)
+    bulletObj:setPosition(playerPosition.x, playerPosition.y)
     --附加动画组件
     ---@type Animation | nil
     local animation = bulletObj:addComponent(Animation)
@@ -164,8 +163,6 @@ function PlayerController:fire()
     print(bulletObj.position.x .. "," .. bulletObj.position.y)
 end
 
-
-
 ---玩家移动
 ---@param dt number 距离上一帧的间隔时间
 ---@param dir Direction 移动方向
@@ -188,7 +185,8 @@ function PlayerController:move(dt, dir)
         y = y + distance
     end
     --if Tile:isEmpty(x, y) then
-        player:setPosition(x, y)
+    player:setPosition(x, y)
     --end
 end
+
 return PlayerController

@@ -6,6 +6,7 @@ require "scripts.game.Role"
 require "scripts.components.CollisionBox"
 require "scripts.manager.RoleManager"
 require "scripts.manager.SceneManager"
+require "scripts.game.PlayerController"
 local sti = require "scripts.utils.sti"
 
 --启用远程调试
@@ -25,104 +26,8 @@ function love.load()
     --加载场景
     map = sti("scenes/start.lua")
 
-    -- Create new dynamic data layer called "Sprites" as the 8th layer
-    local layer = map:addCustomLayer("Sprites", 3)
-
-    -- Get player spawn object
-    local player
-    for k, object in pairs(map.objects) do
-        if object.name == "player" then
-            player = object
-            break
-        end
-    end
-
-    -- Create player object
-    local sprite = love.graphics.newImage("image/character/魔力种子角色.png")
-    layer.player = {
-        sprite      = sprite,
-        x           = player.x,
-        y           = player.y,
-        ox          = 64 / 2,
-        oy          = 64 / 1.35,
-        dir         = Direction.Donw,
-        fx          = 0,
-        fy          = 0,
-        lastAnimTIm = 0
-    }
-
-    -- Add controls to player
-    layer.update = function(self, dt)
-        -- 96 pixels per second
-        local speed = 96 * dt
-        local isMove = false
-        -- Move player up
-        if love.keyboard.isDown("w", "up") then
-            self.player.y = self.player.y - speed
-            self.player.dir = Direction.Up
-            self.player.fy = 5
-            isMove = true
-        end
-
-        -- Move player down
-        if love.keyboard.isDown("s", "down") then
-            self.player.y = self.player.y + speed
-            self.player.dir = Direction.Donw
-            self.player.fy = 4
-            isMove = true
-        end
-
-        -- Move player left
-        if love.keyboard.isDown("a", "left") then
-            self.player.x = self.player.x - speed
-            self.player.dir = Direction.Left
-            self.player.fy = 7
-            isMove = true
-        end
-
-        -- Move player right
-        if love.keyboard.isDown("d", "right") then
-            self.player.x = self.player.x + speed
-            self.player.dir = Direction.Right
-            self.player.fy = 6
-            isMove = true
-        end
-        if isMove then
-            self.player.lastAnimTIm = self.player.lastAnimTIm + dt
-            if self.player.lastAnimTIm > 0.1 then
-                self.player.fx = self.player.fx > 4 and 0 or self.player.fx + 1;
-                self.player.lastAnimTIm = 0
-            end
-        else
-            self.player.fx = 0
-        end
-    end
-
-    -- Draw player
-    layer.draw = function(self)
-        local quad = love.graphics.newQuad(self.player.fx * 64, self.player.fy * 64, 64, 64, sprite:getWidth(),
-        sprite:getHeight())
-        love.graphics.draw(
-            self.player.sprite,
-            quad,
-            math.floor(self.player.x),
-            math.floor(self.player.y),
-            0,
-            1,
-            1,
-            self.player.ox,
-            self.player.oy
-        )
-
-
-        -- Temporarily draw a point at our location so we know
-        -- that our sprite is offset properly
-        --love.graphics.setPointSize(5)
-        --love.graphics.points(math.floor(self.player.x), math.floor(self.player.y))
-    end
-
-    -- Remove unneeded object layer
-    map:removeLayer("SpawnPoint")
+    local role = RoleManager.createRole("image/character/角色_行走.png", "player",250,100);
+    role:addComponent(PlayerController)
 end
 
 --每帧逻辑处理
@@ -166,17 +71,10 @@ end
 function love.draw()
     Camera:set()
     -- Scale world
-    local scale         = 2
-    local screen_width  = love.graphics.getWidth() / scale
-    local screen_height = love.graphics.getHeight() / scale
-
-    -- Translate world so that player is always centred
-    local player        = map.layers["Sprites"].player
-    local tx            = math.floor(player.x - screen_width / 2)
-    local ty            = math.floor(player.y - screen_height / 2)
+    local scale = 2
 
     -- Draw world with translation and scaling
-    map:draw(-tx, -ty, scale)
+    map:draw(0, 0, scale)
     --绘制对象
     for _, value in pairs(Game.gameObjects) do
         --触发组件绘制

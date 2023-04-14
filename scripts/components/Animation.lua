@@ -87,6 +87,16 @@ function Animation:init(image,xCount,yCount,frameInterval,row)
     self.quad = love.graphics.newQuad(0,self.row * self.height,self.width, self.height, self.image:getWidth(), self.image:getHeight())
 end
 
+function Animation:setImage(imagePath,xCount,yCount)
+     --将动画变为待机
+    self.image = love.graphics.newImage(imagePath)
+    self.xCount = xCount or 0
+    self.yCount = yCount or 0
+    self.width = self.image:getWidth() / self.xCount
+    self.height = self.image:getHeight() / self.yCount
+    self.quad = love.graphics.newQuad(0,self.row * self.height,self.width, self.height, self.image:getWidth(), self.image:getHeight())
+end
+
 ---绘制动画图像
 ---@param x number 绘制对象的位置(x轴)
 ---@param y number 绘制对象的位置(y轴)
@@ -99,6 +109,9 @@ function Animation:drawAnimation(x,y,r,sx,sy,ox,oy,kx,ky)
     local image = self.image
     local quad = self.quad
     if image == nil or quad == nil then return end
+    x = math.floor(x)
+    y = math.floor(y)
+    --print(x..","..y)
     love.graphics.draw(image,quad,x,y,r,sx,sy,ox,oy,kx,ky)
 end
 
