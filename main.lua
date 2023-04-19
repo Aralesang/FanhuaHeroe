@@ -27,6 +27,9 @@ function love.load()
     map = sti("scenes/start.lua")
 
     local role = RoleManager.createRole("image/character/角色_行走.png", "player",250,100);
+    if role == nil then
+        return
+    end
     role:addComponent(PlayerController)
 end
 
