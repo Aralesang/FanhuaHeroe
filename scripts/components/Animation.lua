@@ -87,8 +87,11 @@ function Animation:init(image,xCount,yCount,frameInterval,row)
     self.quad = love.graphics.newQuad(0,self.row * self.height,self.width, self.height, self.image:getWidth(), self.image:getHeight())
 end
 
+---设置动画使用的图像
+---@param imagePath string 新图像的地址
+---@param xCount number x轴的帧数
+---@param yCount number y轴帧数
 function Animation:setImage(imagePath,xCount,yCount)
-     --将动画变为待机
     self.image = love.graphics.newImage(imagePath)
     self.xCount = xCount or 0
     self.yCount = yCount or 0
