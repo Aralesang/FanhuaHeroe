@@ -68,6 +68,15 @@ function Animation:new ()
     return o
 end
 
+---创建一个动画
+---@param image any
+---@param xCount any
+---@param yCount any
+---@param frameInterval any
+function Animation:createAnim(image,xCount,yCount,frameInterval)
+    
+end
+
 --动画组件初始化
 ---@overload fun (image,xCount,yCount,frameInterval)
 ---@param image love.Texture 用于创建动画的序列帧位图

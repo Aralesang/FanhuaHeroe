@@ -14,6 +14,8 @@ local sti = require "scripts.utils.sti"
 
 --甚至每帧的时间为1/60秒，即帧率为60帧每秒
 local deltaTime = 1 / 60
+--地图对象
+local map
 
 function love.load()
     print("game starting...")
