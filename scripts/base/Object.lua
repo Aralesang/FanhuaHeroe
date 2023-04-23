@@ -7,8 +7,11 @@
 -- the terms of the MIT license. See LICENSE for details.
 --
 
-
-local Object = {}
+---对象基类
+---@class Object
+Object = {
+  extend = Object.extend
+}
 Object.__index = Object
 
 

@@ -16,6 +16,7 @@ require "scripts.enums.AnimaState"
 ---@field yCount number y轴帧数量
 ---@field private state AnimationState 动画状态
 ---@field eventList function[] | nil 动画事件字典 关键帧:程序处理器
+---@field layer AnimLayer[] | nil 动画层列表
 Animation = {
     image = nil, --用于创建动画的序列帧位图
     width = 0, --单帧对象宽度
@@ -29,7 +30,8 @@ Animation = {
     yCount = 0, --y轴帧数量
     state = AnimationState.Stop, --动画状态
     componentName = "Animation",
-    eventList = nil --事件列表
+    eventList = nil, --事件列表
+    layer = nil --动画层列表
 }
 
 function Animation:load()

@@ -1,3 +1,4 @@
+Object = require "scripts.base.Object"
 require "scripts.base.Camera"
 require "scripts.base.GameObject"
 require "scripts.base.Game"

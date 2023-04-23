@@ -1,3 +1,4 @@
+RoleManager = GameObject:
 require "scripts.base.GameObject"
 require "scripts.components.CollisionBox"
 require "scripts.components.Animation"
