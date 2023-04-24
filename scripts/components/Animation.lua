@@ -16,7 +16,8 @@ require "scripts.enums.AnimaState"
 ---@field yCount number y轴帧数量
 ---@field private state AnimationState 动画状态
 ---@field eventList function[] | nil 动画事件字典 关键帧:程序处理器
----@field layer AnimLayer[] | nil 动画层列表
+---@field anims Anim[] | nil 动画列表
+---@field useName string 当前使用的动画名称
 Animation = {
     image = nil, --用于创建动画的序列帧位图
     width = 0, --单帧对象宽度
@@ -31,7 +32,7 @@ Animation = {
     state = AnimationState.Stop, --动画状态
     componentName = "Animation",
     eventList = nil, --事件列表
-    layer = nil --动画层列表
+    anims = nil --动画层列表
 }
 
 function Animation:load()
@@ -71,12 +72,21 @@ function Animation:new ()
 end
 
 ---创建一个动画
----@param image any
----@param xCount any
----@param yCount any
----@param frameInterval any
-function Animation:createAnim(image,xCount,yCount,frameInterval)
-    
+---@param name string 动画名称
+---@param imagePath string 用于创建动画的序列帧位图地址
+---@param xCount number x轴帧数量
+---@param yCount number y轴帧数量
+function Animation:create(name,imagePath,xCount,yCount)
+    local image = love.graphics.newImage(imagePath)
+    if image == nil then
+        error("动画图像创建错误:" .. imagePath)
+        return
+    end
+    local animLayer = Anim:new(name,image,xCount,yCount)
+    if self.anims == nil then
+        self.anims = {}
+    end
+    self.anims[name] = animLayer
 end
 
 --动画组件初始化
@@ -120,7 +130,13 @@ end
 ---@param ox number 原点偏移(x轴)
 ---@param oy number 原点偏移(y轴)
 function Animation:drawAnimation(x,y,r,sx,sy,ox,oy,kx,ky)
-    local image = self.image
+    --根据当前动画名称取出动画对象
+    local anim = self.anims[self.useName]
+    if anim == nil then
+        error("目标动画不存在"..self.useName)
+        return
+    end
+    local image = anim.image
     local quad = self.quad
     if image == nil or quad == nil then return end
     x = math.floor(x)
@@ -183,11 +199,11 @@ end
 
 ---播放动画
 ---@overload fun()
----@param frameIndex number 指定开始播放的第一帧 默认值: 0
-function Animation:play(frameIndex)
-    frameIndex = frameIndex or 0
+---@param name string 要播放的动画名称
+function Animation:play(name)
+    self.useName = name
     self.state = AnimationState.Playing
-    self:setFrameIndex(frameIndex)
+    self:setFrameIndex(0)
 end
 ---停止动画
 ---@overload fun()
