@@ -1,8 +1,7 @@
-GameObject = Object:extend()
 ---游戏对象基本类
 require "scripts.base.Game"
 require "scripts.base.Vector2"
----@class GameObject : Object
+---@class GameObject
 ---@field gameObjectName string | nil 对象名称
 ---@field animation Animation | nil 对象动画组件
 ---@field position Vector2 | nil 对象所在空间坐标{x,y}
@@ -27,13 +26,26 @@ GameObject = {
 ---构造函数
 ---@return GameObject
 function GameObject:new()
-    self.position = Vector2.zero()
-    self.scale = {x = 1, y = 1}
-    self.rotate = 0
-    self.gameObjectName = tostring(self)
-    self.components = {}
-    self.central = Vector2.zero()
-    return self
+    ---@type GameObject
+    local o = {}
+    setmetatable(o, {__index = self})
+    o.setScale = GameObject.setScale
+    o.setPosition = GameObject.setPosition
+    o.getPosition = GameObject.getPosition
+    o.position = Vector2.zero()
+    o.scale = {x = 1, y = 1}
+    o.rotate = 0
+    o.gameObjectName = tostring(o)
+    o.getPosition = GameObject.getPosition
+    o.addComponent = GameObject.addComponent
+    o.components = {}
+    o.getComponent = self.getComponent
+    o.destroy = self.destroy
+    o.central = Vector2.zero()
+
+    table.insert(Game.gameObjects, o)
+
+    return o
 end
 
 ---设置对象坐标
