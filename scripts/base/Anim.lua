@@ -14,7 +14,9 @@ Anim={
     image = nil, --用于创建动画的序列帧位图
     xCount = 0, --x轴帧数量
     yCount = 0, --y轴帧数量
-    quad = nil
+    quad = nil,
+    width = 0, --单帧动画的宽度
+    height = 0 --单帧动画的高度
 }
 
 ---构造函数
@@ -28,6 +30,11 @@ function Anim:new(name, image, xCount, yCount)
     self.image = image
     self.xCount = xCount
     self.yCount = yCount
-    self.quad = love.graphics.newQuad(0,0,self.width, self.height, self.image:getWidth(), self.image:getHeight())
-    return self
+    --计算出单帧动画的宽高
+    local sw = self.image:getWidth()
+    local sh = self.image:getHeight()
+    self.width = sw / xCount
+    self.height = sh / yCount
+    ---@diagnostic disable-next-line: missing-return
+    self.quad = love.graphics.newQuad(0,0,self.width, self.height, sw, sh)
 end
