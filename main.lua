@@ -8,6 +8,7 @@ require "scripts.components.CollisionBox"
 require "scripts.manager.RoleManager"
 require "scripts.manager.SceneManager"
 require "scripts.game.PlayerController"
+require "scripts.utils.PrefabUtil"
 local sti = require "scripts.utils.sti"
 
 --启用远程调试
@@ -29,11 +30,10 @@ function love.load()
     --加载场景
     map = sti("scenes/start.lua")
 
-    local role = RoleManager.createRole("image/character/角色_行走.png", "player",250,100);
-    if role == nil then
-        return
-    end
-    role:addComponent(PlayerController)
+    --实例化角色对象
+    PrefabUtil.instantiate("player")
+
+    print("game start completed!")
 end
 
 --每帧逻辑处理

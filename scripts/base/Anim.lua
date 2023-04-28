@@ -1,23 +1,17 @@
 local Object = require "scripts.base.Object"
 
-Anim = Object:extend()
-
 ---动画
 ---@class Anim
 ---@field name string | nil 动画名称
 ---@field image love.Texture | nil 用于创建动画的序列帧位图
 ---@field xCount number x轴帧数量
 ---@field yCount number y轴帧数量
+---@field width number 单帧动画的宽度
+---@field height number 单帧动画的高度
+---@field row number 当前所使用的动画行
+---@field frameIndex number 当前动画帧下标
 ---@field quad love.Quad | nil 视图窗口
-Anim={
-    name = nil, --动画名称
-    image = nil, --用于创建动画的序列帧位图
-    xCount = 0, --x轴帧数量
-    yCount = 0, --y轴帧数量
-    quad = nil,
-    width = 0, --单帧动画的宽度
-    height = 0 --单帧动画的高度
-}
+Anim = Object:extend()
 
 ---构造函数
 ---@param name string | nil 动画名称
@@ -26,6 +20,7 @@ Anim={
 ---@param yCount number y轴帧数量
 ---@return Anim
 function Anim:new(name, image, xCount, yCount)
+    print("Anim instances")
     self.name = name
     self.image = image
     self.xCount = xCount
@@ -35,6 +30,8 @@ function Anim:new(name, image, xCount, yCount)
     local sh = self.image:getHeight()
     self.width = sw / xCount
     self.height = sh / yCount
-    ---@diagnostic disable-next-line: missing-return
     self.quad = love.graphics.newQuad(0,0,self.width, self.height, sw, sh)
+    self.row = 0
+    self.frameIndex = 0
+    return self
 end

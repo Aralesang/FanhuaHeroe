@@ -1,15 +1,12 @@
 require "scripts.base.Component"
 require "scripts.enums.AnimaState"
+require "scripts.base.Anim"
 
 ---动画组件
 ---@class Animation : Component
----@field image love.Texture | nil 用于创建动画的序列帧位图
 ---@field width number 单帧对象宽度
 ---@field height number 单帧对象高度
----@field quad table | nil 视图窗口
----@field frameIndex number 当前动画帧下标
 ---@field frameCount number 帧总数量
----@field row number 当前所使用的动画行
 ---@field frameInterval number 动画播放帧率间隔
 ---@field frameLastCount number 距离上一帧动画已过去的帧数
 ---@field xCount number x轴帧数量
@@ -17,23 +14,8 @@ require "scripts.enums.AnimaState"
 ---@field private state AnimationState 动画状态
 ---@field eventList function[] | nil 动画事件字典 关键帧:程序处理器
 ---@field anims Anim[] | nil 动画列表
----@field useName string 当前使用的动画名称
-Animation = {
-    image = nil, --用于创建动画的序列帧位图
-    width = 0, --单帧对象宽度
-    height = 0, --单帧对象高度
-    quad = nil, --视图窗口
-    frameInterval = 0, --动画播放帧率间隔
-    frameLastCount = 0, --当前动画帧所经过的帧率
-    frameCount = 0, --帧数
-    row = 0, --当前所使用的动画行
-    xCount = 0, --x轴帧数量
-    yCount = 0, --y轴帧数量
-    state = AnimationState.Stop, --动画状态
-    componentName = "Animation",
-    eventList = nil, --事件列表
-    anims = nil --动画层列表
-}
+---@field useName string | nil 当前使用的动画名称
+Animation = Component:extend()
 
 function Animation:load()
 
@@ -53,22 +35,18 @@ end
 --创建一个新的动画对象
 ---@return Animation | Component
 function Animation:new ()
-    ---@type Animation | Component
-    local o = Component:new()
-    setmetatable(o,{__index=self})
-    o.image = nil
-    o.xCount = 0
-    o.yCount = 0
-    o.width = 0
-    o.height = 0
-    o.row = 0
-    o.frameInterval = 0
-    o.frameLastCount = 0
-    o.frameIndex = 0
-    o.frameCount = 0
-    o.quad = nil
-    o.eventList = nil
-    return o
+    self.xCount = 0
+    self.yCount = 0
+    self.width = 0
+    self.height = 0
+    self.row = 0
+    self.frameInterval = 0
+    self.frameLastCount = 0
+    self.frameIndex = 0
+    self.frameCount = 0
+    self.quad = nil
+    self.eventList = nil
+    return self
 end
 
 ---创建一个动画
@@ -87,38 +65,15 @@ function Animation:create(name,imagePath,xCount,yCount)
         self.anims = {}
     end
     self.anims[name] = animLayer
+    print("创建动画:["..animLayer.name.."] 图像路径:"..imagePath)
 end
 
---动画组件初始化
----@overload fun (image,xCount,yCount,frameInterval)
----@param image love.Texture 用于创建动画的序列帧位图
----@param xCount number x轴帧数量
----@param yCount number y轴帧数量
----@param frameInterval number 动画播放帧率间隔
----@param row number 当前所使用的动画行
-function Animation:init(image,xCount,yCount,frameInterval,row)
-    self.image = image or {}
-    self.xCount = xCount or 0
-    self.yCount = yCount or 0
-    self.width = self.image:getWidth() / self.xCount
-    self.height = self.image:getHeight() / self.yCount
-    self.row = row or 0
-    self.frameInterval = frameInterval or 0
-    self.frameCount = self.image:getWidth() / self.width
-    self.quad = love.graphics.newQuad(0,self.row * self.height,self.width, self.height, self.image:getWidth(), self.image:getHeight())
-end
-
----设置动画使用的图像
----@param imagePath string 新图像的地址
----@param xCount number x轴的帧数
----@param yCount number y轴帧数
-function Animation:setImage(imagePath,xCount,yCount)
-    self.image = love.graphics.newImage(imagePath)
-    self.xCount = xCount or 0
-    self.yCount = yCount or 0
-    self.width = self.image:getWidth() / self.xCount
-    self.height = self.image:getHeight() / self.yCount
-    self.quad = love.graphics.newQuad(0,self.row * self.height,self.width, self.height, self.image:getWidth(), self.image:getHeight())
+---获取当前正在使用的动画
+---@param name string 目标动画名称
+---@return Anim anim 目标动画对象
+function Animation:getAnim(name)
+    local anim = self.anims[name]
+    return anim
 end
 
 ---绘制动画图像
@@ -130,14 +85,17 @@ end
 ---@param ox number 原点偏移(x轴)
 ---@param oy number 原点偏移(y轴)
 function Animation:drawAnimation(x,y,r,sx,sy,ox,oy,kx,ky)
+    if self.useName == nil then
+        return
+    end
     --根据当前动画名称取出动画对象
     local anim = self.anims[self.useName]
     if anim == nil then
-        error("目标动画不存在"..self.useName)
+        error("目标动画不存在:"..self.useName)
         return
     end
     local image = anim.image
-    local quad = self.quad
+    local quad = anim.quad
     if image == nil or quad == nil then return end
     x = math.floor(x)
     y = math.floor(y)
@@ -173,17 +131,24 @@ end
 ---@param row number 目标动画行
 ---@param animIndex number 从第几帧开始播放 默认值0
 function Animation:setRow(row,animIndex)
-    self.row = row
+    local anim = self:getAnim(self.useName)
+    if anim == nil then return end
+    local quad = anim.quad
+    if quad == nil then return end
     self.frameIndex = animIndex or 0
-    self.quad:setViewport(0, self.row * self.height, self.width, self.height, self.image:getWidth(), self.image:getHeight())
+    quad:setViewport(0, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
 end
 
 ---设置动画帧
 function Animation:setFrameIndex(frameIndex)
-    self.frameIndex = frameIndex
-    self.quad:setViewport(self.frameIndex * self.width, self.row * self.height, self.width, self.height, self.image:getWidth(), self.image:getHeight())
+    local anim = self:getAnim(self.useName)
+    if anim == nil then return end
+    local quad = anim.quad
+    if quad == nil then return end
+    anim.frameIndex = frameIndex
+    quad:setViewport(anim.frameIndex * anim.width, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
     --当前的动画帧
-    local key = self.xCount * self.row + self.frameIndex
+    local key = anim.xCount * anim.row + anim.frameIndex
     --触发动画帧事件
     local event = self:getEvent(key)
     if event then
@@ -201,6 +166,7 @@ end
 ---@overload fun()
 ---@param name string 要播放的动画名称
 function Animation:play(name)
+    print("play:"..name)
     self.useName = name
     self.state = AnimationState.Playing
     self:setFrameIndex(0)

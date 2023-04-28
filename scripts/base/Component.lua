@@ -1,22 +1,28 @@
+require "scripts.base.Object"
+
 ---组件基类
 ---@class Component
 ---@field componentName string | nil 组件名称
 ---@field gameObject GameObject | nil 组件所附加到的游戏物体
 ---@field isLoad boolean 是否已经调用过初始化函数
-Component = {
-    componentName = nil,
-    gameObject = nil,
-    isLoad = false
-}
+Component = Object:extend()
 
 function Component:new()
-    ---@type Component
-    local o = {}
-    setmetatable(o,{__index = self})
-    o.isLoad = false
-    o.addComponent = self.addComponent
-    o.getComponent = self.getComponent
-    return o
+  self.isLoad = false
+  return self
+end
+
+function Component:extend()
+  local cls = {}
+  for k, v in pairs(self) do
+    if k:find("__") == 1 then
+      cls[k] = v
+    end
+  end
+  cls.__index = cls
+  cls.super = self
+  setmetatable(cls, self)
+  return cls
 end
 
 ---组件附加到对象后，立即调用一次
@@ -45,8 +51,12 @@ end
 ---@param componentType T 组件对象
 ---@return T
 function Component:addComponent(componentType)
-    local component = self.gameObject:addComponent(componentType)
-    return component
+  --print("component add: " .. componentType["componentName"])
+  local component = self.gameObject:addComponent(componentType)
+  if component == nil then
+    error("component add fail: " .. componentType["componentName"])
+  end
+  return component
 end
 
 ---获取该组件所附加的游戏对象上指定的组件对象
@@ -54,16 +64,16 @@ end
 ---@param componentType T 组件类型
 ---@return T
 function Component:getComponent(componentType)
-    local component = self.gameObject:getComponent(componentType)
-    return component
+  local component = self.gameObject:getComponent(componentType)
+  return component
 end
 
 ---键盘按下
 ---@param key number 键盘键入值
-function Component: keypressed(key)
+function Component:keypressed(key)
 end
 
 ---按键释放
 ---@param key number 键盘释放的键值
-function Component: keyreleased(key)
+function Component:keyreleased(key)
 end

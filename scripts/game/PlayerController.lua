@@ -51,6 +51,7 @@ function PlayerController:load()
 end
 
 function PlayerController:update(dt)
+    print("walking...")
     local player = self.gameObject
     local width, height = love.window.getMode()
     if player == nil then return end
@@ -73,18 +74,17 @@ function PlayerController:update(dt)
     end
 
     if isMove then                                               --如果移动被激活
+        print("walking...")
         if role:getDir() ~= moveDir then
             role:setDir(moveDir)                                 --设置角色面向
         end
         if not animation:checkState(AnimationState.Playing) then --如果当前动画不处于播放中,则从第一帧(初始帧为第0帧)开始播放
-            animation:setImage("image/character/角色_行走.png",6,4)
-            animation:play(1)
+            animation:play("行走")
         end
         self:move(dt, moveDir)                               --移动
     else                                                     --如果没在移动了
         if animation:checkState(AnimationState.Playing) then --当前如果正在播放动画，则停止播放并定格到第0帧
-            animation:setImage("image/character/角色_待机.png",1,4)
-            animation:stop(0)
+            animation:play("闲置")
         end
     end
 
@@ -131,8 +131,6 @@ function PlayerController:fire()
     ---@type Animation | nil
     local animation = bulletObj:addComponent(Animation)
     if animation == nil then return end
-    animation:init(bulletImage, 1, 1, 30)
-
     --为子弹附加碰撞组件
     ---@type CollisionCircular | nil
     local collision = bulletObj:addComponent(CollisionCircular)

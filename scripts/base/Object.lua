@@ -9,9 +9,7 @@
 
 ---对象基类
 ---@class Object
-Object = {
-  extend = Object.extend
-}
+local Object = {}
 Object.__index = Object
 
 
