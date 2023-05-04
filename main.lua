@@ -32,7 +32,6 @@ function love.load()
 
     --实例化角色对象
     PrefabUtil.instantiate("player")
-
     print("game start completed!")
 end
 
