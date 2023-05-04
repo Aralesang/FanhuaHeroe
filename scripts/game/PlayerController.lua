@@ -31,9 +31,8 @@ local role
 
 ---玩家控制器
 ---@class PlayerController : Component
-PlayerController = {
-    componentName = "PlayerController",
-}
+PlayerController = Component:extend()
+PlayerController.componentName = "PlayerController"
 
 ---@return PlayerController | Component
 function PlayerController:new()
@@ -48,6 +47,7 @@ function PlayerController:load()
     player = self.gameObject
     if player == nil then return end
     animation = player:getComponent(Animation)
+    print("玩家控制器加载")
 end
 
 function PlayerController:update(dt)
@@ -74,16 +74,15 @@ function PlayerController:update(dt)
     end
 
     if isMove then                                               --如果移动被激活
-        print("walking...")
         if role:getDir() ~= moveDir then
             role:setDir(moveDir)                                 --设置角色面向
         end
-        if not animation:checkState(AnimationState.Playing) then --如果当前动画不处于播放中,则从第一帧(初始帧为第0帧)开始播放
+        if animation.useName ~= "行走" then --如果当前动画不是行走，则改为行走
             animation:play("行走")
         end
         self:move(dt, moveDir)                               --移动
     else                                                     --如果没在移动了
-        if animation:checkState(AnimationState.Playing) then --当前如果正在播放动画，则停止播放并定格到第0帧
+        if animation.useName == "行走" then --当前如果正在播放动画，则停止播放并定格到第0帧
             animation:play("闲置")
         end
     end

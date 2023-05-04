@@ -4,16 +4,11 @@ require "scripts.base.Anim"
 
 ---动画组件
 ---@class Animation : Component
----@field width number 单帧对象宽度
----@field height number 单帧对象高度
----@field frameCount number 帧总数量
----@field frameInterval number 动画播放帧率间隔
----@field frameLastCount number 距离上一帧动画已过去的帧数
----@field xCount number x轴帧数量
----@field yCount number y轴帧数量
+---@field private frameInterval number 动画播放帧率间隔
+---@field private frameLastCount number 距离上一帧动画已过去的帧数
 ---@field private state AnimationState 动画状态
----@field eventList function[] | nil 动画事件字典 关键帧:程序处理器
----@field anims Anim[] | nil 动画列表
+---@field private eventList function[] | nil 动画事件字典 关键帧:程序处理器
+---@field private anims Anim[] | nil 动画列表
 ---@field useName string | nil 当前使用的动画名称
 Animation = Component:extend()
 
@@ -99,7 +94,6 @@ function Animation:drawAnimation(x,y,r,sx,sy,ox,oy,kx,ky)
     if image == nil or quad == nil then return end
     x = math.floor(x)
     y = math.floor(y)
-    --print(x..","..y)
     love.graphics.draw(image,quad,x,y,r,sx,sy,ox,oy,kx,ky)
 end
 
@@ -163,7 +157,6 @@ function Animation:checkState(state)
 end
 
 ---播放动画
----@overload fun()
 ---@param name string 要播放的动画名称
 function Animation:play(name)
     print("play:"..name)
@@ -171,6 +164,7 @@ function Animation:play(name)
     self.state = AnimationState.Playing
     self:setFrameIndex(0)
 end
+
 ---停止动画
 ---@overload fun()
 ---@param frameIndex number 指定停止后显示的动画帧 默认值: 当前动画帧下标
