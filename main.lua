@@ -38,6 +38,7 @@ end
 --每帧逻辑处理
 ---@param dt number 距离上一帧的间隔时间
 function love.update(dt)
+    -- 锁定帧率
     if dt < deltaTime then
         love.timer.sleep(deltaTime - dt)
     end
