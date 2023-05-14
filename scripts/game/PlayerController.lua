@@ -6,55 +6,38 @@ require "scripts.utils.Debug"
 require "scripts.base.Component"
 require "scripts.enums.Direction"
 
----@type love.Image
---子弹图片
-local bulletImage
-
----是否正在移动
----@type boolean
-local isMove
-
----移动方向
----@type Direction
-local moveDir = Direction.Donw
-
----@type Animation
-local animation
-
----玩家对象
----@type GameObject
-local player
-
----角色组件
----@type Role
-local role
-
 ---玩家控制器
 ---@class PlayerController : Component
+---@field role Role 角色组件
+---@field bulletImage love.Image 子弹图片
+---@field isMove boolean 是否正在移动
+---@field moveDir Direction 移动方向
+---@field animation Animation 动画组件
+---@field player GameObject 玩家对象
 PlayerController = Component:extend()
 PlayerController.componentName = "PlayerController"
 
 ---@return PlayerController | Component
 function PlayerController:new()
-    ---@type Component
-    local o = Component:new()
-    setmetatable(o, { __index = self })
-    return o
-end
-
-function PlayerController:load()
-    role = self.gameObject:getComponent(Role)
-    player = self.gameObject
-    if player == nil then return end
-    animation = player:getComponent(Animation)
+    self.role = self.gameObject:getComponent(Role)
+    self.player = self.gameObject
+    if self.player == nil then return end
+    self.animation = self.player:getComponent(Animation)
+    self.moveDir = Direction.Donw
+    self.isMove = false
     print("玩家控制器加载")
+    return self
 end
 
 function PlayerController:update(dt)
-    print("walking...")
+    --print("walking...")
     local player = self.gameObject
     local width, height = love.window.getMode()
     if player == nil then return end
+    local animation = self.animation
+    local role = self.role
+    local moveDir = self.moveDir
+    local isMove = self.isMove
     Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
     if love.keyboard.isDown("up") then
         moveDir = Direction.Up
@@ -78,12 +61,12 @@ function PlayerController:update(dt)
             role:setDir(moveDir)                                 --设置角色面向
         end
         if animation.useName ~= "行走" then --如果当前动画不是行走，则改为行走
-            animation:play("行走")
+            --animation:play("行走")
         end
         self:move(dt, moveDir)                               --移动
     else                                                     --如果没在移动了
         if animation.useName == "行走" then --当前如果正在播放动画，则停止播放并定格到第0帧
-            animation:play("闲置")
+            --animation:play("闲置")
         end
     end
 
@@ -107,11 +90,12 @@ end
 ---普通攻击
 function PlayerController:attack()
     --TODO:实现普通攻击逻辑
-    role:attack()
+    self.role:attack()
 end
 
 ---发射子弹
 function PlayerController:fire()
+    local bulletImage = self.bulletImage
     if bulletImage == nil then
         bulletImage = love.graphics.newImage("image/bullet.png")
     end
@@ -120,7 +104,7 @@ function PlayerController:fire()
         return
     end
     local playerPosition = player:getPosition()
-
+    local role = self.role
     --创建子弹对象
     local bulletObj = GameObject:new()
     bulletObj:setCentral(bulletImage:getWidth() / 2, bulletImage:getHeight() / 2)
@@ -166,6 +150,8 @@ end
 function PlayerController:move(dt, dir)
     local player = self.gameObject
     if player == nil then return end
+
+    local role = self.role
 
     local position = player:getPosition()
     local x = position.x

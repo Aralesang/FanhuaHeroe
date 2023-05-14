@@ -11,20 +11,16 @@ require "scripts.enums.Direction"
 ---@field speed number 角色速度
 ---@field moveDir Direction 角色移动方向
 ---@field private direction Direction 角色朝向
-Role = {
-    name = nil,
-    speed = 100,
-    moveDir = Direction.Donw, --移动方向
-    componentName = "Role",
-    direction = Direction.Donw
-}
+Role = Component:extend()
 
 ---@return Role | Component
 function Role:new()
-    ---@type Component
-    local o = Component:new()
-    setmetatable(o, {__index = self})
-    return o
+    self.name = nil
+    self.speed = 100
+    self.moveDir = Direction.Donw --移动方向
+    self.componentName = "Role"
+    self.direction = Direction.Donw
+    return self
 end
 
 function Role:load()
