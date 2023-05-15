@@ -4,7 +4,7 @@ require "scripts.game.PlayerController"
 require "scripts.base.GameObject"
 
 ---@type GameObject | nil
-local roleObj = RoleManager.createRole("player",100,100);
+local roleObj = RoleManager.createRole("player",200,200);
 if roleObj == nil then return end
 ---@type Role
 local role = roleObj:getComponent(Role)
@@ -21,7 +21,9 @@ animation:create("行走","image/character/角色_行走.png",6,4)
 --TODO:创建闲置动画
 animation:create("闲置","image/character/角色_待机.png",1,4)
 animation:play("行走")
+
 roleObj:addComponent(PlayerController)
+
 return role
 
 -- return{
