@@ -21,6 +21,7 @@ PlayerController.componentName = "PlayerController"
 function PlayerController:new()
     self.role = self.gameObject:getComponent(Role)
     self.player = self.gameObject
+---@diagnostic disable-next-line: missing-return-value
     if self.player == nil then return end
     self.animation = self.player:getComponent(Animation)
     self.moveDir = Direction.Donw
