@@ -6,6 +6,7 @@ require "scripts.base.Anim"
 ---@class Animation : Component
 ---@field private frameInterval number 动画播放帧率间隔
 ---@field private frameLastCount number 距离上一帧动画已过去的帧数
+---@field private frameLastTime number 距离上一帧动画已过去的时间(毫秒)
 ---@field private state AnimationState 动画状态
 ---@field private eventList function[] | nil 动画事件字典 关键帧:程序处理器
 ---@field private anims Anim[] | nil 动画列表
@@ -14,17 +15,6 @@ Animation = Component:extend()
 
 function Animation:load()
 
-end
-
-function Animation:draw()
-    local gameObject = self.gameObject
-    if gameObject == nil then
-        return
-    end
-    local position = gameObject:getPosition()
-    local x = position.x - self.gameObject.central.x * self.gameObject.scale.x
-    local y = position.y - self.gameObject.central.y * self.gameObject.scale.y
-    self:drawAnimation(x, y, gameObject.rotate, gameObject.scale.x, gameObject.scale.y,0,0)
 end
 
 --创建一个新的动画对象
@@ -37,6 +27,7 @@ function Animation:new ()
     self.row = 0
     self.frameInterval = 0
     self.frameLastCount = 0
+    self.frameLastTime = 0
     self.frameIndex = 0
     self.frameCount = 0
     self.quad = nil
@@ -71,32 +62,6 @@ function Animation:getAnim(name)
     return anim
 end
 
----绘制动画图像
----@param x number 绘制对象的位置(x轴)
----@param y number 绘制对象的位置(y轴)
----@param r number 旋转弧度
----@param sx number 比例因子(x轴)
----@param sy number 比例因子(y轴)
----@param ox number 原点偏移(x轴)
----@param oy number 原点偏移(y轴)
-function Animation:drawAnimation(x,y,r,sx,sy,ox,oy,kx,ky)
-    if self.useName == nil then
-        return
-    end
-    --根据当前动画名称取出动画对象
-    local anim = self.anims[self.useName]
-    if anim == nil then
-        error("目标动画不存在:"..self.useName)
-        return
-    end
-    local image = anim.image
-    local quad = anim.quad
-    if image == nil or quad == nil then return end
-    x = math.floor(x)
-    y = math.floor(y)
-    love.graphics.draw(image,quad,x,y,r,sx,sy,ox,oy,kx,ky)
-end
-
 ---动画帧刷新(按照顺序从左到右播放动画)
 ---@param dt number 所经过的时间间隔
 function Animation:update(dt)
@@ -120,6 +85,31 @@ function Animation:update(dt)
     self.frameIndex = index
 end
 
+function Animation:draw()
+    local gameObject = self.gameObject
+    if gameObject == nil then
+        return
+    end
+    local position = gameObject:getPosition()
+    local x = position.x - self.gameObject.central.x * self.gameObject.scale.x
+    local y = position.y - self.gameObject.central.y * self.gameObject.scale.y
+    if self.useName == nil then
+        return
+    end
+    --根据当前动画名称取出动画对象
+    local anim = self.anims[self.useName]
+    if anim == nil then
+        error("目标动画不存在:"..self.useName)
+        return
+    end
+    local image = anim.image
+    local quad = anim.quad
+    if image == nil or quad == nil then return end
+    x = math.floor(x)
+    y = math.floor(y)
+    love.graphics.draw(image,quad,x,y,gameObject.rotate,gameObject.scale.x,gameObject.scale.y,0,0,0,0)
+end
+
 ---设置动画行
 ---@overload fun(row)
 ---@param row number 目标动画行
@@ -127,6 +117,7 @@ end
 function Animation:setRow(row,animIndex)
     local anim = self:getAnim(self.useName)
     if anim == nil then return end
+    anim.row = row
     local quad = anim.quad
     if quad == nil then return end
     self.frameIndex = animIndex or 0

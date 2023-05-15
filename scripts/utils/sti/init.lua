@@ -1,3 +1,4 @@
+---@diagnostic disable: lowercase-global
 --- Simple and fast Tiled map loader and renderer.
 -- @module sti
 -- @author Landon Manning
