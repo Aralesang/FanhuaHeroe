@@ -2,29 +2,27 @@
 require "scripts.base.Game"
 require "scripts.base.Vector2"
 ---@class GameObject
----@field gameObjectName string | nil 对象名称
----@field animation Animation | nil 对象动画组件
----@field position Vector2 | nil 对象所在空间坐标{x,y}
----@field scale table | nil 对象缩放比例因子{x,y}
+---@field gameObjectName string 对象名称
+---@field position Vector2 对象所在空间坐标{x,y}
+---@field scale table 对象缩放比例因子{x,y}
 ---@field rotate number 对象旋转弧度
 ---@field components Component[] | nil 组件
 ---@field load function 对象加载
 ---@field update function 对象帧更新 参数: dt 与上一帧的时间间隔(毫秒)
 ---@field isDestroy boolean 销毁标记,持有此标记的对象，将会在本次帧事件的末尾被清除
----@field central Vector2 | nil 中心坐标,相对对象0,0坐标的中心坐标位置
+---@field central Vector2 中心坐标,相对对象0,0坐标的中心坐标位置
 GameObject = Object:extend()
 
 ---构造函数
 ---@return GameObject
 function GameObject:new()
-    self.gameObjectName = nil
-    self.animation = nil
-    self.position = {x = 0, y = 0}
+    self.gameObjectName = ""
+    self.position = Vector2.zero()
     self.scale = {x = 1, y = 1}
     self.rotate = 0
     self.components = nil
     self.isDestroy = false
-    self.central = nil
+    self.central = Vector2.zero()
     return self
 end
 
@@ -61,12 +59,15 @@ end
 ---附加一个组件
 ---@generic T : Component
 ---@param componentType Component 组件对象
----@return T | nil
+---@return T
 function GameObject:addComponent(componentType)
     local component = componentType:new()
     local componentName = component.componentName
     if componentName == nil then
-        return nil
+        error("附加组件失败,目标组件名称为空")
+    end
+    if self.components == nil then
+        self.components = {}
     end
     self.components[componentName] = component
     component.gameObject = self
@@ -79,9 +80,19 @@ end
 ---获取组件对象
 ---@generic T : Component
 ---@param componentType Component 组件类型
----@return T
+---@return T | nil
 function GameObject:getComponent(componentType)
-    local component = self.components[componentType.componentName]
+    if componentType == nil then
+        error("componentType 为空")
+    end
+    local componentName = componentType.componentName
+    if componentName == nil then
+        error("目标组件名称为空")
+    end
+    if self.components == nil then
+        return nil
+    end
+    local component = self.components[componentName]
     return component
 end
 

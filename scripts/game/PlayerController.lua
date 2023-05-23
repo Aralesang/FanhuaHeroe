@@ -8,26 +8,27 @@ require "scripts.enums.Direction"
 
 ---玩家控制器
 ---@class PlayerController : Component
----@field role Role 角色组件
+---@field role Role | nil 角色组件
 ---@field bulletImage love.Image 子弹图片
 ---@field isMove boolean 是否正在移动
 ---@field moveDir Direction 移动方向
----@field animation Animation 动画组件
+---@field animation Animation | nil 动画组件
 ---@field player GameObject 玩家对象
 PlayerController = Component:extend()
 PlayerController.componentName = "PlayerController"
 
 ---@return PlayerController | Component
 function PlayerController:new()
-    self.role = self.gameObject:getComponent(Role)
     self.player = self.gameObject
----@diagnostic disable-next-line: missing-return-value
-    if self.player == nil then return end
-    self.animation = self.player:getComponent(Animation)
     self.moveDir = Direction.Donw
     self.isMove = false
     print("玩家控制器加载")
     return self
+end
+
+function PlayerController:load()
+    self.role = self.gameObject:getComponent(Role)
+    self.animation = self.player:getComponent(Animation)
 end
 
 function PlayerController:update(dt)
@@ -36,7 +37,9 @@ function PlayerController:update(dt)
     local width, height = love.window.getMode()
     if player == nil then return end
     local animation = self.animation
+    if animation == nil then return end
     local role = self.role
+    if role == nil then return end
     local moveDir = self.moveDir
     local isMove = self.isMove
     Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
@@ -106,6 +109,7 @@ function PlayerController:fire()
     end
     local playerPosition = player:getPosition()
     local role = self.role
+    if role == nil then return end
     --创建子弹对象
     local bulletObj = GameObject:new()
     bulletObj:setCentral(bulletImage:getWidth() / 2, bulletImage:getHeight() / 2)
@@ -153,7 +157,7 @@ function PlayerController:move(dt, dir)
     if player == nil then return end
 
     local role = self.role
-
+    if role == nil then return end
     local position = player:getPosition()
     local x = position.x
     local y = position.y

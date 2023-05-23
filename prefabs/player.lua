@@ -6,12 +6,12 @@ require "scripts.base.GameObject"
 ---@type GameObject | nil
 local roleObj = RoleManager.createRole("player",200,200);
 if roleObj == nil then return end
----@type Role
+---@type Role | nil
 local role = roleObj:getComponent(Role)
 if role == nil then return nil end
 --附加动画组件
 ---@type Animation | nil
-local animation = role:addComponent(Animation)
+local animation = roleObj:addComponent(Animation)
 if animation == nil then
     error("animation component add fail")
     return nil 

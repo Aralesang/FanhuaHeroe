@@ -1,5 +1,5 @@
 ---@diagnostic disable: param-type-mismatch, need-check-nil
-local JSON = require "scripts.base.JSON"
+local JSON = require "scripts.utils.JSON"
 require "scripts.utils.Debug"
 local Scene= require "scripts.base.Scene"
 

@@ -28,6 +28,7 @@ function Animation:new ()
     self.frameCount = 0
     self.quad = nil
     self.eventList = nil
+    self.componentName = "Animation"
     return self
 end
 

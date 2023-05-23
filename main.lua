@@ -20,7 +20,7 @@ local deltaTime = 1 / 60
 local map
 
 function love.load()
-    print("game starting...")
+    print("游戏初始化...")
     love.window.setVSync(0)
     --加载中文字体(启动会很缓慢)
     local myFont = love.graphics.newFont("fonts/SourceHanSansCN-Bold.otf", 16)
@@ -32,7 +32,7 @@ function love.load()
 
     --实例化角色对象
     PrefabUtil.instantiate("player")
-    print("game start completed!")
+    print("游戏初始化完毕!")
 end
 
 --每帧逻辑处理

@@ -20,7 +20,6 @@ Anim = Object:extend()
 ---@param yCount number y轴帧数量
 ---@return Anim
 function Anim:new(name, image, xCount, yCount)
-    print("Anim instances")
     self.name = name
     self.image = image
     self.xCount = xCount

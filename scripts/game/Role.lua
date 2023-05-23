@@ -39,7 +39,7 @@ end
 ---@param dir Direction 方向
 function Role:setDir(dir)
     if self.animation == nil then
-        self.animation = self:getComponent(Animation)
+        self.animation = self.gameObject:getComponent(Animation)
     end
     self.direction = dir
     if dir == Direction.Left then

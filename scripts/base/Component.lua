@@ -46,28 +46,6 @@ end
 function Component:onDestroy()
 end
 
----为该组件所附加的游戏对象附加一个新组件
----@generic T : Component
----@param componentType T 组件对象
----@return T
-function Component:addComponent(componentType)
-  --print("component add: " .. componentType["componentName"])
-  local component = self.gameObject:addComponent(componentType)
-  if component == nil then
-    error("component add fail: " .. componentType["componentName"])
-  end
-  return component
-end
-
----获取该组件所附加的游戏对象上指定的组件对象
----@generic T : Component
----@param componentType T 组件类型
----@return T
-function Component:getComponent(componentType)
-  local component = self.gameObject:getComponent(componentType)
-  return component
-end
-
 ---键盘按下
 ---@param key number 键盘键入值
 function Component:keypressed(key)
