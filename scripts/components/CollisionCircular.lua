@@ -6,18 +6,14 @@ require "scripts.components.Collision"
 ---@class CollisionCircular : Collision
 ---@field debug boolean 绘制形状
 ---@field radius number 半径
-CollisionCircular = {
-    radius = 0,
-    componentName = "CollisionCircular"
-}
+CollisionCircular = Component:extend()
 
 ---创建一个新碰撞器
 ---@return CollisionCircular | Collision | Component
 function CollisionCircular:new()
-    local o = Collision:new()
-    setmetatable(o, {__index = self})
     self.radius = 0
-    return o
+    self.componentName = "CollisionCircular"
+    return self
 end
 
 function CollisionCircular:load()

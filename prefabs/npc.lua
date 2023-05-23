@@ -3,5 +3,5 @@ require "scripts.manager.RoleManager"
 require "scripts.game.PlayerController"
 require "scripts.base.GameObject"
 
-local role = RoleManager.createRole("image/npc.png", "npc");
+local role = RoleManager.createRole("npc");
 return role

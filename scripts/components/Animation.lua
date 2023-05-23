@@ -13,10 +13,6 @@ require "scripts.base.Anim"
 ---@field useName string | nil 当前使用的动画名称
 Animation = Component:extend()
 
-function Animation:load()
-
-end
-
 --创建一个新的动画对象
 ---@return Animation | Component
 function Animation:new ()

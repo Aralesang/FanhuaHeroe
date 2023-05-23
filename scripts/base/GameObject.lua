@@ -12,40 +12,20 @@ require "scripts.base.Vector2"
 ---@field update function 对象帧更新 参数: dt 与上一帧的时间间隔(毫秒)
 ---@field isDestroy boolean 销毁标记,持有此标记的对象，将会在本次帧事件的末尾被清除
 ---@field central Vector2 | nil 中心坐标,相对对象0,0坐标的中心坐标位置
-GameObject = {
-    gameObjectName = nil,
-    animation = nil,
-    position = {x = 0, y = 0},
-    scale = {x = 1, y = 1},
-    rotate = 0,
-    components = nil,
-    isDestroy = false,
-    central = nil
-}
+GameObject = Object:extend()
 
 ---构造函数
 ---@return GameObject
 function GameObject:new()
-    ---@type GameObject
-    local o = {}
-    setmetatable(o, {__index = self})
-    o.setScale = GameObject.setScale
-    o.setPosition = GameObject.setPosition
-    o.getPosition = GameObject.getPosition
-    o.position = Vector2.zero()
-    o.scale = {x = 1, y = 1}
-    o.rotate = 0
-    o.gameObjectName = tostring(o)
-    o.getPosition = GameObject.getPosition
-    o.addComponent = GameObject.addComponent
-    o.components = {}
-    o.getComponent = self.getComponent
-    o.destroy = self.destroy
-    o.central = Vector2.zero()
-
-    table.insert(Game.gameObjects, o)
-
-    return o
+    self.gameObjectName = nil
+    self.animation = nil
+    self.position = {x = 0, y = 0}
+    self.scale = {x = 1, y = 1}
+    self.rotate = 0
+    self.components = nil
+    self.isDestroy = false
+    self.central = nil
+    return self
 end
 
 ---设置对象坐标

@@ -12,21 +12,16 @@ require "scripts.components.DebugDraw"
 ---@field speed number 子弹飞行速度
 ---@field master string 子弹的发射者
 ---@field dir Vector2 子弹飞行方向
-Bullet = {
-    animation = nil,
-    speed = 5,
-    componentName = "Bullet",
-    master = "",
-    dir = Vector2.zero()
-}
+Bullet = Component:extend()
 
 ---@return Bullet | Component
 function Bullet:new()
-    ---@type Component
-    local o = Component:new()
-    setmetatable(o,{__index=self})
-
-    return o
+    self.animation = nil
+    self.speed = 5
+    self.componentName = "Bullet"
+    self.master = ""
+    self.dir = Vector2.zero()
+    return self
 end
 
 function Bullet:load()

@@ -25,15 +25,3 @@ animation:play("行走")
 roleObj:addComponent(PlayerController)
 
 return role
-
--- return{
---     components = {
---         Role = {
---             name = nil,
---             speed = 100,
---             moveDir = Direction.Donw, --移动方向
---             componentName = "player",
---             direction = Direction.Donw
---         }
---     }
--- }

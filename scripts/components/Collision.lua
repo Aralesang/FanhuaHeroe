@@ -8,28 +8,15 @@ require "scripts.base.Component"
 ---@field isCollision boolean 当前碰撞器是否处于碰撞中
 ---@field onBeginCollision function 碰撞开始
 ---@field onEndCollision function 碰撞结束
-Collision = {
-    position = {x = 0, y = 0},
-    debug = false,
-    collisions = nil,
-    isCollision = false
-}
+Collision = Component:extend()
 
 ---@return Collision | Component
 function Collision:new()
-    ---@type Component
-    local o = Component:new()
-    setmetatable(o, {__index = self})
-    table.insert(Game.controllers,o)
-    o.position = Vector2.zero()
-    o.debug = true
-    o.collisions = {}
-    o.setPosition = self.setPosition
-    o.getPosition = self.getPosition
-    o.onBeginCollision = self.onBeginCollision
-    o.onEndCollision = self.onEndCollision
-    o.checkCollision = self.checkCollision
-    return o
+    self.position = {x = 0, y = 0}
+    self.debug = false
+    self.collisions = nil
+    self.isCollision = false
+    return self
 end
 
 ---获取碰撞器所在位置

@@ -8,22 +8,18 @@ require "scripts.components.Collision"
 ---@field width number 碰撞器的宽度
 ---@field height number 碰撞器的高度
 ---@field isCollision boolean 如果当前碰撞器处于碰撞中,则为true
-CollisionBox = {
-    width = 0,
-    height = 0,
-    isCollision = false,
-    componentName = "CollisionBox"
-}
+CollisionBox = Component:extend()
 
 ---创建一个新碰撞器
 ---@return CollisionBox | Collision | Component
 function CollisionBox:new()
-    local o = Collision:new()
-    setmetatable(o, {__index = self})
     self.width = 0
     self.height = 0
-
-    return o
+    self.width = 0
+    self.height = 0
+    self.isCollision = false
+    self.componentName = "CollisionBox"
+    return self
 end
 
 function CollisionBox:load()
