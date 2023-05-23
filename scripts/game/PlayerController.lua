@@ -28,16 +28,19 @@ end
 
 function PlayerController:load()
     self.role = self.gameObject:getComponent(Role)
-    self.animation = self.player:getComponent(Animation)
+    self.animation = self.gameObject:getComponent(Animation)
 end
 
 function PlayerController:update(dt)
-    --print("walking...")
     local player = self.gameObject
     local width, height = love.window.getMode()
-    if player == nil then return end
+    if player == nil then 
+        error("player is nil")
+    end
     local animation = self.animation
-    if animation == nil then return end
+    if animation == nil then 
+        error("animation is nil")
+    end
     local role = self.role
     if role == nil then return end
     local moveDir = self.moveDir
@@ -61,6 +64,7 @@ function PlayerController:update(dt)
     end
 
     if isMove then                                               --如果移动被激活
+        
         if role:getDir() ~= moveDir then
             role:setDir(moveDir)                                 --设置角色面向
         end
@@ -175,6 +179,7 @@ function PlayerController:move(dt, dir)
     --if Tile:isEmpty(x, y) then
     player:setPosition(x, y)
     --end
+    print("moveing")
 end
 
 return PlayerController

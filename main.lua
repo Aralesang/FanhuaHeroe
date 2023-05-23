@@ -12,7 +12,9 @@ require "scripts.utils.PrefabUtil"
 local sti = require "scripts.utils.sti"
 
 --启用远程调试
---Debug.debugger()
+if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
+    require("lldebugger").start()
+end
 
 --甚至每帧的时间为1/60秒，即帧率为60帧每秒
 local deltaTime = 1 / 60
@@ -48,7 +50,7 @@ function love.update(dt)
     for key, value in pairs(Game.gameObjects) do
         for _, component in pairs(value.components) do
             --触发组件load函数
-            if component.load and component.isLoad == false then
+            if component.load and component.isLoad == false or component.isLoad == nil then
                 component:load()
                 component.isLoad = true
             end
