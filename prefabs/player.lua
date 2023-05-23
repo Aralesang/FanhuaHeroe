@@ -14,7 +14,7 @@ if role == nil then return nil end
 local animation = roleObj:addComponent(Animation)
 if animation == nil then
     error("animation component add fail")
-    return nil 
+    return nil
 end
 --创建行走动画
 animation:create("行走","image/character/角色_行走.png",6,4)
@@ -23,5 +23,4 @@ animation:create("闲置","image/character/角色_待机.png",1,4)
 animation:play("行走")
 
 roleObj:addComponent(PlayerController)
-
 return role

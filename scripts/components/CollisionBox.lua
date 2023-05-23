@@ -18,6 +18,7 @@ function CollisionBox:new()
     self.width = 0
     self.height = 0
     self.isCollision = false
+    self.position = Vector2.zero()
     self.componentName = "CollisionBox"
     return self
 end

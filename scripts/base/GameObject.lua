@@ -23,6 +23,7 @@ function GameObject:new()
     self.components = nil
     self.isDestroy = false
     self.central = Vector2.zero()
+    Game.gameObjects[tostring(self)] = self
     return self
 end
 

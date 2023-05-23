@@ -23,12 +23,6 @@ function Role:new()
     return self
 end
 
-function Role:load()
-end
-
-function Role:update(dt)
-end
-
 --获取角色方向
 ---@return Direction
 function Role:getDir()
