@@ -68,12 +68,12 @@ function PlayerController:update(dt)
         if role:getDir() ~= moveDir then
             role:setDir(moveDir)                                 --设置角色面向
         end
-        if animation.useName ~= "行走" then --如果当前动画不是行走，则改为行走
+        if animation.anim.name ~= "行走" then --如果当前动画不是行走，则改为行走
             --animation:play("行走")
         end
         self:move(dt, moveDir)                               --移动
     else                                                     --如果没在移动了
-        if animation.useName == "行走" then --当前如果正在播放动画，则停止播放并定格到第0帧
+        if animation.anim.name == "行走" then --当前如果正在播放动画，则停止播放并定格到第0帧
             --animation:play("闲置")
         end
     end
@@ -179,7 +179,6 @@ function PlayerController:move(dt, dir)
     --if Tile:isEmpty(x, y) then
     player:setPosition(x, y)
     --end
-    print("moveing")
 end
 
 return PlayerController

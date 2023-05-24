@@ -10,7 +10,7 @@ require "scripts.base.Anim"
 ---@field private state AnimationState 动画状态
 ---@field private eventList function[] | nil 动画事件字典 关键帧:程序处理器
 ---@field private anims Anim[] | nil 动画列表
----@field useName string | nil 当前使用的动画名称
+---@field anim Anim 当前使用的动画对象
 Animation = Component:extend()
 
 --创建一个新的动画对象
@@ -43,7 +43,7 @@ function Animation:create(name,imagePath,xCount,yCount)
         error("动画图像创建错误:" .. imagePath)
         return
     end
-    local animLayer = Anim:new(name,image,xCount,yCount)
+    local animLayer = Anim(name,image,xCount,yCount)
     if self.anims == nil then
         self.anims = {}
     end
@@ -73,13 +73,12 @@ function Animation:update(dt)
     self.frameLastCount = 0
     --计算出帧所对应的坐标
     local index = self.frameIndex
-    self:setFrameIndex(index)
-    if index < self.frameCount - 1 then
+    if index < self.anim.xCount - 1 then
         index = index + 1
     else
         index = 0
     end
-    self.frameIndex = index
+    self:setFrameIndex(index)
 end
 
 function Animation:draw()
@@ -90,14 +89,9 @@ function Animation:draw()
     local position = gameObject:getPosition()
     local x = position.x - self.gameObject.central.x * self.gameObject.scale.x
     local y = position.y - self.gameObject.central.y * self.gameObject.scale.y
-    if self.useName == nil then
-        return
-    end
-    --根据当前动画名称取出动画对象
-    local anim = self.anims[self.useName]
+    local anim = self.anim
     if anim == nil then
-        error("目标动画不存在:"..self.useName)
-        return
+        error("目标动画不存在")
     end
     local image = anim.image
     local quad = anim.quad
@@ -112,8 +106,7 @@ end
 ---@param row number 目标动画行
 ---@param animIndex number 从第几帧开始播放 默认值0
 function Animation:setRow(row,animIndex)
-    local anim = self:getAnim(self.useName)
-    if anim == nil then return end
+    local anim = self.anim
     anim.row = row
     local quad = anim.quad
     if quad == nil then return end
@@ -123,14 +116,14 @@ end
 
 ---设置动画帧
 function Animation:setFrameIndex(frameIndex)
-    local anim = self:getAnim(self.useName)
+    local anim = self.anim
     if anim == nil then return end
     local quad = anim.quad
     if quad == nil then return end
-    anim.frameIndex = frameIndex
-    quad:setViewport(anim.frameIndex * anim.width, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
+    self.frameIndex = frameIndex
+    quad:setViewport(self.frameIndex * anim.width, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
     --当前的动画帧
-    local key = anim.xCount * anim.row + anim.frameIndex
+    local key = anim.xCount * anim.row + self.frameIndex
     --触发动画帧事件
     local event = self:getEvent(key)
     if event then
@@ -148,8 +141,12 @@ end
 ---@param name string 要播放的动画名称
 function Animation:play(name)
     print("play:"..name)
-    self.useName = name
+    self.anim = self:getAnim(name)
+    if self.anim == nil then
+        error("目标动画不存在")
+    end
     self.state = AnimationState.Playing
+    print(self.anims["行走"])
     self:setFrameIndex(0)
 end
 

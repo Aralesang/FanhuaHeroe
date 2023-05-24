@@ -9,7 +9,6 @@ local Object = require "scripts.base.Object"
 ---@field width number 单帧动画的宽度
 ---@field height number 单帧动画的高度
 ---@field row number 当前所使用的动画行
----@field frameIndex number 当前动画帧下标
 ---@field quad love.Quad | nil 视图窗口
 Anim = Object:extend()
 
@@ -31,6 +30,5 @@ function Anim:new(name, image, xCount, yCount)
     self.height = sh / yCount
     self.quad = love.graphics.newQuad(0,0,self.width, self.height, sw, sh)
     self.row = 0
-    self.frameIndex = 0
     return self
 end
