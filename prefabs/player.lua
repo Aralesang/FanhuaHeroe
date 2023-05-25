@@ -1,6 +1,6 @@
-require "scripts.game.Role"
+require "scripts.components.Role"
 require "scripts.manager.RoleManager"
-require "scripts.game.PlayerController"
+require "scripts.components.PlayerController"
 require "scripts.base.GameObject"
 
 ---@type GameObject | nil

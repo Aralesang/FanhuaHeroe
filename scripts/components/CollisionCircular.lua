@@ -9,11 +9,9 @@ require "scripts.components.Collision"
 CollisionCircular = Component:extend()
 
 ---创建一个新碰撞器
----@return CollisionCircular | Collision | Component
 function CollisionCircular:new()
     self.radius = 0
     self.componentName = "CollisionCircular"
-    return self
 end
 
 function CollisionCircular:load()

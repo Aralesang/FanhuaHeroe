@@ -12,15 +12,13 @@ require "scripts.enums.Direction"
 ---@field moveDir Direction 角色移动方向
 ---@field private direction Direction 角色朝向
 Role = Component:extend()
+Role.componentName = "Role"
 
----@return Role | Component
 function Role:new()
     self.name = nil
     self.speed = 100
     self.moveDir = Direction.Donw --移动方向
-    self.componentName = "Role"
     self.direction = Direction.Donw
-    return self
 end
 
 --获取角色方向

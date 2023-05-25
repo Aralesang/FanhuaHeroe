@@ -1,7 +1,7 @@
 require "scripts.base.GameObject"
 require "scripts.components.CollisionBox"
 require "scripts.components.Animation"
-require "scripts.game.Role"
+require "scripts.components.Role"
 require "scripts.components.DebugDraw"
 
 ---角色管理器

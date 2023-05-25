@@ -11,7 +11,6 @@ require "scripts.components.Collision"
 CollisionBox = Component:extend()
 
 ---创建一个新碰撞器
----@return CollisionBox | Collision | Component
 function CollisionBox:new()
     self.width = 0
     self.height = 0
@@ -20,7 +19,6 @@ function CollisionBox:new()
     self.isCollision = false
     self.position = Vector2.zero()
     self.componentName = "CollisionBox"
-    return self
 end
 
 function CollisionBox:load()

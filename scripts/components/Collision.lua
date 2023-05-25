@@ -10,13 +10,11 @@ require "scripts.base.Component"
 ---@field onEndCollision function 碰撞结束
 Collision = Component:extend()
 
----@return Collision | Component
 function Collision:new()
     self.position = {x = 0, y = 0}
     self.debug = false
     self.collisions = nil
     self.isCollision = false
-    return self
 end
 
 ---获取碰撞器所在位置

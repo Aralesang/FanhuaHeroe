@@ -17,13 +17,10 @@ require "scripts.enums.Direction"
 PlayerController = Component:extend()
 PlayerController.componentName = "PlayerController"
 
----@return PlayerController | Component
 function PlayerController:new()
     self.player = self.gameObject
     self.moveDir = Direction.Donw
     self.isMove = false
-    print("玩家控制器加载")
-    return self
 end
 
 function PlayerController:load()

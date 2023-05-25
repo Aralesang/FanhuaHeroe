@@ -12,23 +12,16 @@ require "scripts.base.Anim"
 ---@field private anims Anim[] | nil 动画列表
 ---@field anim Anim 当前使用的动画对象
 Animation = Component:extend()
+Animation.componentName = "Animation"
 
 --创建一个新的动画对象
 ---@return Animation | Component
 function Animation:new ()
-    self.xCount = 0
-    self.yCount = 0
-    self.width = 0
-    self.height = 0
-    self.row = 0
     self.frameInterval = 0
     self.frameLastCount = 0
     self.frameLastTime = 0
     self.frameIndex = 0
-    self.frameCount = 0
-    self.quad = nil
     self.eventList = nil
-    self.componentName = "Animation"
     return self
 end
 
@@ -43,6 +36,7 @@ function Animation:create(name,imagePath,xCount,yCount)
         error("动画图像创建错误:" .. imagePath)
         return
     end
+    ---@type Anim
     local animLayer = Anim(name,image,xCount,yCount)
     if self.anims == nil then
         self.anims = {}
@@ -146,7 +140,7 @@ function Animation:play(name)
         error("目标动画不存在")
     end
     self.state = AnimationState.Playing
-    print(self.anims["行走"])
+    print(self.anim.name)
     self:setFrameIndex(0)
 end
 

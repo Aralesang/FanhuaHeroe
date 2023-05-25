@@ -2,7 +2,7 @@ require "scripts.base.GameObject"
 require "scripts.components.Animation"
 require "scripts.components.CollisionCircular"
 require "scripts.base.Component"
-require "scripts.game.Role"
+require "scripts.components.Role"
 require "scripts.base.Vector2"
 require "scripts.components.DebugDraw"
 
@@ -14,18 +14,16 @@ require "scripts.components.DebugDraw"
 ---@field dir Vector2 子弹飞行方向
 Bullet = Component:extend()
 
----@return Bullet | Component
 function Bullet:new()
     self.animation = nil
     self.speed = 5
     self.componentName = "Bullet"
     self.master = ""
     self.dir = Vector2.zero()
-    return self
 end
 
 function Bullet:load()
-    self:addComponent(DebugDraw)
+    self.gameObject:addComponent(DebugDraw)
 end
 
 function Bullet:update(dt)
@@ -37,8 +35,8 @@ end
 ---碰撞回调
 ---@param collision Collision
 function Bullet:onBeginCollision(collision)
-    ---@type Role
-    local role = collision:getComponent(Role)
+    ---@type Role | nil
+    local role = collision.gameObject:getComponent(Role)
     if role == nil then
         return
     end

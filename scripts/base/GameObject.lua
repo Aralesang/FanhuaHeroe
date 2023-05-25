@@ -62,7 +62,8 @@ end
 ---@param componentType Component 组件对象
 ---@return T
 function GameObject:addComponent(componentType)
-    local component = componentType:new()
+    ---@type Component
+    local component = componentType()
     local componentName = component.componentName
     if componentName == nil then
         error("附加组件失败,目标组件名称为空")

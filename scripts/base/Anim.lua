@@ -17,7 +17,6 @@ Anim = Object:extend()
 ---@param image love.Texture | nil 用于创建动画的序列帧位图
 ---@param xCount number x轴帧数量
 ---@param yCount number y轴帧数量
----@return Anim
 function Anim:new(name, image, xCount, yCount)
     self.name = name
     self.image = image
@@ -30,5 +29,4 @@ function Anim:new(name, image, xCount, yCount)
     self.height = sh / yCount
     self.quad = love.graphics.newQuad(0,0,self.width, self.height, sw, sh)
     self.row = 0
-    return self
 end

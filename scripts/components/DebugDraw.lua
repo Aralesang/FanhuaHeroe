@@ -4,11 +4,9 @@ require "scripts.base.Component"
 ---@class DebugDraw : Component
 ---@field drawCentral boolean 是否显示中心点
 DebugDraw = Component:extend()
+DebugDraw.componentName = "DebugDraw"
 
----@return DebugDraw | Component
 function DebugDraw:new()
-    self.componentName = "DebugDraw"
-    return self
 end
 
 function DebugDraw:awake()
