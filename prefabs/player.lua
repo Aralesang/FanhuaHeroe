@@ -20,7 +20,7 @@ end
 animation:create("行走","image/character/角色_行走.png",6,4)
 --TODO:创建闲置动画
 animation:create("闲置","image/character/角色_待机.png",1,4)
-animation:play("行走")
+animation:play("闲置")
 
 roleObj:addComponent(PlayerController)
 return role

@@ -11,17 +11,23 @@ require "scripts.base.Anim"
 ---@field private eventList function[] | nil 动画事件字典 关键帧:程序处理器
 ---@field private anims Anim[] | nil 动画列表
 ---@field anim Anim 当前使用的动画对象
+---@field duration number 动画持续时间(秒)
+---@field currentTime number 当前已持续的时间(秒)
+---@field direction Direction 当前动画方向
 Animation = Component:extend()
 Animation.componentName = "Animation"
 
 --创建一个新的动画对象
 ---@return Animation | Component
-function Animation:new ()
-    self.frameInterval = 0
+function Animation:new()
+    self.frameInterval = 10
     self.frameLastCount = 0
     self.frameLastTime = 0
     self.frameIndex = 0
     self.eventList = nil
+    self.duration = 1
+    self.currentTime = 0
+    self.direction = Direction.Donw
     return self
 end
 
@@ -30,19 +36,19 @@ end
 ---@param imagePath string 用于创建动画的序列帧位图地址
 ---@param xCount number x轴帧数量
 ---@param yCount number y轴帧数量
-function Animation:create(name,imagePath,xCount,yCount)
+function Animation:create(name, imagePath, xCount, yCount)
     local image = love.graphics.newImage(imagePath)
     if image == nil then
         error("动画图像创建错误:" .. imagePath)
         return
     end
     ---@type Anim
-    local animLayer = Anim(name,image,xCount,yCount)
+    local animLayer = Anim(name, image, xCount, yCount)
     if self.anims == nil then
         self.anims = {}
     end
     self.anims[name] = animLayer
-    print("创建动画:["..animLayer.name.."] 图像路径:"..imagePath)
+    print("创建动画:[" .. animLayer.name .. "] 图像路径:" .. imagePath)
 end
 
 ---获取当前正在使用的动画
@@ -59,20 +65,12 @@ function Animation:update(dt)
     if self.state ~= AnimationState.Playing then
         return
     end
-    self.frameLastCount = self.frameLastCount + 1
-    --已经过去的帧数如果低于间隔则不绘制新动画
-    if self.frameLastCount < self.frameInterval then
-        return
+    --更新动画当前时间
+    self.currentTime = self.currentTime + dt
+    --如果动画当前时间超过动画持续时间，重置动画当前时间
+    if self.currentTime >= self.duration then
+        self.currentTime = self.currentTime - self.duration
     end
-    self.frameLastCount = 0
-    --计算出帧所对应的坐标
-    local index = self.frameIndex
-    if index < self.anim.xCount - 1 then
-        index = index + 1
-    else
-        index = 0
-    end
-    self:setFrameIndex(index)
 end
 
 function Animation:draw()
@@ -80,6 +78,9 @@ function Animation:draw()
     if gameObject == nil then
         return
     end
+    --计算当前帧
+    local currentFrame = math.floor(self.currentTime / self.duration * self.anim.xCount)
+    self:setFrameIndex(currentFrame)
     local position = gameObject:getPosition()
     local x = position.x - self.gameObject.central.x * self.gameObject.scale.x
     local y = position.y - self.gameObject.central.y * self.gameObject.scale.y
@@ -92,20 +93,21 @@ function Animation:draw()
     if image == nil or quad == nil then return end
     x = math.floor(x)
     y = math.floor(y)
-    love.graphics.draw(image,quad,x,y,gameObject.rotate,gameObject.scale.x,gameObject.scale.y,0,0,0,0)
+    love.graphics.draw(image, quad, x, y, gameObject.rotate, gameObject.scale.x, gameObject.scale.y, 0, 0, 0, 0)
 end
 
 ---设置动画行
 ---@overload fun(row)
 ---@param row number 目标动画行
 ---@param animIndex number 从第几帧开始播放 默认值0
-function Animation:setRow(row,animIndex)
+function Animation:setRow(row, animIndex)
     local anim = self.anim
     anim.row = row
     local quad = anim.quad
     if quad == nil then return end
     self.frameIndex = animIndex or 0
     quad:setViewport(0, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
+    print("row change"..row)
 end
 
 ---设置动画帧
@@ -115,9 +117,11 @@ function Animation:setFrameIndex(frameIndex)
     local quad = anim.quad
     if quad == nil then return end
     self.frameIndex = frameIndex
-    quad:setViewport(self.frameIndex * anim.width, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
+    local row = self.gameObject.direction
+    quad:setViewport(self.frameIndex * anim.width, row * anim.height, anim.width, anim.height, anim.image:getWidth(),
+        anim.image:getHeight())
     --当前的动画帧
-    local key = anim.xCount * anim.row + self.frameIndex
+    local key = anim.xCount * row + self.frameIndex
     --触发动画帧事件
     local event = self:getEvent(key)
     if event then
@@ -134,14 +138,11 @@ end
 ---播放动画
 ---@param name string 要播放的动画名称
 function Animation:play(name)
-    print("play:"..name)
     self.anim = self:getAnim(name)
     if self.anim == nil then
         error("目标动画不存在")
     end
     self.state = AnimationState.Playing
-    print(self.anim.name)
-    self:setFrameIndex(0)
 end
 
 ---停止动画
@@ -166,7 +167,7 @@ end
 ---向动画帧添加事件
 ---@param key number 动画帧
 ---@param event function 事件处理器
-function Animation:addEvent(key,event)
+function Animation:addEvent(key, event)
     if self.eventList == nil then
         self.eventList = {}
     end
@@ -182,3 +183,22 @@ function Animation:getEvent(key)
     end
     return self.eventList[key]
 end
+
+---更新动画方向
+-- function Animation:updateDir()
+--     --设置方向
+--     local direction = self.gameObject.direction
+--     if direction == self.direction then
+--         return
+--     end
+--     self.direction = direction
+--     -- if direction == Direction.Left then
+--     --     self:setRow(3)
+--     -- elseif direction == Direction.Right then
+--     --     self:setRow(2)
+--     -- elseif direction == Direction.Up then
+--     --     self:setRow(1)
+--     -- elseif direction == Direction.Donw then
+--     --     self:setRow(0)
+--     -- end
+-- end

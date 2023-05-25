@@ -40,41 +40,38 @@ function PlayerController:update(dt)
     end
     local role = self.role
     if role == nil then return end
-    local moveDir = self.moveDir
     local isMove = self.isMove
     Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
     if love.keyboard.isDown("up") then
-        moveDir = Direction.Up
+        self.gameObject:setDir(Direction.Up)
+        --animation:updateDir()
         isMove = true
     end
     if love.keyboard.isDown("down") then
-        moveDir = Direction.Donw
+        self.gameObject:setDir(Direction.Donw)
+        --animation:updateDir()
         isMove = true
     end
     if love.keyboard.isDown("left") then
-        moveDir = Direction.Left
+        self.gameObject:setDir(Direction.Left)
+        --animation:updateDir()
         isMove = true
     end
     if love.keyboard.isDown("right") then
-        moveDir = Direction.Right
+        self.gameObject:setDir(Direction.Right)
+        --animation:updateDir()
         isMove = true
     end
-
     if isMove then                                               --如果移动被激活
-        
-        if role:getDir() ~= moveDir then
-            role:setDir(moveDir)                                 --设置角色面向
-        end
         if animation.anim.name ~= "行走" then --如果当前动画不是行走，则改为行走
-            --animation:play("行走")
+            animation:play("行走")
         end
-        self:move(dt, moveDir)                               --移动
+        self:move(dt, self.gameObject.direction)                               --移动
     else                                                     --如果没在移动了
         if animation.anim.name == "行走" then --当前如果正在播放动画，则停止播放并定格到第0帧
-            --animation:play("闲置")
+            animation:play("闲置")
         end
     end
-
     isMove = false
 end
 

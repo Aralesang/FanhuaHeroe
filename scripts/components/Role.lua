@@ -27,24 +27,6 @@ function Role:getDir()
     return self.direction
 end
 
----设置角色方向
----@param dir Direction 方向
-function Role:setDir(dir)
-    if self.animation == nil then
-        self.animation = self.gameObject:getComponent(Animation)
-    end
-    self.direction = dir
-    if dir == Direction.Left then
-        self.animation:setRow(3)
-    elseif dir == Direction.Right then
-        self.animation:setRow(2)
-    elseif dir == Direction.Up then
-        self.animation:setRow(1)
-    elseif dir == Direction.Donw then
-        self.animation:setRow(0)
-    end
-end
-
 function Role:onDestroy()
     --摧毁接触到的对象
     --Debug.log("对象被销毁:"..self.gameObject.gameObjectName)

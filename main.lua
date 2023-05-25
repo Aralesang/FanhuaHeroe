@@ -16,8 +16,6 @@ if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
     require("lldebugger").start()
 end
 
---甚至每帧的时间为1/60秒，即帧率为60帧每秒
-local deltaTime = 1 / 60
 --地图对象
 local map
 
@@ -40,10 +38,6 @@ end
 --每帧逻辑处理
 ---@param dt number 距离上一帧的间隔时间
 function love.update(dt)
-    -- 锁定帧率
-    if dt < deltaTime then
-        love.timer.sleep(deltaTime - dt)
-    end
     ---@type number[]
     local destroyPool = {}
     --触发对象更新

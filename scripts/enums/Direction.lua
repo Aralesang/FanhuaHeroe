@@ -2,11 +2,11 @@
 ---@enum Direction
 Direction = {
     ---上
-    Up = 0,
+    Up = 1,
     ---下
-    Donw = 1,
+    Donw = 0,
     ---左
-    Left = 2,
+    Left = 3,
     ---右
-    Right = 3
+    Right = 2
 }

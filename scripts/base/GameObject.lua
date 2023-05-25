@@ -11,6 +11,7 @@ require "scripts.base.Vector2"
 ---@field update function 对象帧更新 参数: dt 与上一帧的时间间隔(毫秒)
 ---@field isDestroy boolean 销毁标记,持有此标记的对象，将会在本次帧事件的末尾被清除
 ---@field central Vector2 中心坐标,相对对象0,0坐标的中心坐标位置
+---@field direction Direction 当前对象方向
 GameObject = Object:extend()
 
 ---构造函数
@@ -23,6 +24,7 @@ function GameObject:new()
     self.components = nil
     self.isDestroy = false
     self.central = Vector2.zero()
+    self.direction = Direction.Donw
     Game.gameObjects[tostring(self)] = self
     return self
 end
@@ -110,3 +112,9 @@ function GameObject:onBeginCollision(collision) end
 ---碰撞结束回调
 ---@param collision Collision
 function GameObject:onEndCollision(collision) end
+
+---设置对象方向
+---@param dir Direction 方向
+function GameObject:setDir(dir)
+    self.direction = dir
+end
