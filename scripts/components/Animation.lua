@@ -4,31 +4,24 @@ require "scripts.base.Anim"
 
 ---动画组件
 ---@class Animation : Component
----@field private frameInterval number 动画播放帧率间隔
----@field private frameLastCount number 距离上一帧动画已过去的帧数
----@field private frameLastTime number 距离上一帧动画已过去的时间(毫秒)
 ---@field private state AnimationState 动画状态
 ---@field private eventList function[] | nil 动画事件字典 关键帧:程序处理器
 ---@field private anims Anim[] | nil 动画列表
----@field anim Anim 当前使用的动画对象
----@field duration number 动画持续时间(秒)
----@field currentTime number 当前已持续的时间(秒)
----@field direction Direction 当前动画方向
+---@field private anim Anim 当前使用的动画对象
+---@field private duration number 动画持续时间(秒)
+---@field private currentTime number 当前已持续的时间(秒)
+---@field private direction Direction 当前动画方向
 Animation = Component:extend()
 Animation.componentName = "Animation"
 
 --创建一个新的动画对象
----@return Animation | Component
+---@private
 function Animation:new()
-    self.frameInterval = 10
-    self.frameLastCount = 0
-    self.frameLastTime = 0
     self.frameIndex = 0
     self.eventList = nil
     self.duration = 1
     self.currentTime = 0
     self.direction = Direction.Donw
-    return self
 end
 
 ---创建一个动画
@@ -107,10 +100,10 @@ function Animation:setRow(row, animIndex)
     if quad == nil then return end
     self.frameIndex = animIndex or 0
     quad:setViewport(0, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
-    print("row change"..row)
 end
 
 ---设置动画帧
+---@private
 function Animation:setFrameIndex(frameIndex)
     local anim = self.anim
     if anim == nil then return end
@@ -136,7 +129,10 @@ function Animation:checkState(state)
 end
 
 ---播放动画
----@param name string 要播放的动画名称
+---@alias side
+---| '"闲置"'
+---| '"行走"'
+---@param name side 要播放的动画名称
 function Animation:play(name)
     self.anim = self:getAnim(name)
     if self.anim == nil then
@@ -175,6 +171,7 @@ function Animation:addEvent(key, event)
 end
 
 ---获取目标帧上的事件
+---@private
 ---@param key number 目标帧
 ---@return function #事件处理器
 function Animation:getEvent(key)
@@ -184,21 +181,11 @@ function Animation:getEvent(key)
     return self.eventList[key]
 end
 
----更新动画方向
--- function Animation:updateDir()
---     --设置方向
---     local direction = self.gameObject.direction
---     if direction == self.direction then
---         return
---     end
---     self.direction = direction
---     -- if direction == Direction.Left then
---     --     self:setRow(3)
---     -- elseif direction == Direction.Right then
---     --     self:setRow(2)
---     -- elseif direction == Direction.Up then
---     --     self:setRow(1)
---     -- elseif direction == Direction.Donw then
---     --     self:setRow(0)
---     -- end
--- end
+---获取当前正在播放的动画名称
+---@return string
+function Animation:getAnimName()
+    if self.anim == nil then
+        return ""
+    end
+    return self.anim.name
+end

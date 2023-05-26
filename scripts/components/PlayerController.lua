@@ -63,18 +63,17 @@ function PlayerController:update(dt)
         isMove = true
     end
     if isMove then                                               --如果移动被激活
-        if animation.anim.name ~= "行走" then --如果当前动画不是行走，则改为行走
+        if animation:getAnimName() ~= "行走" then --如果当前动画不是行走，则改为行走
             animation:play("行走")
         end
         self:move(dt, self.gameObject.direction)                               --移动
     else                                                     --如果没在移动了
-        if animation.anim.name == "行走" then --当前如果正在播放动画，则停止播放并定格到第0帧
+        if animation:getAnimName() == "行走" then --当前如果正在播放动画，则停止播放并定格到第0帧
             animation:play("闲置")
         end
     end
     isMove = false
 end
-
 ---按键检测
 ---@param key string
 function PlayerController:keypressed(key)
