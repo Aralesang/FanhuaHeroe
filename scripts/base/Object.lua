@@ -9,14 +9,16 @@
 
 ---对象基类
 ---@class Object
-local Object = {}
+---@field private __index Object
+Object = {}
 Object.__index = Object
 
-
+---构造函数
 function Object:new()
 end
 
-
+---继承
+---@return Object
 function Object:extend()
   local cls = {}
   for k, v in pairs(self) do
@@ -30,7 +32,8 @@ function Object:extend()
   return cls
 end
 
-
+---实现接口
+---@vararg table
 function Object:implement(...)
   for _, cls in pairs({...}) do
     for k, v in pairs(cls) do
@@ -41,7 +44,9 @@ function Object:implement(...)
   end
 end
 
-
+---判断是否是目标类型
+---@param T any
+---@return boolean
 function Object:is(T)
   local mt = getmetatable(self)
   while mt do
@@ -53,12 +58,17 @@ function Object:is(T)
   return false
 end
 
-
+---返回对象名称
+---@private
+---@return string
 function Object:__tostring()
   return "Object"
 end
 
-
+---函数调用
+---@private
+---@vararg function
+---@return Object
 function Object:__call(...)
   local obj = setmetatable({}, self)
 ---@diagnostic disable-next-line: redundant-parameter

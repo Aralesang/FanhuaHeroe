@@ -1,7 +1,7 @@
 ---游戏对象基本类
 require "scripts.base.Game"
 require "scripts.base.Vector2"
----@class GameObject
+---@class GameObject : Object
 ---@field gameObjectName string 对象名称
 ---@field position Vector2 对象所在空间坐标{x,y}
 ---@field scale table 对象缩放比例因子{x,y}

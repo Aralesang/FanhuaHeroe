@@ -1,7 +1,7 @@
 require "scripts.base.Object"
 
 ---组件基类
----@class Component
+---@class Component : Object
 ---@field componentName string | nil 组件名称
 ---@field gameObject GameObject | nil 组件所附加到的游戏物体
 ---@field isLoad boolean 是否已经调用过初始化函数

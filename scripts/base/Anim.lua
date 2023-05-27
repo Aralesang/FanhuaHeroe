@@ -1,7 +1,7 @@
 local Object = require "scripts.base.Object"
 
 ---动画
----@class Anim
+---@class Anim : Object
 ---@field name string | nil 动画名称
 ---@field image love.Texture | nil 用于创建动画的序列帧位图
 ---@field xCount number x轴帧数量

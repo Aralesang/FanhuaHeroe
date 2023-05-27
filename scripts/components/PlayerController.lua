@@ -35,7 +35,7 @@ function PlayerController:update(dt)
         error("player is nil")
     end
     local animation = self.animation
-    if animation == nil then 
+    if animation == nil then
         error("animation is nil")
     end
     local role = self.role
@@ -44,22 +44,18 @@ function PlayerController:update(dt)
     Camera:setPosition(player.position.x - width / 2, player.position.y - height / 2)
     if love.keyboard.isDown("up") then
         self.gameObject:setDir(Direction.Up)
-        --animation:updateDir()
         isMove = true
     end
     if love.keyboard.isDown("down") then
         self.gameObject:setDir(Direction.Donw)
-        --animation:updateDir()
         isMove = true
     end
     if love.keyboard.isDown("left") then
         self.gameObject:setDir(Direction.Left)
-        --animation:updateDir()
         isMove = true
     end
     if love.keyboard.isDown("right") then
         self.gameObject:setDir(Direction.Right)
-        --animation:updateDir()
         isMove = true
     end
     if isMove then                                               --如果移动被激活
