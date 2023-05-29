@@ -14,6 +14,9 @@ end
 ---@param id number 道具id
 ---@return boolean result 是否添加成功
 function Inventory:add(id)
+    if self.items == nil then
+        error("错误: 库存道具列表未初始化")
+    end
     --检查当前库存中的道具数量
     local itemNum = #self.items
     if itemNum >= self.cellNum then
@@ -29,6 +32,12 @@ end
 ---@return boolean result 是否删除成功
 function Inventory:remove(id)
     local items = self.items
+    if items == nil then
+        return false
+    end
+    if #items <= 0 then
+        return false
+    end
     for i = #items, 1, -1 do
         local item = items[i]
         if item.id == id then
