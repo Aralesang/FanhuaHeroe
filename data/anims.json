@@ -1,0 +1,16 @@
+[
+    {
+        "id":0,
+        "name": "闲置",
+        "path": "image/character/角色_待机.png",
+        "xCount": 1,
+        "yCount": 4
+    },
+    {
+        "id":1,
+        "name": "行走",
+        "path": "image/character/角色_行走.png",
+        "xCount": 6,
+        "yCount": 4
+    }
+]

@@ -22,6 +22,7 @@ function Animation:new()
     self.duration = 1
     self.currentTime = 0
     self.direction = Direction.Donw
+    self.state = AnimationState.Stop
 end
 
 ---创建一个动画
@@ -42,6 +43,15 @@ function Animation:create(name, imagePath, xCount, yCount)
     end
     self.anims[name] = animLayer
     print("创建动画:[" .. animLayer.name .. "] 图像路径:" .. imagePath)
+end
+
+---向动画组件添加一个动画
+---@param anim Anim
+function Animation:addAnim(anim)
+    if self.anims == nil then
+        self.anims = {}
+    end
+    self.anims[anim.name] = anim
 end
 
 ---获取当前正在使用的动画
@@ -69,6 +79,9 @@ end
 function Animation:draw()
     local gameObject = self.gameObject
     if gameObject == nil then
+        return
+    end
+    if self.state ~= AnimationState.Playing then
         return
     end
     --计算当前帧

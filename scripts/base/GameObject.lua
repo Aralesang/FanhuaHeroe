@@ -2,7 +2,7 @@
 require "scripts.base.Game"
 require "scripts.base.Vector2"
 ---@class GameObject : Object
----@field gameObjectName string 对象名称
+---@field name string 对象名称
 ---@field position Vector2 对象所在空间坐标{x,y}
 ---@field scale table 对象缩放比例因子{x,y}
 ---@field rotate number 对象旋转弧度
@@ -17,7 +17,7 @@ GameObject = Object:extend()
 ---构造函数
 ---@return GameObject
 function GameObject:new()
-    self.gameObjectName = ""
+    self.name = ""
     self.position = Vector2.zero()
     self.scale = {x = 1, y = 1}
     self.rotate = 0

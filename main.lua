@@ -10,6 +10,8 @@ require "scripts.manager.SceneManager"
 require "scripts.components.PlayerController"
 require "scripts.utils.PrefabUtil"
 local sti = require "scripts.utils.sti"
+require "scripts.manager.AnimManager"
+require "scripts.manager.RoleManager"
 
 --启用远程调试
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
@@ -21,17 +23,23 @@ local map
 
 function love.load()
     print("游戏初始化...")
-    love.window.setVSync(0)
     --加载中文字体(启动会很缓慢)
+    print("加载中文字体...")
     local myFont = love.graphics.newFont("fonts/SourceHanSansCN-Bold.otf", 16)
     love.graphics.setFont(myFont)
     --更改图像过滤方式，以显示高清马赛克
+    print("更改图像过滤方式...")
     love.graphics.setDefaultFilter("nearest", "nearest")
+    print("加载动画管理器...")
+    AnimManager.init()
+    print("加载角色管理器...")
+    RoleManager.init()
     --加载场景
+    print("加主场景...")
     map = sti("scenes/start.lua")
 
     --实例化角色对象
-    PrefabUtil.instantiate("player")
+    RoleManager.createRole(0)
     print("游戏初始化完毕!")
 end
 
