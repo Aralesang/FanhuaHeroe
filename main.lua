@@ -13,11 +13,6 @@ local sti = require "scripts.utils.sti"
 require "scripts.manager.AnimManager"
 require "scripts.manager.RoleManager"
 
---启用远程调试
-if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
-    require("lldebugger").start()
-end
-
 --地图对象
 local map
 
@@ -40,6 +35,7 @@ function love.load()
 
     --实例化角色对象
     RoleManager.createRole(0)
+    
     print("游戏初始化完毕!")
 end
 

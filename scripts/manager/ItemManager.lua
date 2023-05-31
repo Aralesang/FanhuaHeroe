@@ -27,7 +27,7 @@ end
 ---创造一个道具对象
 ---@param id number 道具id
 ---@return Item
-function ItemManager.getItem(id)
+function ItemManager.createItem(id)
     local itemTemp = ItemManager.items[id]
     if itemTemp == nil then
         error("目标id的道具不存在:"..id)

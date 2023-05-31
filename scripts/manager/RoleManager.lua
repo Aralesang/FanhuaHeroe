@@ -36,9 +36,8 @@ end
 
 ---创建一个玩家
 ---@param roleId number 角色模板id
----@param x number 角色初始位置x
----@param y number 角色初始位置y
----@overload fun(roleId)
+---@param x? number 角色初始位置x
+---@param y? number 角色初始位置y
 ---@return GameObject | nil
 function RoleManager.createRole(roleId, x, y)
      local roleTemp = RoleManager.roles[roleId]
@@ -68,9 +67,11 @@ function RoleManager.createRole(roleId, x, y)
      end
      --构造动画对象
      for _,animId in pairs(roleTemp.anims) do
-          local animTemp = AnimManager.getAnim(animId)
-          animation:create(animTemp.name, animTemp.path, animTemp.xCount, animTemp.yCount)
+          local anim = AnimManager.careteAnim(animId)
+          animation:addAnim(anim)
      end
+
+     
 
      --附加调试组件
      roleObj:addComponent(DebugDraw)

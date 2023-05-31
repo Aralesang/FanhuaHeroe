@@ -29,23 +29,20 @@ function AnimManager.init()
    end
 end
 
----获取动画对象
----@param id number
+---创建动画对象
+---@param id number 要创建的动画id
 ---@return Anim anim 
-function AnimManager.getAnim(id)
+function AnimManager.careteAnim(id)
     local temp = AnimManager.anims[id]
-
+    if temp == nil then
+        error("目标id的动画不存在:"..id)
+    end
+    local imagePath = temp.path
     local image = love.graphics.newImage(imagePath)
     if image == nil then
         error("动画图像创建错误:" .. imagePath)
-        return
     end
     ---@type Anim
-    local animLayer = Anim(name, image, xCount, yCount)
-    if self.anims == nil then
-        self.anims = {}
-    end
-    self.anims[name] = animLayer
-    print("创建动画:[" .. animLayer.name .. "] 图像路径:" .. imagePath)
-    return AnimManager.anims[id]
+    local anim = Anim(temp.name, image, temp.xCount, temp.yCount)
+    return anim
 end
