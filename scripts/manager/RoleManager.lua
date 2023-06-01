@@ -78,4 +78,13 @@ function RoleManager.createRole(roleId, x, y)
      return roleObj
 end
 
-return RoleManager
+---获取角色模板数据
+---@param id number 角色模板id
+---@return RoleJsonData
+function RoleManager.getRole(id)
+     local role = RoleManager.roles[id]
+     if role == nil then
+          error("目标角色模板不存在:"..id)
+     end
+     return role
+end

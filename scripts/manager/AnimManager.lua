@@ -46,3 +46,14 @@ function AnimManager.careteAnim(id)
     local anim = Anim(temp.name, image, temp.xCount, temp.yCount)
     return anim
 end
+
+---获取动画模板
+---@param id number 目标动画id
+---@return AnimJsonData
+function AnimManager.getAnim(id)
+    local anim = AnimManager.anims[id]
+    if anim == nil then
+        error("目标id的动画不存在"..id)
+    end
+    return anim
+end

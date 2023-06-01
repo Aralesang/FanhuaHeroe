@@ -142,10 +142,10 @@ function Animation:checkState(state)
 end
 
 ---播放动画
----@alias side
+---@alias anim
 ---| '"闲置"'
 ---| '"行走"'
----@param name side 要播放的动画名称
+---@param name anim 要播放的动画名称
 function Animation:play(name)
     self.anim = self:getAnim(name)
     if self.anim == nil then
