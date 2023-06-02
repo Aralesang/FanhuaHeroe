@@ -169,5 +169,3 @@ function PlayerController:move(dt, dir)
     player:setPosition(x, y)
     --end
 end
-
-return PlayerController

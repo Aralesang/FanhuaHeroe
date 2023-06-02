@@ -6,13 +6,11 @@ require "scripts.components.Animation"
 require "scripts.components.Role"
 require "scripts.components.CollisionBox"
 require "scripts.manager.RoleManager"
-require "scripts.manager.SceneManager"
 require "scripts.components.PlayerController"
 require "scripts.utils.PrefabUtil"
 local sti = require "scripts.utils.sti"
 require "scripts.manager.AnimManager"
 require "scripts.manager.RoleManager"
-local Signal = require "scripts.utils.signal"
 
 --地图对象
 local map
@@ -30,12 +28,15 @@ function love.load()
     AnimManager.init()
     print("加载角色管理器...")
     RoleManager.init()
+    print("加载道具管理器...")
+    ItemManager.init()
     --加载场景
     print("加主场景...")
     map = sti("scenes/start.lua")
 
     --实例化角色对象
-    RoleManager.createRole(0)
+    local role = RoleManager.createRole(0)
+    role:addComponent(PlayerController)
     print("游戏初始化完毕!")
 end
 

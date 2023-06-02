@@ -45,12 +45,13 @@ function Object:implement(...)
 end
 
 ---判断是否是目标类型
----@param T any
+---@generic T
+---@param t T
 ---@return boolean
-function Object:is(T)
+function Object:is(t)
   local mt = getmetatable(self)
   while mt do
-    if mt == T then
+    if mt == t then
       return true
     end
     mt = getmetatable(mt)
@@ -58,12 +59,12 @@ function Object:is(T)
   return false
 end
 
----返回对象名称
----@private
----@return string
-function Object:__tostring()
-  return "Object"
-end
+-- ---返回对象名称
+-- ---@private
+-- ---@return string
+-- function Object:__tostring()
+--   return "Object"
+-- end
 
 ---元方法
 ---@private

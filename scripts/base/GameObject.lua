@@ -24,7 +24,7 @@ function GameObject:new()
     self.isDestroy = false
     self.central = Vector2.zero()
     self.direction = Direction.Donw
-    Game.gameObjects[tostring(self)] = self
+    table.insert(Game.gameObjects,self)
 end
 
 ---设置对象坐标
@@ -59,7 +59,7 @@ end
 
 ---附加一个组件
 ---@generic T : Component
----@param componentType Component 组件对象
+---@param componentType T 组件对象
 ---@return T
 function GameObject:addComponent(componentType)
     if componentType == nil then
@@ -84,7 +84,7 @@ end
 
 ---获取组件对象
 ---@generic T : Component
----@param componentType Component 组件类型
+---@param componentType T 组件类型
 ---@return T | nil
 function GameObject:getComponent(componentType)
     if componentType == nil then

@@ -11,6 +11,8 @@ require "scripts.enums.Direction"
 ---@field speed number 角色速度
 ---@field moveDir Direction 角色移动方向
 ---@field private direction Direction 角色朝向
+---@field animation Animation | nil 动画组件
+---@field equipment Equipment | nil 装备组件
 Role = Component:extend()
 Role.componentName = "Role"
 
@@ -19,6 +21,23 @@ function Role:new()
     self.speed = 100
     self.moveDir = Direction.Donw --移动方向
     self.direction = Direction.Donw
+end
+
+function Role:load()
+    self.animation = self.gameObject:getComponent(Animation)
+    self.equipment = self.gameObject:getComponent(Equipment)
+end
+
+function Role:update(dt)
+    if self.animation == nil then
+        error("角色对象未找到动画组件")
+    end
+    if self.equipment == nil then
+        error("角色未找到装备组件")
+    end
+    --同步装备动画
+    self.equipment.frameIndex = self.animation.frameIndex
+    self.equipment.animName = self.animation:getAnimName()
 end
 
 --获取角色方向

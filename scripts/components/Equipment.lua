@@ -1,3 +1,5 @@
+require "scripts.manager.ItemManager"
+
 ---@class Equipment:Component 装备组件
 ---@field private slots table<string,number> 装备槽列表 {装备槽:装备id}
 ---@field private anims table<string,table<number,Anim>> 动画字典 {装备槽:{动画id:动画对象}}
@@ -18,6 +20,11 @@ function Equipment:load()
     self:addSlot("衣服")
 end
 
+function Equipment:update(dt)
+    --同步所有装备图像的视口数据
+    
+end
+
 ---绘制装备图像
 function Equipment:draw()
     if self.animName == nil or self.frameIndex == nil then
@@ -32,16 +39,17 @@ function Equipment:draw()
         local gameObject = self.gameObject
         local x = gameObject.position.x
         local y = gameObject.position.y
-
         love.graphics.draw(image, quad, x, y, gameObject.rotate, gameObject.scale.x, gameObject.scale.y, 0, 0, 0, 0)
     end
 end
 
----@private
----添加一个装备槽
+
 ---@alias slot
 ---| '"帽子"'
 ---| '"衣服"'
+---| '"武器"'
+---添加一个装备槽
+---@private
 ---@param name slot
 function Equipment:addSlot(name)
     self.slots[name] = 0
@@ -59,16 +67,20 @@ function Equipment:equip(slot,itemId)
     for _,v in pairs(anims) do
         local animId = v
         --动画图片路径组合规则:以道具id为文件夹区分，以动画id为最小单位
-        local imgPath = "equipment/"..itemId.."/"..v..".png"
+        local imgPath = "image/equipment/"..itemId.."/"..v..".png"
         local img = love.graphics.newImage(imgPath)
         if img == nil then
             error("目标装备动画不存在:"..imgPath)
         end
         local animTemp = AnimManager.getAnim(animId)
+        ---@type Anim
         local anim = Anim(animTemp.name, img, animTemp.xCount, animTemp.yCount)
         if self.anims[slot] == nil then
             self.anims[slot] = {}
         end
         self.anims[slot][anim.name] = anim
+       -- print("创建装备动画["..anim.name.."]")
     end
+    local item = ItemManager.getItem(itemId)
+    print("装备".. item.name.."成功!")
 end

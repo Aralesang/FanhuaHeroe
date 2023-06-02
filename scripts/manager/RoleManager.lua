@@ -39,19 +39,19 @@ end
 ---@param roleId number 角色模板id
 ---@param x? number 角色初始位置x
 ---@param y? number 角色初始位置y
----@return GameObject | nil
+---@return GameObject
 function RoleManager.createRole(roleId, x, y)
      local roleTemp = RoleManager.roles[roleId]
      --创建角色
+     ---@type GameObject
      local roleObj = GameObject()
      roleObj.position.x = x or 0
      roleObj.position.y = y or 0
      roleObj:setCentral(32 / 2, 32 / 2)
 
      --附加碰撞器组件
-     ---@type CollisionBox | nil
+     ---@type CollisionBox
      local collision = roleObj:addComponent(CollisionBox)
-     if collision == nil then return nil end
      collision:setWH(64, 64)
 
      --附加角色组件
@@ -64,7 +64,6 @@ function RoleManager.createRole(roleId, x, y)
      local animation = roleObj:addComponent(Animation)
      if animation == nil then
           error("animation component add fail")
-          return nil
      end
      --构造动画对象
      for _,animId in pairs(roleTemp.anims) do
@@ -74,7 +73,9 @@ function RoleManager.createRole(roleId, x, y)
      animation:play("闲置")
 
      --附加装备组件
-     roleObj:addComponent(Equipment)
+     local eq = roleObj:addComponent(Equipment)
+     eq:equip("衣服",1)
+     eq:equip("帽子",2)
      --附加调试组件
      roleObj:addComponent(DebugDraw)
      return roleObj
