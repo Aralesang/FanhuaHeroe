@@ -24,7 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]]--
 
+---@class Registry
 local Registry = {}
+---@private
 Registry.__index = function(self, key)
 	return Registry[key] or (function()
 		local t = {}
@@ -84,6 +86,7 @@ function Registry:clearPattern(p)
 end
 
 -- instancing
+---@return Registry
 function Registry.new()
 	return setmetatable({}, Registry)
 end
@@ -98,5 +101,6 @@ for k in pairs(Registry) do
 		module[k] = function(...) return default[k](default, ...) end
 	end
 end
-
-return setmetatable(module, {__call = Registry.new})
+---@type Registry
+local o = setmetatable(module, {__call = Registry.new})
+return o

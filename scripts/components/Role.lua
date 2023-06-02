@@ -36,7 +36,7 @@ end
 function Role:attack()
     print("Normal Attack ...")
     --TODO:创建攻击区域
-    local attackRange = GameObject:new()
+    local attackRange = GameObject()
     local gameObject = self.gameObject
     if gameObject == nil then
         return

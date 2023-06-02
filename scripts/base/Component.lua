@@ -9,7 +9,6 @@ Component = Object:extend()
 
 function Component:new()
   self.isLoad = false
-  return self
 end
 
 function Component:extend()

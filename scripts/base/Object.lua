@@ -65,7 +65,7 @@ function Object:__tostring()
   return "Object"
 end
 
----函数调用
+---元方法
 ---@private
 ---@vararg function
 ---@return Object
@@ -75,6 +75,5 @@ function Object:__call(...)
   obj:new(...)
   return obj
 end
-
 
 return Object

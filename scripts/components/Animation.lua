@@ -36,7 +36,6 @@ function Animation:create(name, imagePath, xCount, yCount)
         error("动画图像创建错误:" .. imagePath)
         return
     end
-    ---@type Anim
     local animLayer = Anim(name, image, xCount, yCount)
     if self.anims == nil then
         self.anims = {}
@@ -152,6 +151,7 @@ function Animation:play(name)
         error("目标动画不存在")
     end
     self.state = AnimationState.Playing
+    print("播放:"..self.anim.name)
 end
 
 ---停止动画

@@ -104,7 +104,7 @@ function PlayerController:fire()
     local role = self.role
     if role == nil then return end
     --创建子弹对象
-    local bulletObj = GameObject:new()
+    local bulletObj = GameObject()
     bulletObj:setCentral(bulletImage:getWidth() / 2, bulletImage:getHeight() / 2)
     bulletObj:setScale(0.2, 0.2)
     bulletObj:setPosition(playerPosition.x, playerPosition.y)

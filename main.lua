@@ -12,6 +12,7 @@ require "scripts.utils.PrefabUtil"
 local sti = require "scripts.utils.sti"
 require "scripts.manager.AnimManager"
 require "scripts.manager.RoleManager"
+local Signal = require "scripts.utils.signal"
 
 --地图对象
 local map
@@ -35,7 +36,6 @@ function love.load()
 
     --实例化角色对象
     RoleManager.createRole(0)
-    
     print("游戏初始化完毕!")
 end
 

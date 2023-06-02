@@ -13,11 +13,10 @@ require "scripts.components.DebugDraw"
 ---@field master string 子弹的发射者
 ---@field dir Vector2 子弹飞行方向
 Bullet = Component:extend()
-
+Bullet.componentName = "Bullet"
 function Bullet:new()
     self.animation = nil
     self.speed = 5
-    self.componentName = "Bullet"
     self.master = ""
     self.dir = Vector2.zero()
 end

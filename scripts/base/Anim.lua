@@ -29,4 +29,5 @@ function Anim:new(name, image, xCount, yCount)
     self.height = sh / yCount
     self.quad = love.graphics.newQuad(0,0,self.width, self.height, sw, sh)
     self.row = 0
+    print("创建动画:[" .. name .. "]")
 end

@@ -58,13 +58,13 @@ function Equipment:equip(slot,itemId)
     --根据玩家所使用的动画创建装备动画
     for _,v in pairs(anims) do
         local animId = v
-        local imgPath = "equipment/"..itemId.."/"..v
+        --动画图片路径组合规则:以道具id为文件夹区分，以动画id为最小单位
+        local imgPath = "equipment/"..itemId.."/"..v..".png"
         local img = love.graphics.newImage(imgPath)
         if img == nil then
             error("目标装备动画不存在:"..imgPath)
         end
         local animTemp = AnimManager.getAnim(animId)
-        ---@type Anim
         local anim = Anim(animTemp.name, img, animTemp.xCount, animTemp.yCount)
         if self.anims[slot] == nil then
             self.anims[slot] = {}

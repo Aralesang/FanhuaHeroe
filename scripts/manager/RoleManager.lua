@@ -4,6 +4,7 @@ require "scripts.components.Animation"
 require "scripts.components.Role"
 require "scripts.components.DebugDraw"
 local JSON = require "scripts.utils.JSON"
+require "scripts.components.Equipment"
 
 ---@class RoleJsonData 角色模板
 ---@field id number 角色id
@@ -42,7 +43,7 @@ end
 function RoleManager.createRole(roleId, x, y)
      local roleTemp = RoleManager.roles[roleId]
      --创建角色
-     local roleObj = GameObject:new()
+     local roleObj = GameObject()
      roleObj.position.x = x or 0
      roleObj.position.y = y or 0
      roleObj:setCentral(32 / 2, 32 / 2)
@@ -70,9 +71,10 @@ function RoleManager.createRole(roleId, x, y)
           local anim = AnimManager.careteAnim(animId)
           animation:addAnim(anim)
      end
+     animation:play("闲置")
 
-     
-
+     --附加装备组件
+     roleObj:addComponent(Equipment)
      --附加调试组件
      roleObj:addComponent(DebugDraw)
      return roleObj

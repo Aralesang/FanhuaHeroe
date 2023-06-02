@@ -42,7 +42,6 @@ function AnimManager.careteAnim(id)
     if image == nil then
         error("动画图像创建错误:" .. imagePath)
     end
-    ---@type Anim
     local anim = Anim(temp.name, image, temp.xCount, temp.yCount)
     return anim
 end

@@ -9,6 +9,7 @@ require "scripts.components.Collision"
 ---@field height number 碰撞器的高度
 ---@field isCollision boolean 如果当前碰撞器处于碰撞中,则为true
 CollisionBox = Component:extend()
+CollisionBox.componentName = "CollisionBox"
 
 ---创建一个新碰撞器
 function CollisionBox:new()
@@ -18,7 +19,6 @@ function CollisionBox:new()
     self.height = 0
     self.isCollision = false
     self.position = Vector2.zero()
-    self.componentName = "CollisionBox"
 end
 
 function CollisionBox:load()

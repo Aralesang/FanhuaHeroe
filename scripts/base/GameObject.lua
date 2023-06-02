@@ -15,7 +15,6 @@ require "scripts.base.Vector2"
 GameObject = Object:extend()
 
 ---构造函数
----@return GameObject
 function GameObject:new()
     self.name = ""
     self.position = Vector2.zero()
@@ -26,7 +25,6 @@ function GameObject:new()
     self.central = Vector2.zero()
     self.direction = Direction.Donw
     Game.gameObjects[tostring(self)] = self
-    return self
 end
 
 ---设置对象坐标
@@ -64,6 +62,9 @@ end
 ---@param componentType Component 组件对象
 ---@return T
 function GameObject:addComponent(componentType)
+    if componentType == nil then
+        error("附加组件失败,组件类型为空")
+    end
     ---@type Component
     local component = componentType()
     local componentName = component.componentName
