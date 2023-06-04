@@ -14,7 +14,7 @@ require "scripts.enums.Direction"
 ---@field animation Animation | nil 动画组件
 ---@field equipment Equipment | nil 装备组件
 Role = Component:extend()
-Role.componentName = "Role"
+-- Role.componentName = "Role"
 
 function Role:new()
     self.name = nil
@@ -36,8 +36,9 @@ function Role:update(dt)
         error("角色未找到装备组件")
     end
     --同步装备动画
-    self.equipment.frameIndex = self.animation.frameIndex
-    self.equipment.animName = self.animation:getAnimName()
+    local frameIndex = self.animation.frameIndex
+    local animName = self.animation:getAnimName()
+    self.equipment:changeAnim(animName,frameIndex)
 end
 
 --获取角色方向

@@ -7,7 +7,7 @@ require "scripts.components.Collision"
 ---@field debug boolean 绘制形状
 ---@field radius number 半径
 CollisionCircular = Component:extend()
-CollisionCircular.componentName = "CollisionCircular"
+--CollisionCircular.componentName = "CollisionCircular"
 
 ---创建一个新碰撞器
 function CollisionCircular:new()
@@ -26,7 +26,7 @@ function CollisionCircular:update(dt)
         ---@type CollisionCircular | Collision
         local otherCollisionCircular = otherCollision
         if
-            otherCollision.componentName == "CollisionCircular" and
+            otherCollision:is(CollisionCircular) and
                 tostring(self) ~= tostring(otherCollisionCircular)
          then
             if
@@ -46,7 +46,7 @@ function CollisionCircular:update(dt)
         --对四边形的碰撞
         ---@type CollisionBox | Collision
         local otherCollisionBox = otherCollision
-        if otherCollision.componentName == "CollisionBox" then
+        if otherCollision:is(CollisionBox) then
             if
                 math.abs(self.position.x - otherCollisionBox.position.x) <= otherCollisionBox.width / 2 + self.radius and
                     math.abs(self.position.y - otherCollisionBox.position.y) <= otherCollisionBox.height / 2 + self.radius

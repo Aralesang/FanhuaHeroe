@@ -12,7 +12,7 @@ require "scripts.base.Anim"
 ---@field private currentTime number 当前已持续的时间(秒)
 ---@field private direction Direction 当前动画方向
 Animation = Component:extend()
-Animation.componentName = "Animation"
+--Animation.componentName = "Animation"
 
 --创建一个新的动画对象
 ---@private
@@ -151,7 +151,7 @@ function Animation:play(name)
         error("目标动画不存在")
     end
     self.state = AnimationState.Playing
-    print("播放:"..self.anim.name)
+    --print("播放:"..self.anim.name)
 end
 
 ---停止动画

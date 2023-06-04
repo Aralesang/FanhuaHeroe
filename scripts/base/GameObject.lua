@@ -67,14 +67,15 @@ function GameObject:addComponent(componentType)
     end
     ---@type Component
     local component = componentType()
-    local componentName = component.componentName
-    if componentName == nil then
-        error("附加组件失败,目标组件名称为空")
-    end
+    -- local componentName = component.componentName
+    -- if componentName == nil then
+    --     error("附加组件失败,目标组件名称为空")
+    -- end
     if self.components == nil then
         self.components = {}
     end
-    self.components[componentName] = component
+    --self.components[componentName] = component
+    table.insert(self.components,component)
     component.gameObject = self
     if component.awake then
         component:awake()
@@ -90,15 +91,21 @@ function GameObject:getComponent(componentType)
     if componentType == nil then
         error("componentType 为空")
     end
-    local componentName = componentType.componentName
-    if componentName == nil then
-        error("目标组件名称为空")
-    end
+    -- local componentName = componentType.componentName
+    -- if componentName == nil then
+    --     error("目标组件名称为空")
+    -- end
     if self.components == nil then
         return nil
     end
-    local component = self.components[componentName]
-    return component
+    --local component = self.components[componentName]
+    for _,v in pairs(self.components) do
+        if v:is(componentType) then
+            return v
+        end
+    end
+    return nil
+    --return component
 end
 
 ---对象销毁

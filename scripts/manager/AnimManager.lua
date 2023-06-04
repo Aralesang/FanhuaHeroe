@@ -1,7 +1,6 @@
 local JSON = require "scripts.utils.JSON"
 
 ---@class AnimJsonData 动画json结构体
----@field id number 动画id
 ---@field name string 动画名称
 ---@field path string 动画所用的图像文件路径
 ---@field xCount number x轴动画数量
@@ -25,17 +24,17 @@ function AnimManager.init()
     AnimManager.anims = {}
     ---@cast json AnimJsonData[]
     for _,v in pairs(json) do
-        AnimManager.anims[v.id] = v
+        AnimManager.anims[v.name] = v
    end
 end
 
 ---创建动画对象
----@param id number 要创建的动画id
+---@param name string 动画名称
 ---@return Anim anim 
-function AnimManager.careteAnim(id)
-    local temp = AnimManager.anims[id]
+function AnimManager.careteAnim(name)
+    local temp = AnimManager.anims[name]
     if temp == nil then
-        error("目标id的动画不存在:"..id)
+        error("目标动画不存在:"..name)
     end
     local imagePath = temp.path
     local image = love.graphics.newImage(imagePath)
@@ -47,12 +46,12 @@ function AnimManager.careteAnim(id)
 end
 
 ---获取动画模板
----@param id number 目标动画id
+---@param name string 动画名称
 ---@return AnimJsonData
-function AnimManager.getAnim(id)
-    local anim = AnimManager.anims[id]
+function AnimManager.getAnim(name)
+    local anim = AnimManager.anims[name]
     if anim == nil then
-        error("目标id的动画不存在"..id)
+        error("目标动画不存在"..name)
     end
     return anim
 end

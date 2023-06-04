@@ -9,7 +9,7 @@ require "scripts.components.Collision"
 ---@field height number 碰撞器的高度
 ---@field isCollision boolean 如果当前碰撞器处于碰撞中,则为true
 CollisionBox = Component:extend()
-CollisionBox.componentName = "CollisionBox"
+-- CollisionBox.componentName = "CollisionBox"
 
 ---创建一个新碰撞器
 function CollisionBox:new()
@@ -29,7 +29,7 @@ function CollisionBox:update(dt)
     self.position.y = self.gameObject.position.y
     ---@param otherCollision CollisionBox
     for _, otherCollision in pairs(Game.controllers) do
-        if otherCollision.componentName == "CollisionBox" and tostring(self) ~= tostring(otherCollision) then
+        if otherCollision:is(CollisionBox) and tostring(self) ~= tostring(otherCollision) then
             if
                 self.position.x + self.width >= otherCollision.position.x and
                     self.position.x - otherCollision.position.x <= self.width and

@@ -9,7 +9,7 @@ require "scripts.components.Equipment"
 ---@class RoleJsonData 角色模板
 ---@field id number 角色id
 ---@field name string 角色名称
----@field anims number[] 动画列表
+---@field anims string[] 动画列表
 RoleJsonData = {}
 
 ---角色管理器
@@ -47,7 +47,7 @@ function RoleManager.createRole(roleId, x, y)
      local roleObj = GameObject()
      roleObj.position.x = x or 0
      roleObj.position.y = y or 0
-     roleObj:setCentral(32 / 2, 32 / 2)
+     --roleObj:setCentral(32 / 2, 32 / 2)
 
      --附加碰撞器组件
      ---@type CollisionBox
@@ -66,16 +66,17 @@ function RoleManager.createRole(roleId, x, y)
           error("animation component add fail")
      end
      --构造动画对象
-     for _,animId in pairs(roleTemp.anims) do
-          local anim = AnimManager.careteAnim(animId)
+     for _,animName in pairs(roleTemp.anims) do
+          local anim = AnimManager.careteAnim(animName)
           animation:addAnim(anim)
      end
      animation:play("闲置")
 
      --附加装备组件
      local eq = roleObj:addComponent(Equipment)
-     eq:equip("衣服",1)
-     eq:equip("帽子",2)
+     eq:equip("衣服",4)
+     --eq:equip("帽子",2)
+     eq:equip("头发",5)
      --附加调试组件
      roleObj:addComponent(DebugDraw)
      return roleObj

@@ -38,7 +38,7 @@ function Collision:onBeginCollision(otherColl)
     --对象上所有组件触发碰撞事件
     ---@param v Collision | Component
     for _, v in pairs(self.gameObject.components) do
-        if v.componentName ~= "CollisionBox" and v.componentName ~= "CollisionCircular" and v.onBeginCollision then
+        if not v:is(CollisionBox) and not v:is(CollisionCircular) and v.onBeginCollision then
             v:onBeginCollision(otherColl)
         end
     end
@@ -63,7 +63,7 @@ function Collision:onEndCollision(otherColl)
     end
     ---@param v Collision | Component
     for _, v in pairs(self.gameObject.components) do
-        if v.componentName ~= "CollisionBox" and v.componentName ~= "CollisionCircular" and v.onEndCollision then
+        if not v:is(CollisionBox) and not v:is(CollisionCircular) and v.onEndCollision then
             v:onEndCollision(otherColl)
         end
     end
