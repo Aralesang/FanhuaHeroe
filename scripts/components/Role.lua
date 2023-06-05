@@ -14,7 +14,6 @@ require "scripts.enums.Direction"
 ---@field animation Animation | nil 动画组件
 ---@field equipment Equipment | nil 装备组件
 Role = Component:extend()
--- Role.componentName = "Role"
 
 function Role:new()
     self.name = nil

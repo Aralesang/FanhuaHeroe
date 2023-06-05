@@ -2,7 +2,6 @@
 ---@field cellNum number 格子数量
 ---@field items Item[] 道具列表
 Inventory = Component:extend()
--- Inventory.componentName = "Inventory"
 
 ---构造函数
 ---@param cellNum number 格子数量

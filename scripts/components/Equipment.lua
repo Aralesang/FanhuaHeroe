@@ -1,21 +1,21 @@
 require "scripts.manager.ItemManager"
+require "scripts.game.Slot"
 
 ---@class Equipment:Component 装备组件
----@field private slots table<string,number> 装备槽列表 {装备槽:装备id}
----@field private anims table<string,table<string,Anim>> 动画字典 {装备槽:{动画名称:动画对象}}
+---@field private slots Slot[] 装备槽有序列表
+---@field private slotMap table<string,Slot> 装备槽字典{装备槽:装备id}
 ---@field animName string 当前动画名称
 ---@field frameIndex number 当前动画帧下标
 ---@field animation Animation | nil 动画组件
 Equipment = Component:extend()
--- Equipment.componentName = "Equipment"
 
 ---构造函数
 function Equipment:new()
     self.slots = {}
-    self.anims = {}
+    self.slotMap = {}
 end
 
-function Equipment:load()
+function Equipment:awake()
     self.animation = self.gameObject:getComponent(Animation)
     if self.animation == nil then
         error("对象未附加Animation组件")
@@ -23,23 +23,30 @@ function Equipment:load()
     --添加装备插槽
     self:addSlot("帽子")
     self:addSlot("衣服")
-    self:addSlot("头发")
+    --self:addSlot("头发")
 end
+
 
 function Equipment:update(dt)
     --同步所有装备图像的视口数据
     if self.animation == nil then
         error("对象未附加Animation组件")
     end
-    for _, v in pairs(self.anims) do
-        local anim = v[self.animName]
+    for _, slot in pairs(self.slots) do
+        local anims = slot.anims
+        if anims == nil then
+            goto continue
+        end
+        local anim = anims[self.animName]
         if anim == nil then
-            error("目标动画" .. self.animName .. "未找到")
+            error("目标动画[" .. self.animName .. "]未找到")
         end
         local quad = anim.quad
         local row = self.gameObject.direction
-        quad:setViewport(self.frameIndex * anim.width, row * anim.height, anim.width, anim.height, anim.image:getWidth(),
+        quad:setViewport(self.frameIndex * anim.width, row * anim.height, anim.width, anim.height,
+            anim.image:getWidth(),
             anim.image:getHeight())
+        ::continue::
     end
 end
 
@@ -48,12 +55,11 @@ function Equipment:draw()
     if self.animName == nil or self.frameIndex == nil then
         return
     end
-    for k, v in pairs(self.anims) do
-        if v == nil then
-            error("装备图像绘制失败")
-            return
+    for k, slot in pairs(self.slots) do
+        if slot.anims == nil then
+            goto continue
         end
-        local anim = v[self.animName]
+        local anim = slot.anims[self.animName]
         local image = anim.image
         local quad = anim.quad
         local gameObject = self.gameObject
@@ -63,6 +69,7 @@ function Equipment:draw()
         x = math.floor(x)
         y = math.floor(y)
         love.graphics.draw(image, quad, x, y, gameObject.rotate, gameObject.scale.x, gameObject.scale.y, 0, 0, 0, 0)
+        ::continue::
     end
 end
 
@@ -74,22 +81,29 @@ end
 ---@private
 ---@param name slot
 function Equipment:addSlot(name)
-    self.slots[name] = 0
+    ---@type Slot
+    local slot = Slot(name)
+    table.insert(self.slots, slot)
+    self.slotMap[name] = slot
 end
 
 ---装备道具
----@param slot slot 要装备到哪个槽
+---@param slotName slot 要装备到哪个槽
 ---@param itemId number 要装备的道具的id
-function Equipment:equip(slot, itemId)
-    self.slots[slot] = itemId
+function Equipment:equip(slotName, itemId)
+    if self.slotMap[slotName] == nil then
+        error("装备槽 [" .. slotName .. "] 不存在!")
+        return
+    end
+    local slot = self.slotMap[slotName]
+    slot.itemId = itemId
     --获取玩家能使用的所有动画
     local role = RoleManager.getRole(0)
     local anims = role.anims
     --根据玩家所使用的动画创建装备动画
-    for _, v in pairs(anims) do
-        local animName = v
+    for _, animName in pairs(anims) do
         --动画图片路径组合规则:以道具id为文件夹区分，以动画id为最小单位
-        local imgPath = "image/equipment/" .. itemId .. "/" .. v .. ".png"
+        local imgPath = "image/equipment/" .. itemId .. "/" .. animName .. ".png"
         local img = love.graphics.newImage(imgPath)
         if img == nil then
             error("目标装备动画不存在:" .. imgPath)
@@ -97,14 +111,14 @@ function Equipment:equip(slot, itemId)
         local animTemp = AnimManager.getAnim(animName)
         ---@type Anim
         local anim = Anim(animTemp.name, img, animTemp.xCount, animTemp.yCount)
-        if self.anims[slot] == nil then
-            self.anims[slot] = {}
+        if slot.anims == nil then
+            slot.anims = {}
         end
-        self.anims[slot][anim.name] = anim
-        print("创建装备动画[" .. anim.name .. "],index:" .. slot)
+        slot.anims[anim.name] = anim
+        print("槽:[" .. slotName.."]创建装备动画[" .. anim.name .. "]")
     end
     local item = ItemManager.getItem(itemId)
-    print("装备" .. item.name .. "成功!")
+    print("装备[" .. item.name .. "]成功!")
 end
 
 ---变更动画

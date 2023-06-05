@@ -75,8 +75,8 @@ function RoleManager.createRole(roleId, x, y)
      --附加装备组件
      local eq = roleObj:addComponent(Equipment)
      eq:equip("衣服",4)
-     --eq:equip("帽子",2)
-     eq:equip("头发",5)
+     eq:equip("帽子",2)
+     --eq:equip("头发",5)
      --附加调试组件
      roleObj:addComponent(DebugDraw)
      return roleObj

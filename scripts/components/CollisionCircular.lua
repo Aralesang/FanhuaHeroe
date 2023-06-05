@@ -7,7 +7,6 @@ require "scripts.components.Collision"
 ---@field debug boolean 绘制形状
 ---@field radius number 半径
 CollisionCircular = Component:extend()
---CollisionCircular.componentName = "CollisionCircular"
 
 ---创建一个新碰撞器
 function CollisionCircular:new()

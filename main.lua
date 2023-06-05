@@ -21,6 +21,10 @@ function love.load()
     print("加载中文字体...")
     local myFont = love.graphics.newFont("fonts/SourceHanSansCN-Bold.otf", 16)
     love.graphics.setFont(myFont)
+    -- if love.system.getOS() == "Windows" then
+    --     print("将终端字体设置为65001")
+    --     os.execute("chcp 65001 > nul") -- 设置代码页为UTF-8
+    -- end
     --更改图像过滤方式，以显示高清马赛克
     print("更改图像过滤方式...")
     love.graphics.setDefaultFilter("nearest", "nearest")

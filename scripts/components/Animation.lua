@@ -12,7 +12,6 @@ require "scripts.base.Anim"
 ---@field private currentTime number 当前已持续的时间(秒)
 ---@field private direction Direction 当前动画方向
 Animation = Component:extend()
---Animation.componentName = "Animation"
 
 --创建一个新的动画对象
 ---@private

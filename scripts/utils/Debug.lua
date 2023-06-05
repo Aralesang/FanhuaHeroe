@@ -64,3 +64,13 @@ function Debug.showTable(table)
         -- end
     end
 end
+
+---获取目标对象的字段数量
+---@param table table 目标对象
+function Debug.size(table)
+    local count = 0
+    for _,v in pairs(table) do
+        count = count + 1
+    end
+    return count
+end

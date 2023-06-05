@@ -15,6 +15,8 @@ Object.__index = Object
 
 ---构造函数
 function Object:new()
+  local obj = setmetatable({}, self)
+  return obj
 end
 
 ---继承
@@ -35,7 +37,7 @@ end
 ---实现接口
 ---@vararg table
 function Object:implement(...)
-  for _, cls in pairs({...}) do
+  for _, cls in pairs({ ... }) do
     for k, v in pairs(cls) do
       if self[k] == nil and type(v) == "function" then
         self[k] = v
@@ -72,7 +74,7 @@ end
 ---@return Object
 function Object:__call(...)
   local obj = setmetatable({}, self)
----@diagnostic disable-next-line: redundant-parameter
+  ---@diagnostic disable-next-line: redundant-parameter
   obj:new(...)
   return obj
 end

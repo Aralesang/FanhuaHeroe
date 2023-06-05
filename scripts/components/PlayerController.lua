@@ -15,7 +15,6 @@ require "scripts.enums.Direction"
 ---@field animation Animation | nil 动画组件
 ---@field player GameObject 玩家对象
 PlayerController = Component:extend()
--- PlayerController.componentName = "PlayerController"
 
 function PlayerController:new()
     self.player = self.gameObject
