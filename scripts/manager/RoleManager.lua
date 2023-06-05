@@ -5,6 +5,7 @@ require "scripts.components.Role"
 require "scripts.components.DebugDraw"
 local JSON = require "scripts.utils.JSON"
 require "scripts.components.Equipment"
+require "scripts.components.Body"
 
 ---@class RoleJsonData 角色模板
 ---@field id number 角色id
@@ -72,11 +73,14 @@ function RoleManager.createRole(roleId, x, y)
      end
      animation:play("闲置")
 
+     ---附加身体装备组件
+     local body = roleObj:addComponent(Body)
+     body:equip("头发","法国卷发")
+
      --附加装备组件
      local eq = roleObj:addComponent(Equipment)
-     eq:equip("衣服",4)
-     eq:equip("帽子",2)
-     --eq:equip("头发",5)
+     eq:equip("衣服",3)
+     eq:equip("下装",4)
      --附加调试组件
      roleObj:addComponent(DebugDraw)
      return roleObj

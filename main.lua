@@ -36,7 +36,7 @@ function love.load()
     ItemManager.init()
     --加载场景
     print("加主场景...")
-    map = sti("scenes/start.lua")
+    map = sti("scenes/测试地图.lua")
 
     --实例化角色对象
     local role = RoleManager.createRole(0)

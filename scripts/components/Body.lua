@@ -1,16 +1,16 @@
 require "scripts.manager.ItemManager"
 require "scripts.game.Slot"
 
----@class Equipment:Component 装备组件
+---@class Body:Component 身体组件
 ---@field private slots Slot[] 装备槽有序列表
 ---@field private slotMap table<string,Slot> 装备槽字典{装备槽:装备id}
 ---@field private hiar string 当前使用的头发
 ---@field animName string 当前动画名称
 ---@field frameIndex number 当前动画帧下标
 ---@field animation Animation | nil 动画组件
-Equipment = Component:extend()
+Body = Component:extend()
 
-function Equipment:extend()
+function Body:extend()
     local cls = {}
     for k, v in pairs(self) do
       if k:find("__") == 1 then
@@ -24,25 +24,22 @@ function Equipment:extend()
   end
 
 ---构造函数
-function Equipment:new()
+function Body:new()
     self.slots = {}
     self.slotMap = {}
 end
 
-function Equipment:awake()
+function Body:awake()
     self.animation = self.gameObject:getComponent(Animation)
     if self.animation == nil then
         error("对象未附加Animation组件")
     end
     --添加装备插槽
-    self:addSlot("帽子")
-    self:addSlot("衣服")
-    self:addSlot("下装")
-    self:addSlot("武器")
+    self:addSlot("头发")
 end
 
 
-function Equipment:update(dt)
+function Body:update(dt)
     --同步所有装备图像的视口数据
     if self.animation == nil then
         error("对象未附加Animation组件")
@@ -69,7 +66,7 @@ function Equipment:update(dt)
 end
 
 ---绘制装备图像
-function Equipment:draw()
+function Body:draw()
     if self.animName == nil or self.frameIndex == nil then
         return
     end
@@ -91,15 +88,12 @@ function Equipment:draw()
     end
 end
 
----@alias slot
----| '"帽子"'
----| '"衣服"'
----| '"下装"'
----| '"武器"'
+---@alias slot_body
+---| '"头发"'
 ---添加一个装备槽
 ---@private
----@param name slot
-function Equipment:addSlot(name)
+---@param name slot_body
+function Body:addSlot(name)
     ---@type Slot
     local slot = Slot(name)
     table.insert(self.slots, slot)
@@ -107,23 +101,21 @@ function Equipment:addSlot(name)
 end
 
 ---装备道具
----@param slotName slot 要装备到哪个槽
----@param itemId number 要装备的道具的id
-function Equipment:equip(slotName, itemId)
+---@param slotName slot_body 要装备到哪个槽
+---@param name string 要装备的身体零件名称
+function Body:equip(slotName, name)
     if self.slotMap[slotName] == nil then
         error("装备槽 [" .. slotName .. "] 不存在!")
         return
     end
     local slot = self.slotMap[slotName]
-    slot.itemId = itemId
     --获取玩家能使用的所有动画
     local role = RoleManager.getRole(0)
     local anims = role.anims
-    local item = ItemManager.getItem(itemId)
     --根据玩家所使用的动画创建装备动画
     for _, animName in pairs(anims) do
-        --动画图片路径组合规则:以道具id为文件夹区分，以动画id为最小单位
-        local imgPath = "image/equipment/" .. animName .. "/" .. item.name .. ".png"
+        --动画图片路径组合规则:动画/身体零件名称
+        local imgPath = "image/body/" .. animName .. "/" .. name .. ".png"
         local img = love.graphics.newImage(imgPath)
         if img == nil then
             error("目标装备动画不存在:" .. imgPath)
@@ -137,13 +129,13 @@ function Equipment:equip(slotName, itemId)
         slot.anims[anim.name] = anim
         print("槽:[" .. slotName.."]创建装备动画[" .. anim.name .. "]")
     end
-    print("装备[" .. item.name .. "]成功!")
+    print("装备[" .. name .. "]成功!")
 end
 
 ---变更动画
 ---@param animName string
 ---@param frameIndex number
-function Equipment:changeAnim(animName, frameIndex)
+function Body:changeAnim(animName, frameIndex)
     self.animName = animName
     self.frameIndex = frameIndex
 end

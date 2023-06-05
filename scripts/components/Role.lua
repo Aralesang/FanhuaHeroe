@@ -4,6 +4,7 @@ require "scripts.base.Game"
 require "scripts.components.CollisionBox"
 require "scripts.base.Component"
 require "scripts.enums.Direction"
+require "scripts.components.Body"
 
 ---角色组件
 ---@class Role : Component
@@ -13,6 +14,7 @@ require "scripts.enums.Direction"
 ---@field private direction Direction 角色朝向
 ---@field animation Animation | nil 动画组件
 ---@field equipment Equipment | nil 装备组件
+---@field body Body | nil 身体组件
 Role = Component:extend()
 
 function Role:new()
@@ -24,6 +26,7 @@ end
 
 function Role:load()
     self.animation = self.gameObject:getComponent(Animation)
+    self.body = self.gameObject:getComponent(Body)
     self.equipment = self.gameObject:getComponent(Equipment)
 end
 
@@ -38,6 +41,9 @@ function Role:update(dt)
     local frameIndex = self.animation.frameIndex
     local animName = self.animation:getAnimName()
     self.equipment:changeAnim(animName,frameIndex)
+    if self.body then
+        self.body:changeAnim(animName,frameIndex)
+    end
 end
 
 --获取角色方向

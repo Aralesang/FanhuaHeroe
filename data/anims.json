@@ -1,14 +1,14 @@
 [
     {
         "name": "闲置",
-        "path": "image/character/角色_待机.png",
+        "path": "image/character/闲置.png",
         "xCount": 1,
         "yCount": 4
     },
     {
         "name": "行走",
-        "path": "image/character/角色_行走.png",
-        "xCount": 6,
+        "path": "image/character/行走.png",
+        "xCount": 8,
         "yCount": 4
     }
 ]
