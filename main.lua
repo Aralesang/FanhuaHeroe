@@ -111,6 +111,7 @@ local function drawBox(box, r, g, b)
     love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
     love.graphics.setColor(r, g, b)
     love.graphics.rectangle("line", box.x, box.y, box.w, box.h)
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 local function drawPlayer()
@@ -120,11 +121,9 @@ local function drawPlayer()
 --每帧绘制
 function love.draw()
     Camera:set()
-    -- Scale world
-    drawPlayer()
+    
     local scale = 2
 
-    -- Draw world with translation and scaling
     --绘制地图
     map:draw(0, 0, scale)
     --绘制对象
@@ -140,7 +139,7 @@ function love.draw()
             end
         end
     end
-
+    drawPlayer()
     Camera:unset()
     Debug.draw()
 end
