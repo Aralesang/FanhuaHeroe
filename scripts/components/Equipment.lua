@@ -81,9 +81,8 @@ function Equipment:draw()
         local image = anim.image
         local quad = anim.quad
         local gameObject = self.gameObject
-        local position = gameObject:getPosition()
-        local x = position.x - self.gameObject.central.x * self.gameObject.scale.x
-        local y = position.y - self.gameObject.central.y * self.gameObject.scale.y
+        local x = gameObject.x - self.gameObject.central.x * self.gameObject.scale.x
+        local y = gameObject.y - self.gameObject.central.y * self.gameObject.scale.y
         x = math.floor(x)
         y = math.floor(y)
         love.graphics.draw(image, quad, x, y, gameObject.rotate, gameObject.scale.x, gameObject.scale.y, 0, 0, 0, 0)

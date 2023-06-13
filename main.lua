@@ -3,14 +3,13 @@ require "scripts.base.Camera"
 require "scripts.base.GameObject"
 require "scripts.base.Game"
 require "scripts.components.Animation"
-require "scripts.components.Role"
 require "scripts.components.CollisionBox"
 require "scripts.manager.RoleManager"
-require "scripts.components.PlayerController"
 require "scripts.utils.PrefabUtil"
 local sti = require "scripts.utils.sti"
 require "scripts.manager.AnimManager"
 require "scripts.manager.RoleManager"
+require "scripts.game.Player"
 
 --地图对象
 local map
@@ -39,8 +38,9 @@ function love.load()
     map = sti("scenes/测试地图.lua")
 
     --实例化角色对象
-    local role = RoleManager.createRole(0)
-    role:addComponent(PlayerController)
+    -- local role = RoleManager.createRole(0)
+    -- role:addComponent(PlayerController)
+    Player()
     print("游戏初始化完毕!")
 end
 
@@ -50,24 +50,36 @@ function love.update(dt)
     ---@type number[]
     local destroyPool = {}
     --触发对象更新
-    for key, value in pairs(Game.gameObjects) do
-        for _, component in pairs(value.components) do
-            --触发组件load函数
-            if component.load and component.isLoad == false or component.isLoad == nil then
-                component:load()
-                component.isLoad = true
-            end
-            --触发组件更新
-            if component.update then
-                component:update(dt)
-            end
-            --触发组件销毁
-            if component.onDestroy and value.isDestroy then
-                component:onDestroy()
+    for key, gameObject in pairs(Game.gameObjects) do
+        --首先触发对象本身的更新
+        if gameObject.load and gameObject.isLoad == false then
+            gameObject:load()
+            gameObject.isLoad = true
+        end
+        if gameObject.update then
+            gameObject:update(dt)
+        end
+        --然后触发对象所附加的组件更新
+        if gameObject.components then
+            for _, component in pairs(gameObject.components) do
+                --触发组件load函数
+                if component.load and component.isLoad == false then
+                    component:load()
+                    component.isLoad = true
+                end
+                --触发组件更新
+                if component.update then
+                    component:update(dt)
+                end
+                --触发组件销毁
+                if component.onDestroy and gameObject.isDestroy then
+                    component:onDestroy()
+                end
             end
         end
-        if value.isDestroy then
+        if gameObject.isDestroy then
             table.insert(destroyPool, key)
+            gameObject:onDestroy()
         end
     end
 
@@ -85,13 +97,18 @@ function love.draw()
     local scale = 2
 
     -- Draw world with translation and scaling
+    --绘制地图
     map:draw(0, 0, scale)
     --绘制对象
     for _, value in pairs(Game.gameObjects) do
-        --触发组件绘制
-        for _, component in pairs(value.components) do
-            if component.draw ~= nil then
-                component:draw()
+        --绘制游戏对象
+        value:draw()
+        if value.components then
+            --触发组件绘制
+            for _, component in pairs(value.components) do
+                if component.draw ~= nil then
+                    component:draw()
+                end
             end
         end
     end
@@ -105,9 +122,12 @@ end
 function love.keypressed(key)
     --触发对象输入事件
     for _, value in pairs(Game.gameObjects) do
-        for _, component in pairs(value.components) do
-            if component.keypressed then
-                component:keypressed(key)
+        value:keypressed(key)
+        if value.components then
+            for _, component in pairs(value.components) do
+                if component.keypressed then
+                    component:keypressed(key)
+                end
             end
         end
     end
@@ -118,9 +138,12 @@ end
 function love.keyreleased(key)
     --触发对象输入事件
     for _, value in pairs(Game.gameObjects) do
-        for _, component in pairs(value.components) do
-            if component.keyreleased then
-                component:keyreleased(key)
+        value:keyreleased(key)
+        if value.components then
+            for _, component in pairs(value.components) do
+                if component.keyreleased then
+                    component:keyreleased(key)
+                end
             end
         end
     end

@@ -1,7 +1,6 @@
 require "scripts.base.GameObject"
 require "scripts.components.CollisionBox"
 require "scripts.components.Animation"
-require "scripts.components.Role"
 require "scripts.components.DebugDraw"
 local JSON = require "scripts.utils.JSON"
 require "scripts.components.Equipment"
@@ -34,56 +33,6 @@ function RoleManager.init()
      for _,v in pairs(json) do
           RoleManager.roles[v.id] = v
      end
-end
-
----创建一个玩家
----@param roleId number 角色模板id
----@param x? number 角色初始位置x
----@param y? number 角色初始位置y
----@return GameObject
-function RoleManager.createRole(roleId, x, y)
-     local roleTemp = RoleManager.roles[roleId]
-     --创建角色
-     ---@type GameObject
-     local roleObj = GameObject()
-     roleObj.position.x = x or 0
-     roleObj.position.y = y or 0
-     --roleObj:setCentral(32 / 2, 32 / 2)
-
-     --附加碰撞器组件
-     ---@type CollisionBox
-     local collision = roleObj:addComponent(CollisionBox)
-     collision:setWH(64, 64)
-
-     --附加角色组件
-     ---@type Role | nil
-     local role = roleObj:addComponent(Role)
-     role.name = roleTemp.name
-
-     ---附加动画组件
-     ---@type Animation | nil
-     local animation = roleObj:addComponent(Animation)
-     if animation == nil then
-          error("animation component add fail")
-     end
-     --构造动画对象
-     for _,animName in pairs(roleTemp.anims) do
-          local anim = AnimManager.careteAnim(animName)
-          animation:addAnim(anim)
-     end
-     animation:play("闲置")
-
-     ---附加身体装备组件
-     local body = roleObj:addComponent(Body)
-     body:equip("头发","法国卷发")
-
-     --附加装备组件
-     local eq = roleObj:addComponent(Equipment)
-     eq:equip("衣服",3)
-     eq:equip("下装",4)
-     --附加调试组件
-     roleObj:addComponent(DebugDraw)
-     return roleObj
 end
 
 ---获取角色模板数据

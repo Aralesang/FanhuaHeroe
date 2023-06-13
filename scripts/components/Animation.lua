@@ -20,7 +20,7 @@ function Animation:new()
     self.eventList = nil
     self.duration = 1
     self.currentTime = 0
-    self.direction = Direction.Donw
+    self.direction = Direction.Down
     self.state = AnimationState.Stop
 end
 
@@ -85,9 +85,8 @@ function Animation:draw()
     --计算当前帧
     local currentFrame = math.floor(self.currentTime / self.duration * self.anim.xCount)
     self:setFrameIndex(currentFrame)
-    local position = gameObject:getPosition()
-    local x = position.x - self.gameObject.central.x * self.gameObject.scale.x
-    local y = position.y - self.gameObject.central.y * self.gameObject.scale.y
+    local x = gameObject.x - self.gameObject.central.x * self.gameObject.scale.x
+    local y = gameObject.y - self.gameObject.central.y * self.gameObject.scale.y
     local anim = self.anim
     if anim == nil then
         error("目标动画不存在")

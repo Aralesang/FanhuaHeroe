@@ -24,8 +24,8 @@ function CollisionBox:load()
 end
 
 function CollisionBox:update(dt)
-    self.position.x = self.gameObject.position.x
-    self.position.y = self.gameObject.position.y
+    self.position.x = self.gameObject.x
+    self.position.y = self.gameObject.y
     ---@param otherCollision CollisionBox
     for _, otherCollision in pairs(Game.controllers) do
         if otherCollision:is(CollisionBox) and tostring(self) ~= tostring(otherCollision) then
