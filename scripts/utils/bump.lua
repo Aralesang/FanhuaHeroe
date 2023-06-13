@@ -322,7 +322,12 @@ local bump = {
   ------------------------------------------
   -- World
   ------------------------------------------
-  
+
+  ---@class World 物理世界
+  ---@field cellSize table
+  ---@field responses table
+  ---@field rows table
+  ---@field rects table
   local World = {}
   local World_mt = {__index = World}
   

@@ -10,6 +10,8 @@ local sti = require "scripts.utils.sti"
 require "scripts.manager.AnimManager"
 require "scripts.manager.RoleManager"
 require "scripts.game.Player"
+local bump = require "scripts.utils.bump"
+local bump_debug = require "scripts.utils.bump_debug"
 
 --地图对象
 local map
@@ -37,16 +39,21 @@ function love.load()
     print("加主场景...")
     map = sti("scenes/测试地图.lua")
 
+    --创建物理世界
+    Game.world = bump.newWorld()
     --实例化角色对象
-    -- local role = RoleManager.createRole(0)
-    -- role:addComponent(PlayerController)
-    Player()
+    ---@type Player
+    local player = Player()
+    Game.player = player
+    --添加到物理世界
+    Game.world:add(player, player.x, player.y, player.w, player.h)
     print("游戏初始化完毕!")
 end
 
 --每帧逻辑处理
 ---@param dt number 距离上一帧的间隔时间
 function love.update(dt)
+    ---碰撞检测
     ---@type number[]
     local destroyPool = {}
     --触发对象更新
@@ -90,10 +97,31 @@ function love.update(dt)
     map:update(dt)
 end
 
+-- local function drawDebug()
+--     bump_debug.draw(Game.world)
+
+--     local statistics = ("fps: %d, mem: %dKB, collisions: %d, items: %d"):format(love.timer.getFPS(),
+--         collectgarbage("count"), cols_len, Game.world:countItems())
+--     love.graphics.setColor(1, 1, 1)
+--     love.graphics.printf(statistics, 0, 580, 790, 'right')
+-- end
+
+local function drawBox(box, r, g, b)
+    love.graphics.setColor(r, g, b, 0.25)
+    love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
+    love.graphics.setColor(r, g, b)
+    love.graphics.rectangle("line", box.x, box.y, box.w, box.h)
+end
+
+local function drawPlayer()
+    drawBox(Game.player, 0, 1, 0)
+  end
+
 --每帧绘制
 function love.draw()
     Camera:set()
     -- Scale world
+    drawPlayer()
     local scale = 2
 
     -- Draw world with translation and scaling

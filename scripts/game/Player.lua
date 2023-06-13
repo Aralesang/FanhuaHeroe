@@ -16,6 +16,10 @@ function Player:new()
     self.animation = self:addComponent(Animation)
     self.body = self:addComponent(Body)
     self.equipment = self:addComponent(Equipment)
+    self.x = 100
+    self.y = 100
+    self.w = 32
+    self.h = 32
 end
 
 function Player:load()
