@@ -57,7 +57,7 @@ function Equipment:update(dt)
         end
         local anim = anims[self.animName]
         if anim == nil then
-            error("目标动画[" .. self.animName .. "]未找到")
+            error("["..slot.name.."]目标动画[" .. self.animName .. "]未找到")
         end
         local quad = anim.quad
         local row = self.gameObject.direction
@@ -77,6 +77,7 @@ function Equipment:draw()
         if slot.anims == nil then
             goto continue
         end
+        print(self.animName)
         local anim = slot.anims[self.animName]
         local image = anim.image
         local quad = anim.quad
@@ -119,6 +120,7 @@ function Equipment:equip(slotName, itemId)
     local role = RoleManager.getRole(0)
     local anims = role.anims
     local item = ItemManager.getItem(itemId)
+    --print("槽:[" .. slotName.."]:")
     --根据玩家所使用的动画创建装备动画
     for _, animName in pairs(anims) do
         --动画图片路径组合规则:以道具id为文件夹区分，以动画id为最小单位
@@ -134,9 +136,8 @@ function Equipment:equip(slotName, itemId)
             slot.anims = {}
         end
         slot.anims[anim.name] = anim
-        print("槽:[" .. slotName.."]创建装备动画[" .. anim.name .. "]")
     end
-    print("装备[" .. item.name .. "]成功!")
+    --print("装备[" .. item.name .. "]成功!")
 end
 
 ---变更动画

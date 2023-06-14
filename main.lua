@@ -1,19 +1,17 @@
-Object = require "scripts.base.Object"
+require "scripts.base.Object"
 require "scripts.base.Camera"
 require "scripts.base.GameObject"
 require "scripts.base.Game"
 require "scripts.components.Animation"
-require "scripts.components.CollisionBox"
 require "scripts.manager.RoleManager"
-require "scripts.utils.PrefabUtil"
 local sti = require "scripts.utils.sti"
 require "scripts.manager.AnimManager"
 require "scripts.manager.RoleManager"
 require "scripts.game.Player"
 local bump = require "scripts.utils.bump"
-local bump_debug = require "scripts.utils.bump_debug"
+require "scripts.utils.debug"
 
---地图对象
+---@type Map 地图对象
 local map
 
 function love.load()
@@ -37,6 +35,7 @@ function love.load()
     ItemManager.init()
     --加载场景
     print("加主场景...")
+
     map = sti("scenes/测试地图.lua")
 
     --创建物理世界
@@ -97,35 +96,12 @@ function love.update(dt)
     map:update(dt)
 end
 
--- local function drawDebug()
---     bump_debug.draw(Game.world)
-
---     local statistics = ("fps: %d, mem: %dKB, collisions: %d, items: %d"):format(love.timer.getFPS(),
---         collectgarbage("count"), cols_len, Game.world:countItems())
---     love.graphics.setColor(1, 1, 1)
---     love.graphics.printf(statistics, 0, 580, 790, 'right')
--- end
-
-local function drawBox(box, r, g, b)
-    love.graphics.setColor(r, g, b, 0.25)
-    love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
-    love.graphics.setColor(r, g, b)
-    love.graphics.rectangle("line", box.x, box.y, box.w, box.h)
-    love.graphics.setColor(1, 1, 1, 1)
-end
-
-local function drawPlayer()
-    drawBox(Game.player, 0, 1, 0)
-  end
-
 --每帧绘制
 function love.draw()
     Camera:set()
-    
-    local scale = 2
 
     --绘制地图
-    map:draw(0, 0, scale)
+    map:draw(0, 0, 2)
     --绘制对象
     for _, value in pairs(Game.gameObjects) do
         --绘制游戏对象
@@ -138,10 +114,11 @@ function love.draw()
                 end
             end
         end
+        --绘制碰撞体积
+        Debug.drawBox(value,0,1,0)
     end
-    drawPlayer()
     Camera:unset()
-    Debug.draw()
+    Debug.showFPS()
 end
 
 --按键按下

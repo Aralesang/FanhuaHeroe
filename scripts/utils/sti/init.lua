@@ -21,6 +21,17 @@ local ceil  = math.ceil
 local floor = math.floor
 local lg    = require(cwd .. "graphics")
 local atlas = require(cwd .. "atlas")
+
+---@class Map 地图对象
+---@field tilesets any
+---@field tilewidth number
+---@field tileheight number
+---@field orientation string
+---@field hexsidelength number
+---@field staggeraxis string
+---@field staggerindex string
+---@field renderorder string
+---@field height number
 local Map   = {}
 Map.__index = Map
 

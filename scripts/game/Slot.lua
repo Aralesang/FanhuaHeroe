@@ -7,5 +7,4 @@ Slot = Object:extend()
 function Slot:new(name)
     self.name = name
     self.itemId = 0
-    --self.anims = {}
 end

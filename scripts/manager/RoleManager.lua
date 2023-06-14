@@ -1,5 +1,4 @@
 require "scripts.base.GameObject"
-require "scripts.components.CollisionBox"
 require "scripts.components.Animation"
 require "scripts.components.DebugDraw"
 local JSON = require "scripts.utils.JSON"

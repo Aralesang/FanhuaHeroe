@@ -21,11 +21,12 @@ function DebugDraw:draw()
     if not Config.ShowCentral then
         return
     end
-    local x = self.gameObject:getPosition().x
-    local y = self.gameObject:getPosition().y
+    local x = self.gameObject.x
+    local y = self.gameObject.y
     --绘制对象中心点
     love.graphics.setColor(0.76, 0.18, 0.05)
     love.graphics.ellipse("fill", x, y, 2, 2)
     love.graphics.setColor(1, 1, 1)
     love.graphics.ellipse("line", x, y, 3, 3)
+    love.graphics.setColor(1, 1, 1)
 end

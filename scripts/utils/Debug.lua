@@ -4,21 +4,27 @@ Debug = {
     text = {}
 }
 
----显示信息到屏幕
+---输出日志
 ---@param log string 要显示的文本
 function Debug.log(log)
     table.insert(Debug.text, log)
 end
 
+---显示信息到屏幕
+function Debug.showLog()
+    local text
+    for _, v in pairs(Debug.text) do
+        text = text .. v .. "\n"
+    end
+    love.graphics.print(text, 10, 0)
+end
+
 ---显示帧率到屏幕
-function Debug.draw()
+function Debug.showFPS()
     if not Config.ShowFps then
         return
     end
     local text = "FPS:" .. love.timer.getFPS() .. "\n"
-    for _, v in pairs(Debug.text) do
-        text = text .. v .. "\n"
-    end
     love.graphics.print(text, 0, 0)
 end
 
@@ -73,4 +79,17 @@ function Debug.size(table)
         count = count + 1
     end
     return count
+end
+
+---绘制碰撞体积
+---@param box GameObject
+---@param r number
+---@param g number
+---@param b number
+function Debug.drawBox(box, r, g, b)
+    love.graphics.setColor(r, g, b, 0.25)
+    love.graphics.rectangle("fill", box.x, box.y, box.w, box.h)
+    love.graphics.setColor(r, g, b)
+    love.graphics.rectangle("line", box.x, box.y, box.w, box.h)
+    love.graphics.setColor(1, 1, 1, 1)
 end

@@ -111,6 +111,7 @@ function Body:set(slotName, name)
     --获取玩家能使用的所有动画
     local role = RoleManager.getRole(0)
     local anims = role.anims
+    --print("槽:[" .. slotName.."]:")
     --根据玩家所使用的动画创建装备动画
     for _, animName in pairs(anims) do
         --动画图片路径组合规则:动画/身体零件名称
@@ -126,9 +127,9 @@ function Body:set(slotName, name)
             slot.anims = {}
         end
         slot.anims[anim.name] = anim
-        print("槽:[" .. slotName.."]创建装备动画[" .. anim.name .. "]")
+        --print(anim.name)
     end
-    print("装备[" .. name .. "]成功!")
+    --print("装备[" .. name .. "]成功!")
 end
 
 ---变更动画

@@ -20,11 +20,13 @@ function Player:new()
     self.y = 50
     self.w = 32
     self.h = 32
+    self.keyList = {}
 end
 
 function Player:load()
     --要创建的动画列表
-    local anims = { "闲置", "行走" }
+    local role = RoleManager.getRole(0)
+    local anims = role.anims
     --构造动画对象
     for _, animName in pairs(anims) do
         local anim = AnimManager.careteAnim(animName)
@@ -37,7 +39,6 @@ function Player:load()
     --添加装备
     self.equipment:equip("衣服", 3)
     self.equipment:equip("下装", 4)
-    self.keyList = {}
 end
 
 function Player:update(dt)
@@ -124,6 +125,6 @@ function Player:move(dt, dir)
     elseif dir == Direction.Down then
         y = y + distance
     end
-    self.x = x
-    self.y = y
+    self.x, self.y = Game.world:move(self,math.floor(x),math.floor(y))
+    --print(string.format("%d,%d",self.x,self.y))
 end

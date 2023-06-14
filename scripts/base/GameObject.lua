@@ -154,14 +154,6 @@ function GameObject:destroy()
     self.isDestroy = true
 end
 
----碰撞开始回调
----@param collision Collision
-function GameObject:onBeginCollision(collision) end
-
----碰撞结束回调
----@param collision Collision
-function GameObject:onEndCollision(collision) end
-
 ---设置对象方向
 ---@param dir Direction | string 方向
 function GameObject:setDir(dir)
