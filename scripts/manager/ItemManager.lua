@@ -1,26 +1,44 @@
 local JSON = require "scripts.utils.JSON"
 
 ---@class ItemManager 道具管理器
----@field items any[] 道具模板列表
+---@field items Item[] 道具模板列表
+---@field hairs any[] 头发模板列表
 ItemManager = {}
 
 ---初始化
 function ItemManager.init()
-    --加载角色模板
-    local file = love.filesystem.read("data/items.json")
-    if file == nil then
+    --加载模板
+    local itemFile = love.filesystem.read("data/items.json")
+    if itemFile == nil then
          error("道具管理器初始化失败,items.json失败")
     end
     ---@type any
-    local json = JSON:decode(file)
-    if json == nil then
-         error("道具管理器初始化失败,json对象创建失败")
+    local itemJson = JSON:decode(itemFile)
+    if itemJson == nil then
+         error("道具管理器初始化失败,item对象创建失败")
     end
 
     ItemManager.items = {}
 
-    for _,v in pairs(json) do
+    for _,v in pairs(itemJson) do
         ItemManager.items[v["id"]] = v
+    end
+
+    --加载模板
+    local hairFile = love.filesystem.read("data/hairs.json")
+    if hairFile == nil then
+         error("道具管理器初始化失败,hairs.json失败")
+    end
+    ---@type any
+    local hairJson = JSON:decode(hairFile)
+    if hairJson == nil then
+         error("道具管理器初始化失败,hair对象创建失败")
+    end
+
+    ItemManager.hairs = {}
+
+    for _,v in pairs(itemJson) do
+        ItemManager.hairs[v["id"]] = v
     end
 end
 
@@ -49,4 +67,18 @@ function ItemManager.getItem(id)
         error("目标id的道具不存在:"..id)
     end
     return item
+end
+
+---获取发型模板
+---@param id number 发型id
+---@return {id:number, name:string, description:string}
+function ItemManager.getHair(id)
+    if ItemManager.hairs == nil then
+        error("发型模板列表为空！")
+    end
+    local hair = ItemManager.hairs[id]
+    if hair == nil then
+        error("目标id的发型不存在:"..id)
+    end
+    return hair
 end

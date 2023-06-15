@@ -3,7 +3,6 @@ require "scripts.components.Animation"
 require "scripts.components.DebugDraw"
 local JSON = require "scripts.utils.JSON"
 require "scripts.components.Equipment"
-require "scripts.components.Body"
 
 ---@class RoleJsonData 角色模板
 ---@field id number 角色id

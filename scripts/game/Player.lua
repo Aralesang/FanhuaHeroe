@@ -4,7 +4,6 @@
 ---@field name string | nil 角色名称
 ---@field speed number 角色速度
 ---@field equipment Equipment | nil 装备组件
----@field body Body | nil 身体组件
 ---@field keyList string[] 按键记录
 Player = GameObject:extend()
 
@@ -14,7 +13,6 @@ function Player:new()
     self.name = "player"
     self.speed = 100
     self.animation = self:addComponent(Animation)
-    self.body = self:addComponent(Body)
     self.equipment = self:addComponent(Equipment)
     self.x = 50
     self.y = 50
@@ -34,8 +32,8 @@ function Player:load()
     end
     --播放默认动画
     self.animation:play("闲置")
-    --设置身体外观
-    self.body:set("头发", "法国卷发")
+    --设置头发
+    self.equipment:equip("头发", 2)
     --添加装备
     self.equipment:equip("衣服", 3)
     self.equipment:equip("下装", 4)
@@ -52,9 +50,6 @@ function Player:update(dt)
     local frameIndex = self.animation.frameIndex
     local animName = self.animation:getAnimName()
     self.equipment:changeAnim(animName, frameIndex)
-    if self.body then
-        self.body:changeAnim(animName, frameIndex)
-    end
 
     local width, height = love.window.getMode()
     local isMove = false
