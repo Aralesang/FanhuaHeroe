@@ -5,6 +5,7 @@ local JSON = require "scripts.utils.JSON"
 ---@field path string 动画所用的图像文件路径
 ---@field xCount number x轴动画数量
 ---@field yCount number y轴动画数量
+---@field loop boolean 是否循环
 AnimJsonData = {}
 
 ---@class AnimManager 动画管理器
@@ -41,7 +42,7 @@ function AnimManager.careteAnim(name)
     if image == nil then
         error("动画图像创建错误:" .. imagePath)
     end
-    local anim = Anim(temp.name, image, temp.xCount, temp.yCount)
+    local anim = Anim(temp.name, image, temp.xCount, temp.yCount, temp.loop)
     return anim
 end
 

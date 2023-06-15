@@ -11,12 +11,15 @@ require "scripts.base.Anim"
 ---@field private duration number 动画持续时间(秒)
 ---@field private currentTime number 当前已持续的时间(秒)
 ---@field private direction Direction 当前动画方向
+---@field frameCall function|nil 动画帧回调,每帧开始之前调用
+---@field endCall function|nil 动画结束回调,动画最后一帧绘制完成时调用
+---@field frameIndex number 当前动画帧
 Animation = Component:extend()
 
 --创建一个新的动画对象
 ---@private
 function Animation:new()
-    self.frameIndex = 0
+    self.frameIndex = -1
     self.eventList = nil
     self.duration = 1
     self.currentTime = 0
@@ -52,6 +55,16 @@ function Animation:addAnim(anim)
     self.anims[anim.name] = anim
 end
 
+---创建一组动画
+---@param names string[] 动画名称列表
+function Animation:addAnims(names)
+    --构造动画对象
+    for _, animName in pairs(names) do
+        local anim = AnimManager.careteAnim(animName)
+        self:addAnim(anim)
+    end
+end
+
 ---获取当前正在使用的动画
 ---@param name string 目标动画名称
 ---@return Anim anim 目标动画对象
@@ -70,7 +83,14 @@ function Animation:update(dt)
     self.currentTime = self.currentTime + dt
     --如果动画当前时间超过动画持续时间，重置动画当前时间
     if self.currentTime >= self.duration then
-        self.currentTime = self.currentTime - self.duration
+        self.currentTime = 0
+        --如果当前动画不能循环，则进入停止
+        if not self.anim.loop then
+            self:stop()
+            if self.endCall then
+                self.endCall(self.anim)
+            end
+        end
     end
 end
 
@@ -109,6 +129,7 @@ function Animation:setRow(row, animIndex)
     local quad = anim.quad
     if quad == nil then return end
     self.frameIndex = animIndex or 0
+    self.currentTime = 0
     quad:setViewport(0, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
 end
 
@@ -119,17 +140,15 @@ function Animation:setFrameIndex(frameIndex)
     if anim == nil then return end
     local quad = anim.quad
     if quad == nil then return end
+    if self.frameIndex ~= frameIndex then
+        if self.frameCall then
+            self.frameCall(anim,frameIndex)
+        end
+    end
     self.frameIndex = frameIndex
     local row = self.gameObject.direction
     quad:setViewport(self.frameIndex * anim.width, row * anim.height, anim.width, anim.height, anim.image:getWidth(),
         anim.image:getHeight())
-    --当前的动画帧
-    local key = anim.xCount * row + self.frameIndex
-    --触发动画帧事件
-    local event = self:getEvent(key)
-    if event then
-        event()
-    end
 end
 
 ---检查动画状态
@@ -140,12 +159,18 @@ end
 
 ---播放动画
 ---@param name string 要播放的动画名称
-function Animation:play(name)
+---@param frameCall? function 动画帧回调
+---@param endCall? function 动画结束回调
+function Animation:play(name, frameCall,endCall)
     self.anim = self:getAnim(name)
     if self.anim == nil then
         error("目标动画不存在")
     end
+    self.frameIndex = -1
+    self.currentTime = 0
     self.state = AnimationState.Playing
+    self.frameCall = frameCall
+    self.endCall = endCall
     --print("播放:"..self.anim.name)
 end
 

@@ -10,6 +10,7 @@ require "scripts.manager.RoleManager"
 require "scripts.game.Player"
 local bump = require "scripts.utils.bump"
 require "scripts.utils.debug"
+require "scripts.game.Slim"
 
 ---@type Map 地图对象
 local map
@@ -46,6 +47,9 @@ function love.load()
     Game.player = player
     --添加到物理世界
     Game.world:add(player, player.x, player.y, player.w, player.h)
+    ---@type Slim
+    local slim = Slim()
+    Game.world:add(slim,slim.x,slim.y,slim.w,slim.h)
     print("游戏初始化完毕!")
 end
 

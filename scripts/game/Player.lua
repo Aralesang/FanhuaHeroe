@@ -5,7 +5,15 @@
 ---@field speed number 角色速度
 ---@field equipment Equipment | nil 装备组件
 ---@field keyList string[] 按键记录
+---@field state State 玩家当前状态
 Player = GameObject:extend()
+
+---@enum State 状态
+local State = {
+    idle = 1,    --闲置
+    walking = 2, --移动中
+    attack = 3   --攻击
+}
 
 function Player:new()
     self.super:new()
@@ -14,11 +22,12 @@ function Player:new()
     self.speed = 100
     self.animation = self:addComponent(Animation)
     self.equipment = self:addComponent(Equipment)
-    self.x = 50
+    self.x = 150
     self.y = 50
     self.w = 32
     self.h = 32
     self.keyList = {}
+    self.state = State.idle
 end
 
 function Player:load()
@@ -26,10 +35,7 @@ function Player:load()
     local role = RoleManager.getRole(0)
     local anims = role.anims
     --构造动画对象
-    for _, animName in pairs(anims) do
-        local anim = AnimManager.careteAnim(animName)
-        self.animation:addAnim(anim)
-    end
+    self.animation:addAnims(anims)
     --播放默认动画
     self.animation:play("闲置")
     --设置头发
@@ -50,8 +56,47 @@ function Player:update(dt)
     local frameIndex = self.animation.frameIndex
     local animName = self.animation:getAnimName()
     self.equipment:changeAnim(animName, frameIndex)
-
+    --相机跟随
     local width, height = love.window.getMode()
+    Camera:setPosition(self.x - width / 2, self.y - height / 2)
+    self:stateCheck(dt)
+end
+
+---状态检测
+function Player:stateCheck(dt)
+    if self.state == State.idle then
+        self:idleState()
+    elseif self.state == State.walking then
+        self:moveState(dt)
+    elseif self.state == State.attack then
+        self:attackState()
+    end
+end
+
+---如果进入闲置状态
+function Player:idleState()
+    if self.animation:getAnimName() ~= "闲置" then
+        self.animation:play("闲置")
+    end
+    --处于闲置状态下，此时如果检测到方向键被按下，则进入移动
+    --寻找最后一个按住的方向键
+    for i = #self.keyList, 1, -1 do
+        local key = self.keyList[i]
+        --如果按了任何方向键，进入移动状态
+        if key == "up" or key == "down" or
+            key == "left" or key == "right" then
+            self.state = State.walking
+            break
+        end
+        if key == "space" then
+            self.state = State.attack
+            break
+        end
+    end
+end
+
+--如果进入移动状态
+function Player:moveState(dt)
     local isMove = false
     --寻找最后一个按住的方向键
     for i = #self.keyList, 1, -1 do
@@ -59,22 +104,40 @@ function Player:update(dt)
         if key == "up" or key == "down" or
             key == "left" or key == "right" then
             --找到了一个方向键,改变玩家移动状态
-            isMove = true
             self:setDir(key)
+            --如果当前动画不是行走，则改为行走
+            if self.animation:getAnimName() ~= "行走" then
+                self.animation:play("行走")
+            end
+            self:move(dt, self.direction) --移动
+            isMove = true
+            break
+        end
+        if key == "space" then
+            self.state = State.attack
             break
         end
     end
-    Camera:setPosition(self.x - width / 2, self.y - height / 2)
 
-    if isMove then                                   --如果移动被激活
-        if self.animation:getAnimName() ~= "行走" then --如果当前动画不是行走，则改为行走
-            self.animation:play("行走")
-        end
-        self:move(dt, self.direction)                --移动
-    else                                             --如果没在移动了
-        if self.animation:getAnimName() == "行走" then --当前如果正在播放动画，则停止播放并定格到第0帧
-            self.animation:play("闲置")
-        end
+    if isMove == false then
+        --没有按住任何有功能的按键,回到闲置
+        self.state = State.idle
+    end
+end
+
+---普通攻击
+function Player:attackState()
+    if self.animation:getAnimName() ~= "挥击" then
+        print("普通攻击!")
+        ---@param anim Anim
+        self.animation:play("挥击",function (anim,index)
+            --print("普攻帧事件",index)
+            if index == 3 then
+                print("触发伤害帧!")
+            end
+        end,function ()
+            self.state = State.idle
+        end)
     end
 end
 
@@ -82,9 +145,6 @@ end
 ---@param key string
 function Player:keypressed(key)
     table.insert(self.keyList, key)
-    if key == "space" then
-        self:attack()
-    end
 end
 
 ---按键释放
@@ -96,11 +156,6 @@ function Player:keyreleased(key)
             break
         end
     end
-end
-
----普通攻击
-function Player:attack()
-    print("普通攻击!")
 end
 
 ---玩家移动
@@ -120,6 +175,6 @@ function Player:move(dt, dir)
     elseif dir == Direction.Down then
         y = y + distance
     end
-    self.x, self.y = Game.world:move(self,math.floor(x),math.floor(y))
+    self.x, self.y = Game.world:move(self, math.floor(x), math.floor(y))
     --print(string.format("%d,%d",self.x,self.y))
 end

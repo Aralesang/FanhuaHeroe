@@ -3,36 +3,42 @@
         "name": "闲置",
         "path": "image/role/玩家/闲置.png",
         "xCount": 1,
-        "yCount": 4
+        "yCount": 4,
+        "loop": true
     },
     {
         "name": "行走",
         "path": "image/role/玩家/行走.png",
         "xCount": 8,
-        "yCount": 4
+        "yCount": 4,
+        "loop": true
     },
     {
         "name": "挥击",
         "path": "image/role/玩家/挥击.png",
         "xCount": 8,
-        "yCount": 4
+        "yCount": 4,
+        "loop": false
     },
     {
         "name": "闲置_史莱姆",
-        "path": "image/role/史莱姆/挥击.png",
+        "path": "image/role/史莱姆/闲置.png",
         "xCount": 8,
-        "yCount": 4
+        "yCount": 4,
+        "loop": true
     },
     {
         "name": "行走_史莱姆",
         "path": "image/role/史莱姆/行走.png",
         "xCount": 8,
-        "yCount": 4
+        "yCount": 4,
+        "loop": true
     },
     {
         "name": "攻击_史莱姆",
         "path": "image/role/史莱姆/攻击.png",
         "xCount": 8,
-        "yCount": 4
+        "yCount": 4,
+        "loop": false
     }
 ]
