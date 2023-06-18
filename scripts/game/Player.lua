@@ -175,6 +175,8 @@ function Player:move(dt, dir)
     elseif dir == Direction.Down then
         y = y + distance
     end
-    self.x, self.y = Game.world:move(self, math.floor(x), math.floor(y))
+    --self.x, self.y = Game.world:move(self, math.floor(x), math.floor(y))
+    self.x = x
+    self.y = y
     --print(string.format("%d,%d",self.x,self.y))
 end

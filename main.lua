@@ -101,7 +101,7 @@ function love.update(dt)
 end
 
 --每帧绘制
-function love.draw()
+function love.draw() 
     Camera:set()
 
     --绘制地图
@@ -118,8 +118,10 @@ function love.draw()
                 end
             end
         end
-        --绘制碰撞体积
-        Debug.drawBox(value,0,1,0)
+        if Config.ShowCollision then
+            --绘制碰撞体积
+            Debug.drawBox(value,0,1,0)
+        end
     end
     Camera:unset()
     Debug.showFPS()

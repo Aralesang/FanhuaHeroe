@@ -23,21 +23,28 @@
     {
         "name": "闲置_史莱姆",
         "path": "image/role/史莱姆/闲置.png",
-        "xCount": 8,
+        "xCount": 2,
         "yCount": 4,
         "loop": true
     },
     {
         "name": "行走_史莱姆",
         "path": "image/role/史莱姆/行走.png",
-        "xCount": 8,
+        "xCount": 5,
         "yCount": 4,
         "loop": true
     },
     {
         "name": "攻击_史莱姆",
         "path": "image/role/史莱姆/攻击.png",
-        "xCount": 8,
+        "xCount": 5,
+        "yCount": 4,
+        "loop": false
+    },
+    {
+        "name": "死亡_史莱姆",
+        "path": "image/role/史莱姆/攻击.png",
+        "xCount": 5,
         "yCount": 4,
         "loop": false
     }

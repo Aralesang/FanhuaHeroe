@@ -72,7 +72,7 @@ function Equipment:draw()
     if self.animName == nil or self.frameIndex == nil then
         return
     end
-    for k, slot in pairs(self.slots) do
+    for _, slot in pairs(self.slots) do
         if slot.anims == nil then
             goto continue
         end

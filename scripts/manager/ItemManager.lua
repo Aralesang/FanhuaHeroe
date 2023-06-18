@@ -37,7 +37,7 @@ function ItemManager.init()
 
     ItemManager.hairs = {}
 
-    for _,v in pairs(itemJson) do
+    for _,v in pairs(hairJson) do
         ItemManager.hairs[v["id"]] = v
     end
 end

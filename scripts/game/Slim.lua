@@ -10,12 +10,15 @@ function Slim:new()
     self.speed = 100
     self.x = 0
     self.y = 50
-    self.w = 32
-    self.h = 32
+    self.w = 16
+    self.h = 16
 end
 
 function Slim:load()
     self.animtion = self:addComponent(Animation)
+    local role = RoleManager.getRole(1)
+    self.animtion:addAnims(role.anims)
+    self.animtion:play("闲置_史莱姆")
 end
 
 function Slim:update(dt)
@@ -28,8 +31,8 @@ function Slim:update(dt)
     
     --如果距离小于视野，则向玩家移动
     if distance < self.sight then
-        local angle = math.atan2(dy,dx)
-        self.x = self.x + math.cos(angle) * self.speed * dt
-        self.y = self.y + math.sin(angle) * self.speed * dt
+        -- local angle = math.atan2(dy,dx)
+        -- self.x = self.x + math.cos(angle) * self.speed * dt
+        -- self.y = self.y + math.sin(angle) * self.speed * dt
     end
 end
