@@ -5,10 +5,10 @@
 ---@field speed number 角色速度
 ---@field equipment Equipment | nil 装备组件
 ---@field keyList string[] 按键记录
----@field state State 玩家当前状态
+---@field state number 玩家当前状态
 Player = GameObject:extend()
 
----@enum State 状态
+--- 状态
 local State = {
     idle = 1,    --闲置
     walking = 2, --移动中
@@ -59,6 +59,7 @@ function Player:update(dt)
     --相机跟随
     local width, height = love.window.getMode()
     Camera:setPosition(self.x - width / 2, self.y - height / 2)
+    --有限状态机
     self:stateCheck(dt)
 end
 
@@ -156,27 +157,4 @@ function Player:keyreleased(key)
             break
         end
     end
-end
-
----玩家移动
----@param dt number 距离上一帧的间隔时间
----@param dir Direction 移动方向
-function Player:move(dt, dir)
-    local x = self.x
-    local y = self.y
-    --获取移动
-    local distance = dt * self.speed
-    if dir == Direction.Left then
-        x = x - distance
-    elseif dir == Direction.Right then
-        x = x + distance
-    elseif dir == Direction.Up then
-        y = y - distance
-    elseif dir == Direction.Down then
-        y = y + distance
-    end
-    --self.x, self.y = Game.world:move(self, math.floor(x), math.floor(y))
-    self.x = x
-    self.y = y
-    --print(string.format("%d,%d",self.x,self.y))
 end

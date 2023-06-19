@@ -1,8 +1,17 @@
 ---@class Slim:GameObject 史莱姆
----@field animtion Animation 动画组件
+---@field animation Animation 动画组件
 ---@field sight number 视野范围
----@field speed number 移动速度
+---@field state number 状态
+---@field target GameObject 仇恨目标
+---@field range number 射程
 Slim = GameObject:extend()
+
+--- 状态
+local State = {
+    idle = 1,    --闲置
+    walking = 2, --移动中
+    attack = 3   --攻击
+}
 
 function Slim:new()
     self.super:new()
@@ -15,24 +24,82 @@ function Slim:new()
 end
 
 function Slim:load()
-    self.animtion = self:addComponent(Animation)
+    self.animation = self:addComponent(Animation)
     local role = RoleManager.getRole(1)
-    self.animtion:addAnims(role.anims)
-    self.animtion:play("闲置_史莱姆")
+    self.animation:addAnims(role.anims)
+    self.animation:play("闲置_史莱姆")
+    --测试代码：直接将玩家作为仇恨目标
+    self.target = Game.player
 end
 
 function Slim:update(dt)
-    --检查玩家是否进入了自己的攻击范围
-    local player = Game.player
-    --计算距离
-    local dx = player.x - self.x
-    local dy = player.y - self.y
-    local distance = math.sqrt(dx * dx + dy * dy)
-    
+    self:stateCheck(dt)
+end
+
+---状态检测
+function Slim:stateCheck(dt)
+    if self.state == State.idle then
+        self:idleState()
+    elseif self.state == State.walking then
+        self:moveState(dt)
+    elseif self.state == State.attack then
+        self:attackState()
+    end
+end
+
+---如果进入闲置状态
+function Slim:idleState()
+    if self.animation:getAnimName() ~= "闲置_史莱姆" then
+        self.animation:play("闲置_史莱姆")
+    end
+    local distance = self:getDistance(self,Game.player)
     --如果距离小于视野，则向玩家移动
     if distance < self.sight then
-        -- local angle = math.atan2(dy,dx)
-        -- self.x = self.x + math.cos(angle) * self.speed * dt
-        -- self.y = self.y + math.sin(angle) * self.speed * dt
+        self.state = State.walking
     end
+end
+
+--如果进入移动状态
+function Slim:moveState(dt)
+    local distance = self:getDistance(self,Game.player)
+    --目标已丢失
+    if distance > self.sight then
+        self.state = State.idle
+        return
+    end
+
+    --目标进入射程
+    if distance < self.range then
+        self.state = State.attack
+        return
+    end
+
+    local dx = self.x - self.target.x
+    local dy = self.y - self.target.y
+    local angle = math.atan2(dy,dx)
+    local x = self.x + math.cos(angle) * self.speed * dt
+    local y = self.y + math.sin(angle) * self.speed * dt
+    self:move(x ,y) --移动
+end
+
+---普通攻击
+function Slim:attackState()
+    if self.animation:getAnimName() ~= "攻击_史莱姆" then
+        print("普通攻击!")
+        ---@param anim Anim
+        self.animation:play("攻击_史莱姆",function (anim,index)
+            if index == 2 then
+                print("触发伤害帧!")
+            end
+        end,function ()
+            self.state = State.idle
+        end)
+    end
+end
+
+---移动
+---@param x number
+---@param y number
+function Slim:move(x,y)
+    self.x,self.y = Game.world:move(self,math.floor(x),math.floor(y))
 end

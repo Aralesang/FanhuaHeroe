@@ -18,6 +18,7 @@ require "scripts.enums.Direction"
 ---@field y number 对象空间垂直坐标
 ---@field w number 对象宽度
 ---@field h number 对象高度
+---@field speed number 移动速度
 GameObject = Object:extend()
 
 ---构造函数
@@ -34,6 +35,7 @@ function GameObject:new()
     self.central = Vector2.zero()
     self.direction = Direction.Down
     self.isLoad = false
+    self.speed = 0
 end
 
 ---继承
@@ -170,4 +172,39 @@ function GameObject:setDir(dir)
     else
         self.direction = dir
     end
+end
+
+---移动
+---@param dt number 距离上一帧的间隔时间
+---@param dir Direction 移动方向
+---@return number x, number y
+function GameObject:move(dt, dir)
+    local x = self.x
+    local y = self.y
+    --获取移动
+    local distance = dt * self.speed
+    if dir == Direction.Left then
+        x = x - distance
+    elseif dir == Direction.Right then
+        x = x + distance
+    elseif dir == Direction.Up then
+        y = y - distance
+    elseif dir == Direction.Down then
+        y = y + distance
+    end
+
+    self.x,self.y = Game.world:move(self,math.floor(x),math.floor(y))
+    return self.x,self.y
+end
+
+---获取对象之间的距离
+---@param objA GameObject
+---@param objB GameObject
+---@return number
+function GameObject:getDistance(objA,objB)
+    --计算距离
+    local dx = objA.x - objB.x
+    local dy = objA.y - objB.y
+    local distance = math.sqrt(dx * dx + dy * dy)
+    return distance
 end
