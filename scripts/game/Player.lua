@@ -5,15 +5,8 @@
 ---@field speed number 角色速度
 ---@field equipment Equipment | nil 装备组件
 ---@field keyList string[] 按键记录
----@field state number 玩家当前状态
+---@field state number 状态
 Player = GameObject:extend()
-
---- 状态
-local State = {
-    idle = 1,    --闲置
-    walking = 2, --移动中
-    attack = 3   --攻击
-}
 
 function Player:new()
     self.super:new()
@@ -28,6 +21,8 @@ function Player:new()
     self.h = 32
     self.keyList = {}
     self.state = State.idle
+    self.hpMax = 2
+    self.hp = 2
 end
 
 function Player:load()
@@ -71,6 +66,8 @@ function Player:stateCheck(dt)
         self:moveState(dt)
     elseif self.state == State.attack then
         self:attackState()
+    elseif self.state == State.death then
+        self:deathState()
     end
 end
 
@@ -119,9 +116,8 @@ function Player:moveState(dt)
             break
         end
     end
-
+    --没有按住任何有功能的按键,回到闲置
     if isMove == false then
-        --没有按住任何有功能的按键,回到闲置
         self.state = State.idle
     end
 end
@@ -139,6 +135,13 @@ function Player:attackState()
         end,function ()
             self.state = State.idle
         end)
+    end
+end
+
+---死亡中
+function Player:deathState()
+    if self.animation:getAnimName() ~= "死亡" then
+        self.animation:play("死亡")
     end
 end
 

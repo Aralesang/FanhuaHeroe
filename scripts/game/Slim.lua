@@ -6,21 +6,17 @@
 ---@field range number 射程
 Slim = GameObject:extend()
 
---- 状态
-local State = {
-    idle = 1,    --闲置
-    walking = 2, --移动中
-    attack = 3   --攻击
-}
-
 function Slim:new()
     self.super:new()
+    self.state = State.idle
     self.sight = 100
     self.speed = 100
     self.x = 0
     self.y = 50
     self.w = 16
     self.h = 16
+    self.hp = 2
+    self.hpMax = 2
 end
 
 function Slim:load()
@@ -90,6 +86,8 @@ function Slim:attackState()
         self.animation:play("攻击_史莱姆",function (anim,index)
             if index == 2 then
                 print("触发伤害帧!")
+                --扣除对象的生命值
+                Game.player.hp = Game.player.hp - self.atk
             end
         end,function ()
             self.state = State.idle

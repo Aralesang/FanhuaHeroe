@@ -1,6 +1,7 @@
 require "scripts.base.Game"
 require "scripts.base.Vector2"
 require "scripts.enums.Direction"
+require "scripts.enums.State"
 
 ---游戏对象基本类
 ---@class GameObject : Object
@@ -19,6 +20,11 @@ require "scripts.enums.Direction"
 ---@field w number 对象宽度
 ---@field h number 对象高度
 ---@field speed number 移动速度
+---@field hp number 生命值
+---@field hpMax number 最大生命值
+---@field atk number 攻击力
+---@field def number 防御力
+---@field state State 状态
 GameObject = Object:extend()
 
 ---构造函数
@@ -36,6 +42,11 @@ function GameObject:new()
     self.direction = Direction.Down
     self.isLoad = false
     self.speed = 0
+    self.hp = 0
+    self.hpMax = 0
+    self.atk = 0
+    self.def = 0
+    self.state = State.idle
 end
 
 ---继承
@@ -207,4 +218,20 @@ function GameObject:getDistance(objA,objB)
     local dy = objA.y - objB.y
     local distance = math.sqrt(dx * dx + dy * dy)
     return distance
+end
+
+---受到伤害
+---@param obj GameObject 伤害来源
+---@param atk number 攻击力
+function GameObject:damage(obj,atk)
+    self.hp = self.hp - atk
+    if self.hp < 0 then
+        self.hp = 0
+    end
+    if self.hp > self.hpMax then
+        self.hp = self.hpMax
+    end
+    if self.hp == 0 then
+        self.state = State.death
+    end
 end
