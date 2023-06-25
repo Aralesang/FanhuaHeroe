@@ -11,12 +11,13 @@ function Slim:new()
     self.state = State.idle
     self.sight = 100
     self.speed = 100
-    self.x = 0
+    self.x = 50
     self.y = 50
     self.w = 16
     self.h = 16
     self.hp = 2
     self.hpMax = 2
+    self.range = 16
 end
 
 function Slim:load()
@@ -26,9 +27,11 @@ function Slim:load()
     self.animation:play("闲置_史莱姆")
     --测试代码：直接将玩家作为仇恨目标
     self.target = Game.player
+    Game:addEnemy(self)
 end
 
 function Slim:update(dt)
+    --print("x:"..self.x.."y:"..self.y)
     self:stateCheck(dt)
 end
 
@@ -40,6 +43,8 @@ function Slim:stateCheck(dt)
         self:moveState(dt)
     elseif self.state == State.attack then
         self:attackState()
+    elseif self.state == State.death then
+        self:deathState()
     end
 end
 
@@ -48,7 +53,7 @@ function Slim:idleState()
     if self.animation:getAnimName() ~= "闲置_史莱姆" then
         self.animation:play("闲置_史莱姆")
     end
-    local distance = self:getDistance(self,Game.player)
+    local distance = GameObject.getDistance(self,Game.player)
     --如果距离小于视野，则向玩家移动
     if distance < self.sight then
         self.state = State.walking
@@ -57,7 +62,7 @@ end
 
 --如果进入移动状态
 function Slim:moveState(dt)
-    local distance = self:getDistance(self,Game.player)
+    local distance = GameObject.getDistance(self,Game.player)
     --目标已丢失
     if distance > self.sight then
         self.state = State.idle
@@ -65,17 +70,17 @@ function Slim:moveState(dt)
     end
 
     --目标进入射程
-    if distance < self.range then
-        self.state = State.attack
-        return
-    end
+    -- if distance < self.range then
+    --     self.state = State.attack
+    --     return
+    -- end
 
-    local dx = self.x - self.target.x
-    local dy = self.y - self.target.y
-    local angle = math.atan2(dy,dx)
-    local x = self.x + math.cos(angle) * self.speed * dt
-    local y = self.y + math.sin(angle) * self.speed * dt
-    self:move(x ,y) --移动
+    -- local dx = self.x - self.target.x
+    -- local dy = self.y - self.target.y
+    -- local angle = math.atan2(dy,dx)
+    -- local x = self.x + math.cos(angle) * self.speed * dt
+    -- local y = self.y + math.sin(angle) * self.speed * dt
+    -- self:move(x ,y) --移动
 end
 
 ---普通攻击
@@ -89,8 +94,6 @@ function Slim:attackState()
                 --扣除对象的生命值
                 Game.player.hp = Game.player.hp - self.atk
             end
-        end,function ()
-            self.state = State.idle
         end)
     end
 end
@@ -100,4 +103,20 @@ end
 ---@param y number
 function Slim:move(x,y)
     self.x,self.y = Game.world:move(self,math.floor(x),math.floor(y))
+end
+
+---受到伤害
+---@param obj GameObject
+---@param atk number
+function Slim:damage(obj,atk)
+    print("我受到了"..obj.name.."的"..atk.."点攻击")
+end
+
+---死亡
+function Slim:deathState()
+    if self.animation:getAnimName() ~= "死亡_史莱姆" then
+        self.animation:play("死亡_史莱姆", nil, function (_,index)
+            self:destroy()
+        end)
+    end
 end

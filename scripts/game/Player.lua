@@ -6,6 +6,7 @@
 ---@field equipment Equipment | nil 装备组件
 ---@field keyList string[] 按键记录
 ---@field state number 状态
+---@field range number 射程
 Player = GameObject:extend()
 
 function Player:new()
@@ -15,7 +16,7 @@ function Player:new()
     self.speed = 100
     self.animation = self:addComponent(Animation)
     self.equipment = self:addComponent(Equipment)
-    self.x = 150
+    self.x = 50
     self.y = 50
     self.w = 32
     self.h = 32
@@ -23,6 +24,8 @@ function Player:new()
     self.state = State.idle
     self.hpMax = 2
     self.hp = 2
+    self.range = 60
+    self.atk = 1
 end
 
 function Player:load()
@@ -125,12 +128,21 @@ end
 ---普通攻击
 function Player:attackState()
     if self.animation:getAnimName() ~= "挥击" then
-        print("普通攻击!")
+        --print("普通攻击!")
         ---@param anim Anim
         self.animation:play("挥击",function (anim,index)
             --print("普攻帧事件",index)
             if index == 3 then
                 print("触发伤害帧!")
+                --检查所有的敌对对象
+                for _,enemy in pairs(Game.enemys) do
+                    --敌人与玩家的距离
+                    local dis = GameObject.getDistance(self,enemy)
+                    if dis <= self.range then
+                        --处于射程中的敌人,调用受伤函数
+                        enemy:_damage(self,self.atk)
+                    end
+                end
             end
         end,function ()
             self.state = State.idle

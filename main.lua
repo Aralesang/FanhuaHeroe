@@ -16,15 +16,15 @@ require "scripts.game.Slim"
 local map
 
 function love.load()
+    -- if love.system.getOS() == "Windows" then
+    --     print("将终端字体设置为65001")
+    --     os.execute("chcp 65001") -- 设置代码页为UTF-8
+    -- end
     print("游戏初始化...")
     --加载中文字体(启动会很缓慢)
     print("加载中文字体...")
     local myFont = love.graphics.newFont("fonts/SourceHanSansCN-Bold.otf", 16)
     love.graphics.setFont(myFont)
-    -- if love.system.getOS() == "Windows" then
-    --     print("将终端字体设置为65001")
-    --     os.execute("chcp 65001 > nul") -- 设置代码页为UTF-8
-    -- end
     --更改图像过滤方式，以显示高清马赛克
     print("更改图像过滤方式...")
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -102,8 +102,6 @@ end
 
 --每帧绘制
 function love.draw() 
-    Camera:set()
-
     --绘制地图
     map:draw(0, 0, 2)
     --绘制对象
@@ -123,7 +121,6 @@ function love.draw()
             Debug.drawBox(value,0,1,0)
         end
     end
-    Camera:unset()
     Debug.showFPS()
 end
 

@@ -204,7 +204,9 @@ function GameObject:move(dt, dir)
         y = y + distance
     end
 
-    self.x,self.y = Game.world:move(self,math.floor(x),math.floor(y))
+    --self.x,self.y = Game.world:move(self,math.floor(x),math.floor(y))
+    self.x = x;
+    self.y = y;
     return self.x,self.y
 end
 
@@ -212,7 +214,7 @@ end
 ---@param objA GameObject
 ---@param objB GameObject
 ---@return number
-function GameObject:getDistance(objA,objB)
+function GameObject.getDistance(objA,objB)
     --计算距离
     local dx = objA.x - objB.x
     local dy = objA.y - objB.y
@@ -220,10 +222,14 @@ function GameObject:getDistance(objA,objB)
     return distance
 end
 
----受到伤害
+---元受伤函数
 ---@param obj GameObject 伤害来源
 ---@param atk number 攻击力
-function GameObject:damage(obj,atk)
+function GameObject:_damage(obj,atk)
+    --如果已经处于死亡，则不会再受伤
+    if self.state == State.death then
+        return
+    end
     self.hp = self.hp - atk
     if self.hp < 0 then
         self.hp = 0
@@ -234,4 +240,10 @@ function GameObject:damage(obj,atk)
     if self.hp == 0 then
         self.state = State.death
     end
+    self:damage(obj,atk)
 end
+
+---抽象受伤函数
+---@param obj GameObject 伤害来源
+---@param atk number 攻击力
+function GameObject:damage(obj,atk)end
