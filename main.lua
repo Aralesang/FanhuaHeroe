@@ -1,7 +1,7 @@
 require "scripts.base.Object"
 require "scripts.base.Camera"
-require "scripts.base.GameObject"
-require "scripts.base.Game"
+require "scripts.game.GameObject"
+require "scripts.game.Game"
 require "scripts.components.Animation"
 require "scripts.manager.RoleManager"
 local sti = require "scripts.utils.sti"
@@ -44,7 +44,6 @@ function love.load()
     --实例化角色对象
     ---@type Player
     local player = Player()
-    Game.player = player
     --添加到物理世界
     Game.world:add(player, player.x, player.y, player.w, player.h)
     ---@type Slim
@@ -56,8 +55,8 @@ end
 --每帧逻辑处理
 ---@param dt number 距离上一帧的间隔时间
 function love.update(dt)
-    ---碰撞检测
-    ---@type number[]
+    ---删除池
+    ---@type GameObject[]
     local destroyPool = {}
     --触发对象更新
     for key, gameObject in pairs(Game.gameObjects) do
@@ -94,8 +93,8 @@ function love.update(dt)
     end
 
     for i = #destroyPool, 1, -1 do
-        local index = destroyPool[i]
-        table.remove(Game.gameObjects, index)
+        local obj = destroyPool[i]
+        Game:removeGameObject(obj)
     end
     map:update(dt)
 end

@@ -12,28 +12,16 @@ Player = GameObject:extend()
 function Player:new()
     self.super:new()
     self.moveDir = Direction.Down
-    self.name = "player"
-    self.speed = 100
     self.animation = self:addComponent(Animation)
     self.equipment = self:addComponent(Equipment)
-    self.x = 50
-    self.y = 50
-    self.w = 32
-    self.h = 32
     self.keyList = {}
-    self.state = State.idle
-    self.hpMax = 2
-    self.hp = 2
-    self.range = 60
-    self.atk = 1
+    local role = RoleManager.getRole(0)
+    for k,v in pairs(role) do
+        self[k] = v
+    end
 end
 
 function Player:load()
-    --要创建的动画列表
-    local role = RoleManager.getRole(0)
-    local anims = role.anims
-    --构造动画对象
-    self.animation:addAnims(anims)
     --播放默认动画
     self.animation:play("闲置")
     --设置头发
@@ -67,10 +55,6 @@ function Player:stateCheck(dt)
         self:idleState()
     elseif self.state == State.walking then
         self:moveState(dt)
-    elseif self.state == State.attack then
-        self:attackState()
-    elseif self.state == State.death then
-        self:deathState()
     end
 end
 
@@ -86,11 +70,11 @@ function Player:idleState()
         --如果按了任何方向键，进入移动状态
         if key == "up" or key == "down" or
             key == "left" or key == "right" then
-            self.state = State.walking
+            self:setState(State.walking)
             break
         end
         if key == "space" then
-            self.state = State.attack
+            self:setState(State.attack)
             break
         end
     end
@@ -115,46 +99,42 @@ function Player:moveState(dt)
             break
         end
         if key == "space" then
-            self.state = State.attack
+            self:setState(State.attack)
             break
         end
     end
     --没有按住任何有功能的按键,回到闲置
     if isMove == false then
-        self.state = State.idle
+        self:setState(State.idle)
     end
 end
 
 ---普通攻击
 function Player:attackState()
-    if self.animation:getAnimName() ~= "挥击" then
-        --print("普通攻击!")
-        ---@param anim Anim
-        self.animation:play("挥击",function (anim,index)
-            --print("普攻帧事件",index)
-            if index == 3 then
-                print("触发伤害帧!")
-                --检查所有的敌对对象
-                for _,enemy in pairs(Game.enemys) do
-                    --敌人与玩家的距离
-                    local dis = GameObject.getDistance(self,enemy)
-                    if dis <= self.range then
-                        --处于射程中的敌人,调用受伤函数
-                        enemy:_damage(self,self.atk)
-                    end
+    self.animation:play("挥击", function(index)
+        --print("普攻帧事件",index)
+        if index == 3 then
+            --print("触发伤害帧!")
+            --检查所有的敌对对象
+            for _, enemy in pairs(Game.enemys) do
+                --敌人与玩家的距离
+                local dis = self:getDistance(enemy)
+                if dis <= self.range then
+                    --处于射程中的敌人,调用受伤函数
+                    enemy:damage(self, self.atk)
                 end
             end
-        end,function ()
-            self.state = State.idle
-        end)
-    end
+        end
+    end, function()
+        self:setState(State.idle)
+    end)
 end
 
----死亡中
+---死亡
 function Player:deathState()
-    if self.animation:getAnimName() ~= "死亡" then
-        self.animation:play("死亡")
-    end
+    self.animation:play("死亡", nil, function()
+        self:destroy()
+    end)
 end
 
 ---按键检测
@@ -172,4 +152,24 @@ function Player:keyreleased(key)
             break
         end
     end
+end
+
+---受伤
+---@param obj GameObject
+---@param atk number
+function Player:onDamage(obj, atk)
+    print("玩家:" .. "额啊！")
+end
+
+function Player:setState(state)
+    self.state = state
+    if state == State.death then
+        self:deathState()
+    elseif state == State.attack then
+        self:attackState()
+    end
+end
+
+function Player:onDestroy()
+    print("玩家已死")
 end

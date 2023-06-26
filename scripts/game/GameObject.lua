@@ -1,4 +1,4 @@
-require "scripts.base.Game"
+require "scripts.game.Game"
 require "scripts.base.Vector2"
 require "scripts.enums.Direction"
 require "scripts.enums.State"
@@ -210,14 +210,13 @@ function GameObject:move(dt, dir)
     return self.x,self.y
 end
 
----获取对象之间的距离
----@param objA GameObject
----@param objB GameObject
+---获取与目标对象之间的距离
+---@param target GameObject
 ---@return number
-function GameObject.getDistance(objA,objB)
+function GameObject:getDistance(target)
     --计算距离
-    local dx = objA.x - objB.x
-    local dy = objA.y - objB.y
+    local dx = math.abs(self.x - target.x)
+    local dy = math.abs(self.y - target.y)
     local distance = math.sqrt(dx * dx + dy * dy)
     return distance
 end
@@ -225,7 +224,7 @@ end
 ---元受伤函数
 ---@param obj GameObject 伤害来源
 ---@param atk number 攻击力
-function GameObject:_damage(obj,atk)
+function GameObject:damage(obj,atk)
     --如果已经处于死亡，则不会再受伤
     if self.state == State.death then
         return
@@ -238,12 +237,18 @@ function GameObject:_damage(obj,atk)
         self.hp = self.hpMax
     end
     if self.hp == 0 then
-        self.state = State.death
+        self:setState(State.death)
     end
-    self:damage(obj,atk)
+    self:onDamage(obj,atk)
 end
 
 ---抽象受伤函数
 ---@param obj GameObject 伤害来源
 ---@param atk number 攻击力
-function GameObject:damage(obj,atk)end
+function GameObject:onDamage(obj,atk)end
+
+---设置状态
+---@param state State
+function GameObject:setState(state)
+    self.state = state
+end

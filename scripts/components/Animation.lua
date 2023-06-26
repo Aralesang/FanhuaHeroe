@@ -47,12 +47,15 @@ function Animation:create(name, imagePath, xCount, yCount)
 end
 
 ---向动画组件添加一个动画
----@param anim Anim
-function Animation:addAnim(anim)
+---@param name string
+---@return Anim
+function Animation:addAnim(name)
     if self.anims == nil then
         self.anims = {}
     end
-    self.anims[anim.name] = anim
+    local anim = AnimManager.careteAnim(name)
+    self.anims[name] = anim
+    return anim
 end
 
 ---创建一组动画
@@ -60,16 +63,22 @@ end
 function Animation:addAnims(names)
     --构造动画对象
     for _, animName in pairs(names) do
-        local anim = AnimManager.careteAnim(animName)
-        self:addAnim(anim)
+        self:addAnim(animName)
     end
 end
 
----获取当前正在使用的动画
+---获取一个动画对象
 ---@param name string 目标动画名称
----@return Anim anim 目标动画对象
+---@return Anim|nil anim 目标动画对象
 function Animation:getAnim(name)
+    if self.anims == nil then
+       self.anims = {}
+    end
     local anim = self.anims[name]
+    --如果动画不存在，则尝试创建
+    if anim == nil then
+       anim = self:addAnim(name)
+    end
     return anim
 end
 
@@ -88,7 +97,7 @@ function Animation:update(dt)
         if not self.anim.loop then
             self:stop()
             if self.endCall then
-                self.endCall(self.anim)
+                self.endCall()
             end
         end
     end
@@ -142,7 +151,7 @@ function Animation:setFrameIndex(frameIndex)
     if quad == nil then return end
     if self.frameIndex ~= frameIndex then
         if self.frameCall then
-            self.frameCall(anim,frameIndex)
+            self.frameCall(frameIndex)
         end
     end
     self.frameIndex = frameIndex
@@ -162,16 +171,21 @@ end
 ---@param frameCall? function 动画帧回调
 ---@param endCall? function 动画结束回调
 function Animation:play(name, frameCall,endCall)
-    self.anim = self:getAnim(name)
-    if self.anim == nil then
-        error("目标动画不存在")
+    local anim = self:getAnim(name)
+    if anim == nil then
+        error("目标动画不存在:"..name)
     end
+    --如果已经在播放目标动画，则不进行处理
+    if self.anim and self.anim.name == name and
+    self.state == AnimationState.Playing then
+        return
+    end
+    self.anim = anim
     self.frameIndex = -1
     self.currentTime = 0
     self.state = AnimationState.Playing
     self.frameCall = frameCall
     self.endCall = endCall
-    --print("播放:"..self.anim.name)
 end
 
 ---停止动画
@@ -180,7 +194,6 @@ end
 function Animation:stop(frameIndex)
     frameIndex = frameIndex or self.frameIndex
     self.state = AnimationState.Stop
-    self:setFrameIndex(frameIndex)
 end
 
 ---暂停动画

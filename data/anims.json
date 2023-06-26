@@ -21,6 +21,13 @@
         "loop": false
     },
     {
+        "name": "死亡",
+        "path": "image/role/玩家/挥击.png",
+        "xCount": 8,
+        "yCount": 4,
+        "loop": false
+    },
+    {
         "name": "闲置_史莱姆",
         "path": "image/role/史莱姆/闲置.png",
         "xCount": 2,

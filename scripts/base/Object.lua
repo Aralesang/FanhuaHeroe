@@ -10,7 +10,7 @@
 ---对象基类
 ---@class Object
 ---@field private __index Object
----@field super GameObject 父对象
+---@field super Object 父对象
 Object = {}
 Object.__index = Object
 

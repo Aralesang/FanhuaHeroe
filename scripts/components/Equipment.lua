@@ -40,7 +40,6 @@ function Equipment:awake()
     self:addSlot("武器","装备")
 end
 
-
 function Equipment:update(dt)
     --同步所有装备图像的视口数据
     if self.animation == nil then
@@ -50,13 +49,9 @@ function Equipment:update(dt)
         return
     end
     for _, slot in pairs(self.slots) do
-        local anims = slot.anims
-        if anims == nil then
-            goto continue
-        end
-        local anim = anims[self.animName]
+        local anim = slot:getAnim(self.animName)
         if anim == nil then
-            error("["..slot.name.."]目标动画[" .. self.animName .. "]未找到")
+            goto continue
         end
         local quad = anim.quad
         local row = self.gameObject.direction
@@ -73,10 +68,10 @@ function Equipment:draw()
         return
     end
     for _, slot in pairs(self.slots) do
-        if slot.anims == nil then
+        local anim = slot:getAnim(self.animName)
+        if anim == nil then
             goto continue
         end
-        local anim = slot.anims[self.animName]
         local image = anim.image
         local quad = anim.quad
         local gameObject = self.gameObject
@@ -132,33 +127,6 @@ function Equipment:equip(name, itemId)
         return
     end
     slot.itemId = itemId
-    --获取玩家能使用的所有动画
-    local role = RoleManager.getRole(0)
-    local anims = role.anims
-    local equName; --装备名称
-    
-    if slot.type == "装备" then
-        equName = ItemManager.getItem(itemId).name
-    elseif slot.type == "身体部件" then
-        equName = ItemManager.getHair(itemId).name
-    end
-
-    --根据玩家所使用的动画创建装备动画
-    for _, animName in pairs(anims) do
-        --动画图片路径组合规则:以装备id为文件夹区分，以动画id为最小单位
-        local imgPath = "image/equipment/" .. animName .. "/" .. equName .. ".png"
-        local img = love.graphics.newImage(imgPath)
-        if img == nil then
-            error("目标装备动画不存在:" .. imgPath)
-        end
-        local animTemp = AnimManager.getAnim(animName)
-        ---@type Anim
-        local anim = Anim(animTemp.name, img, animTemp.xCount, animTemp.yCount)
-        if slot.anims == nil then
-            slot.anims = {}
-        end
-        slot.anims[anim.name] = anim
-    end
 end
 
 ---变更动画

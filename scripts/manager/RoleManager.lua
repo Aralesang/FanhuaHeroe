@@ -1,13 +1,10 @@
-require "scripts.base.GameObject"
+require "scripts.game.GameObject"
 require "scripts.components.Animation"
 require "scripts.components.DebugDraw"
 local JSON = require "scripts.utils.JSON"
 require "scripts.components.Equipment"
 
 ---@class RoleJsonData 角色模板
----@field id number 角色id
----@field name string 角色名称
----@field anims string[] 动画列表
 RoleJsonData = {}
 
 ---角色管理器
@@ -29,7 +26,7 @@ function RoleManager.init()
      end
      ---@cast json RoleJsonData[]
      for _,v in pairs(json) do
-          RoleManager.roles[v.id] = v
+          RoleManager.roles[v["id"]] = v
      end
 end
 
