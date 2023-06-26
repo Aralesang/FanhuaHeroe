@@ -29,6 +29,7 @@ function Player:load()
     --添加装备
     self.equipment:equip("衣服", 3)
     self.equipment:equip("下装", 4)
+    --self.equipment:equip("武器", 5)
 end
 
 function Player:update(dt)

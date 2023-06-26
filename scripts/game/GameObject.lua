@@ -207,6 +207,7 @@ function GameObject:move(dt, dir)
     --self.x,self.y = Game.world:move(self,math.floor(x),math.floor(y))
     self.x = x;
     self.y = y;
+    --print("x:"..self.x.."y:"..self.y)
     return self.x,self.y
 end
 

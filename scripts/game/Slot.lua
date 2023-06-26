@@ -1,3 +1,5 @@
+require "scripts.utils.Tool"
+
 ---@class Slot : Object 装备槽
 ---@field name string 装备槽名称
 ---@field itemId number 所装备的物品id
@@ -36,6 +38,10 @@ function Slot:getAnim(name)
 
         --动画图片路径组合规则:以装备id为文件夹区分，以动画id为最小单位
         local imgPath = "image/equipment/" .. name .. "/" .. equName .. ".png"
+        -- if not Tool.fileExists(imgPath) then
+        --     error("错误:装备["..equName.."]的动画文件没有找到")
+        --     return nil
+        -- end
         local img = love.graphics.newImage(imgPath)
         if img == nil then
             error("目标装备动画不存在:" .. imgPath)
