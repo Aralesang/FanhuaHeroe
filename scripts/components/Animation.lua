@@ -168,7 +168,7 @@ end
 
 ---播放动画
 ---@param name string 要播放的动画名称
----@param frameCall? function 动画帧回调
+---@param frameCall? function 动画帧回调 参数: index 当前的动画帧
 ---@param endCall? function 动画结束回调
 function Animation:play(name, frameCall,endCall)
     local anim = self:getAnim(name)

@@ -131,10 +131,16 @@ function Player:attackState()
     end)
 end
 
+---受伤状态
+function Player:damageState()
+    print("呀！")
+end
+
 ---死亡
 function Player:deathState()
     self.animation:play("死亡", nil, function()
         self:destroy()
+        print(self.name.."已死")
     end)
 end
 
@@ -159,7 +165,8 @@ end
 ---@param obj GameObject
 ---@param atk number
 function Player:onDamage(obj, atk)
-    print("玩家:" .. "额啊！")
+    --print(string.format("hp:%d/%d",self.hp,self.hpMax))
+    self:setState(State.damage)
 end
 
 function Player:setState(state)
@@ -168,9 +175,7 @@ function Player:setState(state)
         self:deathState()
     elseif state == State.attack then
         self:attackState()
+    elseif state == State.damage then
+        self:damageState()
     end
-end
-
-function Player:onDestroy()
-    print("玩家已死")
 end
