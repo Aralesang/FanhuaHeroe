@@ -48,7 +48,7 @@ function Slot:getAnim(name)
         end
         local animTemp = AnimManager.getAnim(name)
         ---@type Anim
-        anim = Anim(animTemp.name, img, animTemp.xCount, animTemp.yCount)
+        anim = Anim(animTemp.name, img, animTemp.frame)
         self.anims[anim.name] = anim
     end
     return anim

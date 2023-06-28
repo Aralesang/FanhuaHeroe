@@ -208,7 +208,7 @@ function GameObject:move(dt, dir)
     self.x = x;
     self.y = y;
     --print("x:"..self.x.."y:"..self.y)
-    return self.x,self.y
+    return self.x, self.y
 end
 
 ---获取与目标对象之间的距离
@@ -225,7 +225,7 @@ end
 ---元受伤函数
 ---@param obj GameObject 伤害来源
 ---@param atk number 攻击力
-function GameObject:damage(obj,atk)
+function GameObject:damage(obj, atk)
     --如果已经处于死亡或已经在受伤状态，则不会再受伤
     if self.state == State.death or self.state == State.damage then
         return
@@ -240,16 +240,32 @@ function GameObject:damage(obj,atk)
     if self.hp == 0 then
         self:setState(State.death)
     end
-    self:onDamage(obj,atk)
+    self:onDamage(obj, atk)
 end
 
 ---抽象受伤函数
 ---@param obj GameObject 伤害来源
 ---@param atk number 攻击力
-function GameObject:onDamage(obj,atk)end
+function GameObject:onDamage(obj, atk) end
 
 ---设置状态
 ---@param state State
 function GameObject:setState(state)
+    --闲置状态仅允许从移动,攻击,受伤状态进入
+    local idle = {}
+    idle[State.walking] = 1
+    idle[State.attack] = 1
+    idle[State.damage] = 1
+    if state == State.idle and idle[self.state] == nil then
+        return
+    end
+    local attack = {State.walking,State.attack,State.idle}
+    if state == State.attack and attack[self.state] == nil then
+        return
+    end
+    local damage = {State.walking,State.attack,State.idle}
+    if state == State.damage and damage[self.state] == nil then
+        return
+    end
     self.state = state
 end

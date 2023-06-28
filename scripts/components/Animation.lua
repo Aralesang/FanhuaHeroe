@@ -30,15 +30,14 @@ end
 ---创建一个动画
 ---@param name string 动画名称
 ---@param imagePath string 用于创建动画的序列帧位图地址
----@param xCount number x轴帧数量
----@param yCount number y轴帧数量
-function Animation:create(name, imagePath, xCount, yCount)
+---@param frame number 帧数量
+function Animation:create(name, imagePath, frame)
     local image = love.graphics.newImage(imagePath)
     if image == nil then
         error("动画图像创建错误:" .. imagePath)
         return
     end
-    local animLayer = Anim(name, image, xCount, yCount)
+    local animLayer = Anim(name, image, frame)
     if self.anims == nil then
         self.anims = {}
     end
@@ -100,7 +99,7 @@ function Animation:update(dt)
         if self.currentTime >= self.frameTime then
             self.currentTime = 0
             --如果加一帧后超过了最大帧数
-            if self.frameIndex + 1 >= anim.xCount then
+            if self.frameIndex + 1 >= anim.frame then
                 --动画不可以循环的情况下，直接停止
                 if not self.anim.loop then
                     self:stop()
