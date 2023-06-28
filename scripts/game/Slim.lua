@@ -10,7 +10,7 @@ Slim = Enemy:extend()
 
 function Slim:new()
     self.super:new()
-    self.state = State.idle
+    self:setState(State.idle)
     local role = RoleManager.getRole(1)
     for k,v in pairs(role) do
         self[k] = v
@@ -58,7 +58,7 @@ function Slim:idleState()
     --目标进入视野，则向玩家移动
     if distance < self.sight then
         --print("目标进入视野！")
-        self.state = State.walking
+        self:setState(State.walking)
     end
 end
 
@@ -67,14 +67,14 @@ function Slim:moveState(dt)
     local distance = self:getDistance(self.target)
     --目标已丢失
     if distance > self.sight then
-        self.state = State.idle
+        self:setState(State.idle)
         return
     end
 
     --目标进入射程
     if distance < self.range then
         --print("目标进入射程！")
-        self.state = State.attack
+        self:setState(State.attack)
         return
     end
 

@@ -21,8 +21,15 @@
         "loop": false
     },
     {
+        "name": "受伤",
+        "path": "image/role/玩家/受伤.png",
+        "xCount": 8,
+        "yCount": 4,
+        "loop": false
+    },
+    {
         "name": "死亡",
-        "path": "image/role/玩家/挥击.png",
+        "path": "image/role/玩家/死亡.png",
         "xCount": 8,
         "yCount": 4,
         "loop": false
@@ -49,8 +56,15 @@
         "loop": false
     },
     {
+        "name": "受伤_史莱姆",
+        "path": "image/role/史莱姆/受伤.png",
+        "xCount": 5,
+        "yCount": 4,
+        "loop": false
+    },
+    {
         "name": "死亡_史莱姆",
-        "path": "image/role/史莱姆/攻击.png",
+        "path": "image/role/史莱姆/死亡.png",
         "xCount": 5,
         "yCount": 4,
         "loop": false

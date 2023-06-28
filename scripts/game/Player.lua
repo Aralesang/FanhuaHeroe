@@ -61,9 +61,7 @@ end
 
 ---如果进入闲置状态
 function Player:idleState()
-    if self.animation:getAnimName() ~= "闲置" then
-        self.animation:play("闲置")
-    end
+    self.animation:play("闲置")
     --处于闲置状态下，此时如果检测到方向键被按下，则进入移动
     --寻找最后一个按住的方向键
     for i = #self.keyList, 1, -1 do
@@ -133,7 +131,10 @@ end
 
 ---受伤状态
 function Player:damageState()
-    print("呀！")
+    self.animation:play("受伤",nil,function ()
+        print("受伤硬直结束")
+        self:setState(State.idle)
+    end)
 end
 
 ---死亡
@@ -165,7 +166,7 @@ end
 ---@param obj GameObject
 ---@param atk number
 function Player:onDamage(obj, atk)
-    --print(string.format("hp:%d/%d",self.hp,self.hpMax))
+    print(string.format("hp:%d/%d",self.hp,self.hpMax))
     self:setState(State.damage)
 end
 

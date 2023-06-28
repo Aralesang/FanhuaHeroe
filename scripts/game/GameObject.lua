@@ -226,8 +226,8 @@ end
 ---@param obj GameObject 伤害来源
 ---@param atk number 攻击力
 function GameObject:damage(obj,atk)
-    --如果已经处于死亡，则不会再受伤
-    if self.state == State.death then
+    --如果已经处于死亡或已经在受伤状态，则不会再受伤
+    if self.state == State.death or self.state == State.damage then
         return
     end
     self.hp = self.hp - atk

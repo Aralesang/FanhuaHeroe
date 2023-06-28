@@ -8,7 +8,7 @@ require "scripts.base.Anim"
 ---@field private eventList function[] | nil 动画事件字典 关键帧:程序处理器
 ---@field private anims Anim[] | nil 动画列表
 ---@field private anim Anim 当前使用的动画对象
----@field private duration number 动画持续时间(秒)
+---@field private frameTime number 每帧动画间隔
 ---@field private currentTime number 当前已持续的时间(秒)
 ---@field private direction Direction 当前动画方向
 ---@field frameCall function|nil 动画帧回调,每帧开始之前调用
@@ -21,7 +21,7 @@ Animation = Component:extend()
 function Animation:new()
     self.frameIndex = -1
     self.eventList = nil
-    self.duration = 1
+    self.frameTime = 0.25
     self.currentTime = 0
     self.direction = Direction.Down
     self.state = AnimationState.Stop
@@ -72,12 +72,12 @@ end
 ---@return Anim|nil anim 目标动画对象
 function Animation:getAnim(name)
     if self.anims == nil then
-       self.anims = {}
+        self.anims = {}
     end
     local anim = self.anims[name]
     --如果动画不存在，则尝试创建
     if anim == nil then
-       anim = self:addAnim(name)
+        anim = self:addAnim(name)
     end
     return anim
 end
@@ -86,18 +86,33 @@ end
 ---@param dt number 所经过的时间间隔
 function Animation:update(dt)
     if self.state ~= AnimationState.Playing then
+        print("非播放状态")
         return
     end
     --更新动画当前时间
     self.currentTime = self.currentTime + dt
-    --如果动画当前时间超过动画持续时间，重置动画当前时间
-    if self.currentTime >= self.duration then
-        self.currentTime = 0
-        --如果当前动画不能循环，则进入停止
-        if not self.anim.loop then
-            self:stop()
-            if self.endCall then
-                self.endCall()
+    local anim = self.anim
+    --如果是第一次播放该动画，需立即渲染第0帧
+    if self.frameIndex == -1 then
+        self:setFrameIndex(0)
+    else
+        --如果动画当前时间超过单帧持续时间，进入下一帧
+        if self.currentTime >= self.frameTime then
+            self.currentTime = 0
+            --如果加一帧后超过了最大帧数
+            if self.frameIndex + 1 >= anim.xCount then
+                --动画不可以循环的情况下，直接停止
+                if not self.anim.loop then
+                    self:stop()
+                    self.state = AnimationState.Stop
+                    if self.endCall then
+                        self.endCall()
+                    end
+                else
+                    self:setFrameIndex(0)
+                end
+            else
+                self:setFrameIndex(self.frameIndex + 1)
             end
         end
     end
@@ -111,9 +126,6 @@ function Animation:draw()
     if self.state ~= AnimationState.Playing then
         return
     end
-    --计算当前帧
-    local currentFrame = math.floor(self.currentTime / self.duration * self.anim.xCount)
-    self:setFrameIndex(currentFrame)
     local x = gameObject.x - self.gameObject.central.x * self.gameObject.scale.x
     local y = gameObject.y - self.gameObject.central.y * self.gameObject.scale.y
     local anim = self.anim
@@ -170,16 +182,17 @@ end
 ---@param name string 要播放的动画名称
 ---@param frameCall? function 动画帧回调 参数: index 当前的动画帧
 ---@param endCall? function 动画结束回调
-function Animation:play(name, frameCall,endCall)
+function Animation:play(name, frameCall, endCall)
     local anim = self:getAnim(name)
     if anim == nil then
-        error("目标动画不存在:"..name)
+        error("目标动画不存在:" .. name)
     end
     --如果已经在播放目标动画，则不进行处理
     if self.anim and self.anim.name == name and
-    self.state == AnimationState.Playing then
+        self.state == AnimationState.Playing then
         return
     end
+    --print("play:" .. name)
     self.anim = anim
     self.frameIndex = -1
     self.currentTime = 0
@@ -189,11 +202,9 @@ function Animation:play(name, frameCall,endCall)
 end
 
 ---停止动画
----@overload fun()
----@param frameIndex number 指定停止后显示的动画帧 默认值: 当前动画帧下标
-function Animation:stop(frameIndex)
-    frameIndex = frameIndex or self.frameIndex
+function Animation:stop()
     self.state = AnimationState.Stop
+    self.currentTime = 0
 end
 
 ---暂停动画
