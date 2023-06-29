@@ -13,4 +13,8 @@ function Item:new()
     self.description = ""
 end
 
+---使用该物品
+---@param obj GameObject 使用道具的对象
+function Item:use(obj)end
+
 return Item

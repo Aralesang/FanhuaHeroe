@@ -28,7 +28,7 @@ function Slim:load()
 
     --测试代码：直接将第一个玩家作为仇恨目标
     for _, player in pairs(Game.players) do
-        self.target = player
+        --self.target = player
         break
     end
 end
@@ -79,7 +79,7 @@ end
 function Slim:attackState()
     self.animation:play("攻击_史莱姆", function(index)
         if index == 4 then
-            --print("触发伤害帧!")
+            print("触发伤害帧!")
             --查找所有的玩家对象，并检查距离
             for _, v in pairs(Game.players) do
                 local dis = self:getDistance(v)

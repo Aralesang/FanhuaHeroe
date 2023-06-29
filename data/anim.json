@@ -20,7 +20,7 @@
     {
         "name": "受伤",
         "path": "image/role/玩家/受伤.png",
-        "frame": 8,
+        "frame": 3,
         "loop": false
     },
     {
@@ -50,7 +50,7 @@
     {
         "name": "受伤_史莱姆",
         "path": "image/role/史莱姆/受伤.png",
-        "frame": 5,
+        "frame": 3,
         "loop": false
     },
     {

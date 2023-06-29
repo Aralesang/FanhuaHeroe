@@ -1,5 +1,6 @@
 local Component = require "scripts.base.Component"
 local Item = require "scripts.game.Item"
+local ItemManager = require "scripts.manager.ItemManager"
 
 ---@class Inventory : Component 库存
 ---@field cellNum number 格子数量
@@ -7,9 +8,8 @@ local Item = require "scripts.game.Item"
 local Inventory = Component:extend()
 
 ---构造函数
----@param cellNum number 格子数量
-function Inventory:new(cellNum)
-    self.cellNum = cellNum
+function Inventory:new()
+    self.cellNum = 10
     self.items = {}
 end
 
@@ -25,7 +25,7 @@ function Inventory:add(id)
     if itemNum >= self.cellNum then
         return false
     end
-    local item = Item(id)
+    local item = ItemManager.createItem(0)
     table.insert(self.items,item)
     return true
 end
@@ -49,6 +49,18 @@ function Inventory:remove(id)
         end
     end
     return false
+end
+
+---使用道具
+---@param id number 道具id
+function Inventory:use(id)
+    --库存中寻找目标道具
+    for k,v in pairs(self.items) do
+        if v.id == id then
+            --调用目标物品的使用函数
+            v:use(self.gameObject)
+        end
+    end
 end
 
 return Inventory

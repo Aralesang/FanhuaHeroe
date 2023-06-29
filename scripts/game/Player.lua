@@ -6,13 +6,15 @@ local RoleManager = require "scripts.manager.RoleManager"
 local Camera = require "scripts.base.Camera"
 local State = require "scripts.enums.State"
 local Game = require "scripts.game.Game"
+local Inventory = require "scripts.components.Inventory"
 
 ---@class Player:GameObject 玩家对象
 ---@field moveDir Direction 移动方向
 ---@field animation Animation | nil 动画组件
+---@field equipment Equipment | nil 装备组件
+---@field inventory Inventory | nil 库存组件
 ---@field name string | nil 角色名称
 ---@field speed number 角色速度
----@field equipment Equipment | nil 装备组件
 ---@field keyList string[] 按键记录
 ---@field state number 状态
 ---@field range number 射程
@@ -23,6 +25,7 @@ function Player:new()
     self.moveDir = Direction.Down
     self.animation = self:addComponent(Animation)
     self.equipment = self:addComponent(Equipment)
+    self.inventory = self:addComponent(Inventory)
     self.keyList = {}
     local role = RoleManager.getRole(0)
     for k,v in pairs(role) do
@@ -40,6 +43,8 @@ function Player:load()
     self.equipment:equip("衣服", 3)
     self.equipment:equip("下装", 4)
     --self.equipment:equip("武器", 5)
+    --添加道具
+    self.inventory:add(0)
 end
 
 function Player:update(dt)
@@ -71,7 +76,7 @@ function Player:idleState()
             self:setState(State.walking)
             break
         end
-        if key == "space" then
+        if key == "x" then
             self:setState(State.attack)
             break
         end
@@ -96,7 +101,7 @@ function Player:walkState(dt)
             isMove = true
             break
         end
-        if key == "space" then
+        if key == "x" then
             self:setState(State.attack)
             break
         end
@@ -148,6 +153,9 @@ end
 ---@param key string
 function Player:keypressed(key)
     table.insert(self.keyList, key)
+    if key == "q" then
+        self.inventory:use(0)
+    end
 end
 
 ---按键释放

@@ -25,7 +25,7 @@ function ItemManager.init()
     for _, v in pairs(itemJson) do
         ItemManager.items[v["id"]] = v
     end
-
+    
     --加载模板
     local hairFile = love.filesystem.read("data/hair.json")
     if hairFile == nil then
@@ -42,6 +42,9 @@ function ItemManager.init()
     for _, v in pairs(hairJson) do
         ItemManager.hairs[v["id"]] = v
     end
+
+    --注册道具
+    ItemManager.batchItems()
 end
 
 ---创造一个道具对象
@@ -54,6 +57,7 @@ function ItemManager.createItem(id)
     item.id = itemTemp["id"]
     item.name = itemTemp["name"]
     item.description = itemTemp["description"]
+    item.use = itemTemp["use"]
     return item
 end
 
@@ -83,6 +87,24 @@ function ItemManager.getHair(id)
         error("目标id的发型不存在:" .. id)
     end
     return hair
+end
+
+---注册道具
+---@param id number 道具id
+---@param use function 使用道具的逻辑 参数: obj 使用道具的对象
+function ItemManager.register(id,use)
+    if  ItemManager.items[id] == nil then
+        error("注册道具时出错,目标id不存在:"..id)
+    end
+    ItemManager.items[id].use = use
+end
+
+---批量注册道具
+function ItemManager.batchItems()
+    --微弱的治愈药剂
+    ItemManager.register(0,function (_,obj)
+        print("血药！",obj.name)
+    end)
 end
 
 return ItemManager
