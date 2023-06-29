@@ -2,6 +2,7 @@ local Vector2 = require "scripts.base.Vector2"
 local Direction = require "scripts.enums.Direction"
 local State = require "scripts.enums.State"
 local Object = require "scripts.base.Object"
+local FSM    = require "scripts.game.FSM"
 
 ---游戏对象基本类
 ---@class GameObject : Object
@@ -250,23 +251,7 @@ function GameObject:onDamage(obj, atk) end
 ---设置状态
 ---@param state State
 function GameObject:setState(state)
-    --闲置状态仅允许从移动,攻击,受伤状态进入
-    local idle = {}
-    idle[State.walking] = 1
-    idle[State.attack] = 1
-    idle[State.damage] = 1
-    if state == State.idle and idle[self.state] == nil then
-        return
-    end
-    local attack = {State.walking,State.attack,State.idle}
-    if state == State.attack and attack[self.state] == nil then
-        return
-    end
-    local damage = {State.walking,State.attack,State.idle}
-    if state == State.damage and damage[self.state] == nil then
-        return
-    end
-    self.state = state
+    FSM.change(self,state)
 end
 
 return GameObject

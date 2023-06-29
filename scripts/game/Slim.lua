@@ -33,25 +33,6 @@ function Slim:load()
     end
 end
 
-function Slim:update(dt)
-    self:stateCheck(dt)
-end
-
----状态检测
-function Slim:stateCheck(dt)
-    if self.state == State.idle then
-        self:idleState()
-    elseif self.state == State.walking then
-        self:moveState(dt)
-    elseif self.state == State.attack then
-        self:attackState()
-    elseif self.state == State.death then
-        self:deathState()
-    elseif self.state == State.damage then
-        self:damageState()
-    end
-end
-
 ---如果进入闲置状态
 function Slim:idleState()
     if self.animation:getAnimName() ~= "闲置_史莱姆" then
@@ -62,6 +43,7 @@ function Slim:idleState()
         return
     end
     local distance = self:getDistance(self.target)
+    --print(distance)
     --目标进入视野，则向玩家移动
     if distance < self.sight then
         --print("目标进入视野！")
@@ -70,7 +52,7 @@ function Slim:idleState()
 end
 
 --如果进入移动状态
-function Slim:moveState(dt)
+function Slim:walkState(dt)
     local distance = self:getDistance(self.target)
     --目标已丢失
     if distance > self.sight then
@@ -147,7 +129,7 @@ end
 ---受伤状态
 function Slim:damageState()
     self.animation:play("受伤_史莱姆",nil,function ()
-        print("史莱姆挨打结束")
+        --print("史莱姆挨打结束")
         self:setState(State.idle)
     end)
 end

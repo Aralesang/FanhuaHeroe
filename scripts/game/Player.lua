@@ -56,17 +56,6 @@ function Player:update(dt)
     --相机跟随
     local width, height = love.window.getMode()
     Camera:setPosition(self.x - width / 2, self.y - height / 2)
-    --有限状态机
-    self:stateCheck(dt)
-end
-
----状态检测
-function Player:stateCheck(dt)
-    if self.state == State.idle then
-        self:idleState()
-    elseif self.state == State.walking then
-        self:moveState(dt)
-    end
 end
 
 ---如果进入闲置状态
@@ -90,7 +79,7 @@ function Player:idleState()
 end
 
 --如果进入移动状态
-function Player:moveState(dt)
+function Player:walkState(dt)
     local isMove = false
     --寻找最后一个按住的方向键
     for i = #self.keyList, 1, -1 do
@@ -142,7 +131,7 @@ end
 ---受伤状态
 function Player:damageState()
     self.animation:play("受伤",nil,function ()
-        print("受伤硬直结束")
+        --print("受伤硬直结束")
         self:setState(State.idle)
     end)
 end
@@ -178,17 +167,6 @@ end
 function Player:onDamage(obj, atk)
     print(string.format("hp:%d/%d",self.hp,self.hpMax))
     self:setState(State.damage)
-end
-
-function Player:setState(state)
-    self.state = state
-    if state == State.death then
-        self:deathState()
-    elseif state == State.attack then
-        self:attackState()
-    elseif state == State.damage then
-        self:damageState()
-    end
 end
 
 return Player

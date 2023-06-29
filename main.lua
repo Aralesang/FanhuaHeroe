@@ -4,6 +4,10 @@ local Player = require "scripts.game.Player"
 local bump = require "scripts.utils.bump"
 local Debug = require "scripts.utils.debug"
 local Slim = require "scripts.game.Slim"
+local AnimManager = require "scripts.manager.AnimManager"
+local ItemManager = require "scripts.manager.ItemManager"
+local RoleManager = require "scripts.manager.RoleManager"
+local FSM         = require "scripts.game.FSM"
 
 ---@type Map 地图对象
 local map
@@ -21,7 +25,14 @@ function love.load()
     --更改图像过滤方式，以显示高清马赛克
     print("更改图像过滤方式...")
     love.graphics.setDefaultFilter("nearest", "nearest")
-    
+
+    --加载系统管理器
+    AnimManager.init()
+    ItemManager.init()
+    RoleManager.init()
+    --加载有限状态机
+    FSM.init()
+
     --加载场景
     print("加主场景...")
 
@@ -55,6 +66,8 @@ function love.update(dt)
         end
         if gameObject.update then
             gameObject:update(dt)
+            --触发有限状态机
+            FSM.call(gameObject,dt)
         end
         --然后触发对象所附加的组件更新
         if gameObject.components then

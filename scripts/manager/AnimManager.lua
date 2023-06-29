@@ -12,20 +12,22 @@ local AnimJsonData = {}
 ---@field anims AnimJsonData[] 动画配置列表
 local AnimManager = {}
 
---加载动画列表
-print("加载动画管理器...")
-local file = love.filesystem.read("data/anim.json")
-if file == nil then
-    error("动画管理器初始化失败,anims.json失败")
-end
-local json = JSON:decode(file)
-if json == nil then
-    error("动画管理器初始化失败,json对象创建失败")
-end
-AnimManager.anims = {}
----@cast json AnimJsonData[]
-for _, v in pairs(json) do
-    AnimManager.anims[v.name] = v
+function AnimManager.init()
+    --加载动画列表
+    print("加载动画管理器...")
+    local file = love.filesystem.read("data/anim.json")
+    if file == nil then
+        error("动画管理器初始化失败,anims.json失败")
+    end
+    local json = JSON:decode(file)
+    if json == nil then
+        error("动画管理器初始化失败,json对象创建失败")
+    end
+    AnimManager.anims = {}
+    ---@cast json AnimJsonData[]
+    for _, v in pairs(json) do
+        AnimManager.anims[v.name] = v
+    end
 end
 
 ---创建动画对象

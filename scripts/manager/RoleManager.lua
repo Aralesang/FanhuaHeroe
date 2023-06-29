@@ -13,20 +13,22 @@ local RoleJsonData = {}
 ---@field roles RoleJsonData[] 玩家模板列表
 local RoleManager = {}
 
-print("加载角色管理器...")
-RoleManager.roles = {}
---加载角色模板
-local file = love.filesystem.read("data/role.json")
-if file == nil then
-     error("角色管理器初始化失败,读取roles.json失败")
-end
-local json = JSON:decode(file)
-if json == nil then
-     error("角色管理器初始化失败,json对象创建失败")
-end
----@cast json RoleJsonData[]
-for _, v in pairs(json) do
-     RoleManager.roles[v["id"]] = v
+function RoleManager.init()
+     print("加载角色管理器...")
+     RoleManager.roles = {}
+     --加载角色模板
+     local file = love.filesystem.read("data/role.json")
+     if file == nil then
+          error("角色管理器初始化失败,读取roles.json失败")
+     end
+     local json = JSON:decode(file)
+     if json == nil then
+          error("角色管理器初始化失败,json对象创建失败")
+     end
+     ---@cast json RoleJsonData[]
+     for _, v in pairs(json) do
+          RoleManager.roles[v["id"]] = v
+     end
 end
 
 ---获取角色模板数据
