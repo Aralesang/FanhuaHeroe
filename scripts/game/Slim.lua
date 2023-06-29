@@ -1,4 +1,8 @@
-require "scripts.game.Enemy"
+local Enemy = require "scripts.game.Enemy"
+local State = require "scripts.enums.State"
+local RoleManager = require "scripts.manager.RoleManager"
+local Animation = require "scripts.components.Animation"
+local Game = require "scripts.game.Game"
 
 ---@class Slim:Enemy 史莱姆
 ---@field animation Animation 动画组件
@@ -6,7 +10,7 @@ require "scripts.game.Enemy"
 ---@field state number 状态
 ---@field target GameObject 仇恨目标
 ---@field range number 射程
-Slim = Enemy:extend()
+local Slim = Enemy:extend()
 
 function Slim:new()
     self.super:new()
@@ -15,6 +19,7 @@ function Slim:new()
     for k,v in pairs(role) do
         self[k] = v
     end
+    Game:addEnemys(self)
 end
 
 function Slim:load()
@@ -146,3 +151,5 @@ function Slim:damageState()
         self:setState(State.idle)
     end)
 end
+
+return Slim

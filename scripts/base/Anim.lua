@@ -10,7 +10,7 @@ local Object = require "scripts.base.Object"
 ---@field row number 当前所使用的动画行
 ---@field quad love.Quad 视图窗口
 ---@field loop boolean 是否循环
-Anim = Object:extend()
+local Anim = Object:extend()
 
 ---构造函数
 ---@param name string 动画名称
@@ -30,3 +30,5 @@ function Anim:new(name, image, frame, loop)
     self.row = 0
     self.loop = loop
 end
+
+return Anim

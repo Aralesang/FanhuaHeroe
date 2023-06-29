@@ -1,3 +1,12 @@
+local GameObject = require "scripts.game.GameObject"
+local Direction = require "scripts.enums.Direction"
+local Animation = require "scripts.components.Animation"
+local Equipment = require "scripts.components.Equipment"
+local RoleManager = require "scripts.manager.RoleManager"
+local Camera = require "scripts.base.Camera"
+local State = require "scripts.enums.State"
+local Game = require "scripts.game.Game"
+
 ---@class Player:GameObject 玩家对象
 ---@field moveDir Direction 移动方向
 ---@field animation Animation | nil 动画组件
@@ -7,7 +16,7 @@
 ---@field keyList string[] 按键记录
 ---@field state number 状态
 ---@field range number 射程
-Player = GameObject:extend()
+local Player = GameObject:extend()
 
 function Player:new()
     self.super:new()
@@ -19,6 +28,7 @@ function Player:new()
     for k,v in pairs(role) do
         self[k] = v
     end
+    Game:addPlayer(self)
 end
 
 function Player:load()
@@ -180,3 +190,5 @@ function Player:setState(state)
         self:damageState()
     end
 end
+
+return Player

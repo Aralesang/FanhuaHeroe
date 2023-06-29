@@ -1,7 +1,7 @@
-require "scripts.game.Game"
-require "scripts.base.Vector2"
-require "scripts.enums.Direction"
-require "scripts.enums.State"
+local Vector2 = require "scripts.base.Vector2"
+local Direction = require "scripts.enums.Direction"
+local State = require "scripts.enums.State"
+local Object = require "scripts.base.Object"
 
 ---游戏对象基本类
 ---@class GameObject : Object
@@ -25,7 +25,7 @@ require "scripts.enums.State"
 ---@field atk number 攻击力
 ---@field def number 防御力
 ---@field state State 状态
-GameObject = Object:extend()
+local GameObject = Object:extend()
 
 ---构造函数
 function GameObject:new()
@@ -73,7 +73,6 @@ function GameObject:__call(...)
     ---@cast obj GameObject
     ---@diagnostic disable-next-line: redundant-parameter
     obj:new(...)
-    Game:addGameObject(obj)
     return obj
 end
 
@@ -269,3 +268,5 @@ function GameObject:setState(state)
     end
     self.state = state
 end
+
+return GameObject

@@ -1,5 +1,7 @@
-require "scripts.manager.ItemManager"
-require "scripts.game.Slot"
+local ItemManager = require "scripts.manager.ItemManager"
+local Slot = require "scripts.game.Slot"
+local Component = require "scripts.base.Component"
+local Animation = require "scripts.components.Animation"
 
 ---@class Equipment:Component 装备组件
 ---@field private slots Slot[] 装备槽有序列表
@@ -7,7 +9,7 @@ require "scripts.game.Slot"
 ---@field animName string 当前动画名称
 ---@field frameIndex number 当前动画帧下标
 ---@field animation Animation | nil 动画组件
-Equipment = Component:extend()
+local Equipment = Component:extend()
 
 function Equipment:extend()
     local cls = {}
@@ -136,3 +138,5 @@ function Equipment:changeAnim(animName, frameIndex)
     self.animName = animName
     self.frameIndex = frameIndex
 end
+
+return Equipment

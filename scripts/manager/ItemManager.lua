@@ -1,45 +1,45 @@
 local JSON = require "scripts.utils.JSON"
+local Item = require "scripts.game.Item"
 
 ---@class ItemManager 道具管理器
 ---@field items Item[] 道具模板列表
 ---@field hairs any[] 头发模板列表
-ItemManager = {}
+local ItemManager = {}
 
----初始化
-function ItemManager.init()
-    --加载模板
-    local itemFile = love.filesystem.read("data/items.json")
-    if itemFile == nil then
-         error("道具管理器初始化失败,items.json失败")
-    end
-    ---@type any
-    local itemJson = JSON:decode(itemFile)
-    if itemJson == nil then
-         error("道具管理器初始化失败,item对象创建失败")
-    end
+print("加载道具管理器...")
 
-    ItemManager.items = {}
+--加载模板
+local itemFile = love.filesystem.read("data/item.json")
+if itemFile == nil then
+    error("道具管理器初始化失败,items.json失败")
+end
+---@type any
+local itemJson = JSON:decode(itemFile)
+if itemJson == nil then
+    error("道具管理器初始化失败,item对象创建失败")
+end
 
-    for _,v in pairs(itemJson) do
-        ItemManager.items[v["id"]] = v
-    end
+ItemManager.items = {}
 
-    --加载模板
-    local hairFile = love.filesystem.read("data/hairs.json")
-    if hairFile == nil then
-         error("道具管理器初始化失败,hairs.json失败")
-    end
-    ---@type any
-    local hairJson = JSON:decode(hairFile)
-    if hairJson == nil then
-         error("道具管理器初始化失败,hair对象创建失败")
-    end
+for _, v in pairs(itemJson) do
+    ItemManager.items[v["id"]] = v
+end
 
-    ItemManager.hairs = {}
+--加载模板
+local hairFile = love.filesystem.read("data/hair.json")
+if hairFile == nil then
+    error("道具管理器初始化失败,hairs.json失败")
+end
+---@type any
+local hairJson = JSON:decode(hairFile)
+if hairJson == nil then
+    error("道具管理器初始化失败,hair对象创建失败")
+end
 
-    for _,v in pairs(hairJson) do
-        ItemManager.hairs[v["id"]] = v
-    end
+ItemManager.hairs = {}
+
+for _, v in pairs(hairJson) do
+    ItemManager.hairs[v["id"]] = v
 end
 
 ---创造一个道具对象
@@ -64,7 +64,7 @@ function ItemManager.getItem(id)
     end
     local item = ItemManager.items[id]
     if item == nil then
-        error("目标id的道具不存在:"..id)
+        error("目标id的道具不存在:" .. id)
     end
     return item
 end
@@ -78,7 +78,9 @@ function ItemManager.getHair(id)
     end
     local hair = ItemManager.hairs[id]
     if hair == nil then
-        error("目标id的发型不存在:"..id)
+        error("目标id的发型不存在:" .. id)
     end
     return hair
 end
+
+return ItemManager

@@ -1,9 +1,9 @@
-require "scripts.base.Component"
+local Component = require "scripts.base.Component"
 
 ---绘制调试组件，用于可视化游戏内的各种坐标和检测范围，方便调试
 ---@class DebugDraw : Component
 ---@field drawCentral boolean 是否显示中心点
-DebugDraw = Component:extend()
+local DebugDraw = Component:extend()
 
 function DebugDraw:new()
 end
@@ -30,3 +30,5 @@ function DebugDraw:draw()
     love.graphics.ellipse("line", x, y, 3, 3)
     love.graphics.setColor(1, 1, 1)
 end
+
+return DebugDraw

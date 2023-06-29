@@ -1,5 +1,7 @@
+local GameObject = require "scripts.game.GameObject"
+
 ---@class Enemy:GameObject 敌人基类
-Enemy = GameObject:extend()
+local Enemy = GameObject:extend()
 
 ---继承
 ---@return GameObject
@@ -15,3 +17,9 @@ function Enemy:extend()
     setmetatable(cls, self)
     return cls
 end
+
+function Enemy:new()
+    self.super:new()
+end
+
+return Enemy

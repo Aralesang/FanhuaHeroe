@@ -1,6 +1,6 @@
 ---摄像机
 ---@class Camera
-Camera = {}
+local Camera = {}
 Camera.x = 0
 Camera.y = 0
 Camera.scaleX = 0.5
@@ -42,3 +42,5 @@ function Camera:setScale(sx, sy)
     self.scaleX = sx or self.scaleX
     self.scaleY = sy or self.scaleY
 end
+
+return Camera

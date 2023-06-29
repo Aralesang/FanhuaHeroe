@@ -11,7 +11,7 @@
 ---@class Object
 ---@field private __index Object
 ---@field super Object 父对象
-Object = {}
+local Object = {}
 Object.__index = Object
 
 ---构造函数

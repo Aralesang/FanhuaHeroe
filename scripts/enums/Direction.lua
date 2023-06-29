@@ -1,6 +1,6 @@
 ---方向枚举
 ---@enum Direction
-Direction = {
+local Direction = {
     ---下
     Down = 0,
     ---上
@@ -10,3 +10,5 @@ Direction = {
     ---左
     Left = 3
 }
+
+return Direction

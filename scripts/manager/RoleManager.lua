@@ -3,31 +3,30 @@ require "scripts.components.Animation"
 require "scripts.components.DebugDraw"
 local JSON = require "scripts.utils.JSON"
 require "scripts.components.Equipment"
+local FSM = require "scripts.game.FSM"
 
 ---@class RoleJsonData 角色模板
-RoleJsonData = {}
+local RoleJsonData = {}
 
 ---角色管理器
 ---@class RoleManager
 ---@field roles RoleJsonData[] 玩家模板列表
-RoleManager = {}
+local RoleManager = {}
 
----初始化角色管理器
-function RoleManager.init()
-     RoleManager.roles = {}
-     --加载角色模板
-     local file = love.filesystem.read("data/roles.json")
-     if file == nil then
-          error("角色管理器初始化失败,读取roles.json失败")
-     end
-     local json = JSON:decode(file)
-     if json == nil then
-          error("角色管理器初始化失败,json对象创建失败")
-     end
-     ---@cast json RoleJsonData[]
-     for _,v in pairs(json) do
-          RoleManager.roles[v["id"]] = v
-     end
+print("加载角色管理器...")
+RoleManager.roles = {}
+--加载角色模板
+local file = love.filesystem.read("data/role.json")
+if file == nil then
+     error("角色管理器初始化失败,读取roles.json失败")
+end
+local json = JSON:decode(file)
+if json == nil then
+     error("角色管理器初始化失败,json对象创建失败")
+end
+---@cast json RoleJsonData[]
+for _, v in pairs(json) do
+     RoleManager.roles[v["id"]] = v
 end
 
 ---获取角色模板数据
@@ -36,7 +35,9 @@ end
 function RoleManager.getRole(id)
      local role = RoleManager.roles[id]
      if role == nil then
-          error("目标角色模板不存在:"..id)
+          error("目标角色模板不存在:" .. id)
      end
      return role
 end
+
+return RoleManager

@@ -1,7 +1,10 @@
+local Component = require "scripts.base.Component"
+local Item = require "scripts.game.Item"
+
 ---@class Inventory : Component 库存
 ---@field cellNum number 格子数量
 ---@field items Item[] 道具列表
-Inventory = Component:extend()
+local Inventory = Component:extend()
 
 ---构造函数
 ---@param cellNum number 格子数量
@@ -47,3 +50,5 @@ function Inventory:remove(id)
     end
     return false
 end
+
+return Inventory

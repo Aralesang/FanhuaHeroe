@@ -2,7 +2,7 @@
 ---@class Vector2
 ---@field x number
 ---@field y number
-Vector2={
+local Vector2={
     x = 0,
     y = 0
 }
@@ -47,3 +47,5 @@ end
 function Vector2.right()
     return Vector2:new(1,0)
 end
+
+return Vector2

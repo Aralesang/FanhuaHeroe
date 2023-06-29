@@ -1,10 +1,10 @@
-require "scripts.base.Object"
+local Object = require "scripts.base.Object"
 
 ---组件基类
 ---@class Component : Object
 ---@field gameObject GameObject 组件所附加到的游戏物体
 ---@field isLoad boolean 是否已经调用过初始化函数
-Component = Object:extend()
+local Component = Object:extend()
 
 function Component:new()
   self.isLoad = false
@@ -53,3 +53,5 @@ end
 ---@param key number 键盘释放的键值
 function Component:keyreleased(key)
 end
+
+return Component

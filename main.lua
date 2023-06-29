@@ -1,16 +1,9 @@
-require "scripts.base.Object"
-require "scripts.base.Camera"
-require "scripts.game.GameObject"
-require "scripts.game.Game"
-require "scripts.components.Animation"
-require "scripts.manager.RoleManager"
+local Game = require "scripts.game.Game"
 local sti = require "scripts.utils.sti"
-require "scripts.manager.AnimManager"
-require "scripts.manager.RoleManager"
-require "scripts.game.Player"
+local Player = require "scripts.game.Player"
 local bump = require "scripts.utils.bump"
-require "scripts.utils.debug"
-require "scripts.game.Slim"
+local Debug = require "scripts.utils.debug"
+local Slim = require "scripts.game.Slim"
 
 ---@type Map 地图对象
 local map
@@ -28,12 +21,7 @@ function love.load()
     --更改图像过滤方式，以显示高清马赛克
     print("更改图像过滤方式...")
     love.graphics.setDefaultFilter("nearest", "nearest")
-    print("加载动画管理器...")
-    AnimManager.init()
-    print("加载角色管理器...")
-    RoleManager.init()
-    print("加载道具管理器...")
-    ItemManager.init()
+    
     --加载场景
     print("加主场景...")
 
@@ -100,7 +88,7 @@ function love.update(dt)
 end
 
 --每帧绘制
-function love.draw() 
+function love.draw()
     --绘制地图
     map:draw(0, 0, 2)
     --绘制对象

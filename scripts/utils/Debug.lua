@@ -1,6 +1,6 @@
 ---@class Debug 调试接口
 ---@field text table 当前所显示的日志文本
-Debug = {
+local Debug = {
     text = {}
 }
 
@@ -93,3 +93,5 @@ function Debug.drawBox(box, r, g, b)
     love.graphics.rectangle("line", box.x, box.y, box.w, box.h)
     love.graphics.setColor(1, 1, 1, 1)
 end
+
+return Debug

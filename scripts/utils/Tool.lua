@@ -1,5 +1,5 @@
 ---@class Tool 工具类
-Tool = {}
+local Tool = {}
 
 ---检查文件是否存在
 ---@param fileName string 文件名
@@ -13,3 +13,5 @@ function Tool.fileExists(fileName)
         return false
     end
 end
+
+return Tool
