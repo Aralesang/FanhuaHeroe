@@ -54,10 +54,9 @@ function ItemManager.createItem(id)
     local itemTemp = ItemManager.getItem(id)
     ---@type Item
     local item = Item()
-    item.id = itemTemp["id"]
-    item.name = itemTemp["name"]
-    item.description = itemTemp["description"]
-    item.use = itemTemp["use"]
+    for k,v in pairs(itemTemp) do
+        item[k] = v
+    end
     return item
 end
 
@@ -91,7 +90,7 @@ end
 
 ---注册道具
 ---@param id number 道具id
----@param use function 使用道具的逻辑 参数: obj 使用道具的对象
+---@param use fun(Item:Item,target:GameObject) 使用道具的逻辑 参数: obj 使用道具的对象
 function ItemManager.register(id,use)
     if  ItemManager.items[id] == nil then
         error("注册道具时出错,目标id不存在:"..id)
@@ -101,9 +100,11 @@ end
 
 ---批量注册道具
 function ItemManager.batchItems()
+    local i = ItemManager
     --微弱的治愈药剂
-    ItemManager.register(0,function (_,obj)
-        print("血药！",obj.name)
+    i.register(0,function (item,target)
+        target.hp = target.hp + item["hp"]
+        print(string.format("%s恢复了%d点生命",target.name,item["hp"]))
     end)
 end
 

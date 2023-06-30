@@ -55,12 +55,15 @@ end
 ---@param id number 道具id
 function Inventory:use(id)
     --库存中寻找目标道具
-    for k,v in pairs(self.items) do
+    for _,v in pairs(self.items) do
         if v.id == id then
             --调用目标物品的使用函数
             v:use(self.gameObject)
+            self:remove(id)
+            return
         end
     end
+    print("未拥有物品:"..id)
 end
 
 return Inventory

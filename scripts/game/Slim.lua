@@ -28,7 +28,7 @@ function Slim:load()
 
     --测试代码：直接将第一个玩家作为仇恨目标
     for _, player in pairs(Game.players) do
-        --self.target = player
+        self.target = player
         break
     end
 end
