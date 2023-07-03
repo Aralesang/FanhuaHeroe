@@ -1,4 +1,3 @@
-local ItemManager = require "scripts.manager.ItemManager"
 local Slot = require "scripts.game.Slot"
 local Component = require "scripts.base.Component"
 local Animation = require "scripts.components.Animation"
@@ -37,7 +36,7 @@ function Equipment:awake()
     --添加装备插槽
     self:addSlot("头发","身体部件")
     self:addSlot("帽子","装备")
-    self:addSlot("衣服","装备")
+    self:addSlot("上衣","装备")
     self:addSlot("下装","装备")
     self:addSlot("武器","装备")
 end
@@ -88,7 +87,7 @@ end
 
 ---@alias slot
 ---| '"帽子"'
----| '"衣服"'
+---| '"上衣"'
 ---| '"下装"'
 ---| '"武器"'
 ---| '"头发"'
@@ -129,6 +128,17 @@ function Equipment:equip(name, itemId)
         return
     end
     slot.itemId = itemId
+end
+
+---卸除装备
+---@param name slot 要卸除的槽
+function Equipment:unequip(name)
+    local slot = self:getSlot(name)
+    if slot == nil then
+        error("装备槽 [" .. name .. "] 不存在!")
+        return
+    end
+    slot.itemId = 0
 end
 
 ---变更动画

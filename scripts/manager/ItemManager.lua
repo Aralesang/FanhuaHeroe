@@ -27,7 +27,7 @@ function ItemManager.init()
     for _, v in pairs(itemJson) do
         ItemManager.items[v["id"]] = v
     end
-    
+
     --加载模板
     local hairFile = love.filesystem.read("data/hair.json")
     if hairFile == nil then
@@ -56,7 +56,7 @@ function ItemManager.createItem(id)
     local itemTemp = ItemManager.getItem(id)
     ---@type Item
     local item = Item()
-    for k,v in pairs(itemTemp) do
+    for k, v in pairs(itemTemp) do
         item[k] = v
     end
     return item
@@ -71,7 +71,7 @@ function ItemManager.getItem(id)
     end
     local item = ItemManager.items[id]
     if item == nil then
-        error("目标id的道具不存在:" .. id)
+        error(string.format("目标id的道具不存在:%d",id))
     end
     return item
 end
@@ -92,21 +92,27 @@ end
 
 ---注册道具
 ---@param id number 道具id
----@param use fun(Item:Item,target:GameObject) 使用道具的逻辑 参数: obj 使用道具的对象
-function ItemManager.register(id,use)
-    if  ItemManager.items[id] == nil then
-        error("注册道具时出错,目标id不存在:"..id)
+---@param use? fun(target:GameObject,item:Item) 使用道具的逻辑
+---@param equip? fun(target: GameObject,item:Item) 装备道具的逻辑
+function ItemManager.register(id, use, equip)
+    if ItemManager.items[id] == nil then
+        error("注册道具时出错,目标id不存在:" .. id)
     end
-    ItemManager.items[id].use = use
+    if use then
+        ItemManager.items[id].use = use
+    end
+    if equip then
+        ItemManager.items[id].equip = equip
+    end
 end
 
 ---批量注册道具
 function ItemManager.batchItems()
     local i = ItemManager
     --微弱的治愈药剂
-    i.register(0,function (item,target)
+    i.register(0, function(target, item)
         target.hp = target.hp + item["hp"]
-        print(string.format("%s恢复了%d点生命",target.name,item["hp"]))
+        print(string.format("%s恢复了%d点生命", target.name, item["hp"]))
     end)
 end
 
@@ -114,10 +120,13 @@ end
 ---@param itemId number 掉落物id
 ---@param x number 掉落物所在x轴坐标
 ---@param y number 掉落物所在y轴坐标
-function ItemManager.createDrop(itemId,x,y)
+---@return Drop drop 掉落物
+function ItemManager.createDrop(itemId, x, y)
+    local item = ItemManager.getItem(itemId)
     ---@type Drop
-    local drop = Drop(itemId,x,y)
+    local drop = Drop(itemId, item.name, x, y)
     Game:addDrops(drop)
+    return drop
 end
 
 return ItemManager

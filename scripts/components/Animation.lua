@@ -87,7 +87,6 @@ end
 ---@param dt number 所经过的时间间隔
 function Animation:update(dt)
     if self.state ~= AnimationState.Playing then
-        print("非播放状态")
         return
     end
     --更新动画当前时间

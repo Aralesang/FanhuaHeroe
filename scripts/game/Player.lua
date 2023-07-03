@@ -40,11 +40,9 @@ function Player:load()
     --设置头发
     self.equipment:equip("头发", 2)
     --添加装备
-    self.equipment:equip("衣服", 3)
-    self.equipment:equip("下装", 4)
+    -- self.equipment:equip("衣服", 3)
+    -- self.equipment:equip("下装", 4)
     --self.equipment:equip("武器", 5)
-    --添加道具
-    self.inventory:add(0)
 end
 
 function Player:update(dt)
@@ -101,7 +99,13 @@ function Player:walkState(dt)
             local cols_len
             cols,cols_len = self:move(dt, self.direction) --移动
             for i=1,cols_len do
-                print(cols[i].name)
+                --将接触到的所有掉落物收入库存
+                ---@type Drop
+                local item = cols[i].other
+                self.inventory:add(item.itemId)
+                Game.world:remove(item)
+                Game:removeGameObject(cols[i].other)
+                print("获得:"..item.name)
             end
             isMove = true
             break
@@ -160,6 +164,9 @@ function Player:keypressed(key)
     table.insert(self.keyList, key)
     if key == "q" then
         self.inventory:use(0)
+    end
+    if key == "e" then
+        self.inventory:equip(1)
     end
 end
 

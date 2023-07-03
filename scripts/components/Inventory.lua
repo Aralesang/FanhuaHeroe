@@ -1,11 +1,11 @@
-local Component = require "scripts.base.Component"
-local Item = require "scripts.game.Item"
+local Component   = require "scripts.base.Component"
 local ItemManager = require "scripts.manager.ItemManager"
+local Equipment   = require "scripts.components.Equipment"
 
 ---@class Inventory : Component 库存
 ---@field cellNum number 格子数量
 ---@field items Item[] 道具列表
-local Inventory = Component:extend()
+local Inventory   = Component:extend()
 
 ---构造函数
 function Inventory:new()
@@ -25,8 +25,8 @@ function Inventory:add(id)
     if itemNum >= self.cellNum then
         return false
     end
-    local item = ItemManager.createItem(0)
-    table.insert(self.items,item)
+    local item = ItemManager.createItem(id)
+    table.insert(self.items, item)
     return true
 end
 
@@ -55,7 +55,7 @@ end
 ---@param id number 道具id
 function Inventory:use(id)
     --库存中寻找目标道具
-    for _,v in pairs(self.items) do
+    for _, v in pairs(self.items) do
         if v.id == id then
             --调用目标物品的使用函数
             v:use(self.gameObject)
@@ -63,7 +63,37 @@ function Inventory:use(id)
             return
         end
     end
-    print("未拥有物品:"..id)
+    print("未拥有物品:" .. id)
+end
+
+---装备道具
+---@param id number 道具id
+function Inventory:equip(id)
+    local equip = self.gameObject:getComponent(Equipment)
+    if equip == nil then
+        print("目标对象没有装备组件")
+        return
+    end
+    --库存中寻找目标道具
+    for _, v in pairs(self.items) do
+        if v.id == id then
+            --装备目标物品
+            local slotName = v["slot"]
+            --检查目标槽中是否有装备
+            local slot = equip:getSlot(slotName)
+            if slot == nil then
+                print("装备槽:"..slotName.."不存在")
+                return
+            end
+            if slot.itemId == id then
+                equip:unequip(slotName)
+                return
+            end
+            equip:equip(slotName, v.id)
+            return
+        end
+    end
+    print("未拥有物品:" .. id)
 end
 
 return Inventory

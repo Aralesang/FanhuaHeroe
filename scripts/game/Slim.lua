@@ -3,6 +3,7 @@ local State = require "scripts.enums.State"
 local RoleManager = require "scripts.manager.RoleManager"
 local Animation = require "scripts.components.Animation"
 local Game = require "scripts.game.Game"
+local ItemManager = require "scripts.manager.ItemManager"
 
 ---@class Slim:Enemy 史莱姆
 ---@field animation Animation 动画组件
@@ -118,6 +119,12 @@ function Slim:deathState()
     if self.animation:getAnimName() ~= "死亡_史莱姆" then
         self.animation:play("死亡_史莱姆", nil, function()
             self:destroy()
+             --在死亡位置创建一个掉落物
+             math.randomseed(os.time())
+             local itemId = math.random(0,5)
+             local drop = ItemManager.createDrop(itemId,self.x,self.y)
+             print("掉落物品:"..drop.name)
+             Game.world:remove(self)
         end)
     end
 end
