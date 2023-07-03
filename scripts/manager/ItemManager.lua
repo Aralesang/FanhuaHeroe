@@ -1,5 +1,7 @@
 local JSON = require "scripts.utils.JSON"
 local Item = require "scripts.game.Item"
+local Drop = require "scripts.game.Drop"
+local Game = require "scripts.game.Game"
 
 ---@class ItemManager 道具管理器
 ---@field items Item[] 道具模板列表
@@ -106,6 +108,16 @@ function ItemManager.batchItems()
         target.hp = target.hp + item["hp"]
         print(string.format("%s恢复了%d点生命",target.name,item["hp"]))
     end)
+end
+
+---创建一个掉落物
+---@param itemId number 掉落物id
+---@param x number 掉落物所在x轴坐标
+---@param y number 掉落物所在y轴坐标
+function ItemManager.createDrop(itemId,x,y)
+    ---@type Drop
+    local drop = Drop(itemId,x,y)
+    Game:addDrops(drop)
 end
 
 return ItemManager

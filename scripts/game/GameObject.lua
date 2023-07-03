@@ -1,8 +1,9 @@
-local Vector2 = require "scripts.base.Vector2"
-local Direction = require "scripts.enums.Direction"
-local State = require "scripts.enums.State"
-local Object = require "scripts.base.Object"
-local FSM    = require "scripts.game.FSM"
+local Vector2    = require "scripts.base.Vector2"
+local Direction  = require "scripts.enums.Direction"
+local State      = require "scripts.enums.State"
+local Object     = require "scripts.base.Object"
+local FSM        = require "scripts.game.FSM"
+local Game       = require "scripts.game.Game"
 
 ---游戏对象基本类
 ---@class GameObject : Object
@@ -20,12 +21,6 @@ local FSM    = require "scripts.game.FSM"
 ---@field y number 对象空间垂直坐标
 ---@field w number 对象宽度
 ---@field h number 对象高度
----@field speed number 移动速度
----@field hp number 生命值
----@field hpMax number 最大生命值
----@field atk number 攻击力
----@field def number 防御力
----@field state State 状态
 local GameObject = Object:extend()
 
 ---构造函数
@@ -43,11 +38,6 @@ function GameObject:new()
     self.direction = Direction.Down
     self.isLoad = false
     self.speed = 0
-    self.hp = 0
-    self.hpMax = 0
-    self.atk = 0
-    self.def = 0
-    self.state = State.idle
 end
 
 ---继承
@@ -188,27 +178,28 @@ end
 ---移动
 ---@param dt number 距离上一帧的间隔时间
 ---@param dir Direction 移动方向
----@return number x, number y
+---@return table cols, number cols_len
 function GameObject:move(dt, dir)
-    local x = self.x
-    local y = self.y
+    local speed = self.speed
+    local dx, dy = 0, 0
     --获取移动
-    local distance = dt * self.speed
     if dir == Direction.Left then
-        x = x - distance
+        dx = -speed * dt
     elseif dir == Direction.Right then
-        x = x + distance
+        dx = speed * dt
     elseif dir == Direction.Up then
-        y = y - distance
+        dy = -speed * dt
     elseif dir == Direction.Down then
-        y = y + distance
+        dy = speed * dt
     end
 
-    --self.x,self.y = Game.world:move(self,math.floor(x),math.floor(y))
-    self.x = x;
-    self.y = y;
-    --print("x:"..self.x.."y:"..self.y)
-    return self.x, self.y
+    if dx ~= 0 or dy ~= 0 then
+        local cols
+        local cols_len = 0
+        self.x, self.y, cols, cols_len =  Game.world:move(self, self.x + dx, self.y + dy)
+        return cols, cols_len
+    end
+    return {},0
 end
 
 ---获取与目标对象之间的距离
@@ -220,38 +211,6 @@ function GameObject:getDistance(target)
     local dy = math.abs(self.y - target.y)
     local distance = math.sqrt(dx * dx + dy * dy)
     return distance
-end
-
----元受伤函数
----@param obj GameObject 伤害来源
----@param atk number 攻击力
-function GameObject:damage(obj, atk)
-    --如果已经处于死亡或已经在受伤状态，则不会再受伤
-    if self.state == State.death or self.state == State.damage then
-        return
-    end
-    self.hp = self.hp - atk
-    if self.hp < 0 then
-        self.hp = 0
-    end
-    if self.hp > self.hpMax then
-        self.hp = self.hpMax
-    end
-    if self.hp == 0 then
-        self:setState(State.death)
-    end
-    self:onDamage(obj, atk)
-end
-
----抽象受伤函数
----@param obj GameObject 伤害来源
----@param atk number 攻击力
-function GameObject:onDamage(obj, atk) end
-
----设置状态
----@param state State
-function GameObject:setState(state)
-    FSM.change(self,state)
 end
 
 return GameObject

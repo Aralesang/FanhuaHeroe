@@ -1,7 +1,7 @@
-local GameObject = require "scripts.game.GameObject"
+local Role = require "scripts.game.Role"
 
----@class Enemy:GameObject 敌人基类
-local Enemy = GameObject:extend()
+---@class Enemy:Role 敌人基类
+local Enemy = Role:extend()
 
 ---继承
 ---@return GameObject

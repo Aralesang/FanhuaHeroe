@@ -43,11 +43,10 @@ function love.load()
     --实例化角色对象
     ---@type Player
     local player = Player()
-    --添加到物理世界
-    Game.world:add(player, player.x, player.y, player.w, player.h)
     ---@type Slim
     local slim = Slim()
-    Game.world:add(slim,slim.x,slim.y,slim.w,slim.h)
+
+    local itemDrop = ItemManager.createDrop(0,110,0)
     print("游戏初始化完毕!")
 end
 

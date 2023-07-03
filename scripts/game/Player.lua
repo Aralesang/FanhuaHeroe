@@ -1,4 +1,4 @@
-local GameObject = require "scripts.game.GameObject"
+local Role = require "scripts.game.Role"
 local Direction = require "scripts.enums.Direction"
 local Animation = require "scripts.components.Animation"
 local Equipment = require "scripts.components.Equipment"
@@ -8,7 +8,7 @@ local State = require "scripts.enums.State"
 local Game = require "scripts.game.Game"
 local Inventory = require "scripts.components.Inventory"
 
----@class Player:GameObject 玩家对象
+---@class Player:Role 玩家对象
 ---@field moveDir Direction 移动方向
 ---@field animation Animation | nil 动画组件
 ---@field equipment Equipment | nil 装备组件
@@ -18,7 +18,7 @@ local Inventory = require "scripts.components.Inventory"
 ---@field keyList string[] 按键记录
 ---@field state number 状态
 ---@field range number 射程
-local Player = GameObject:extend()
+local Player = Role:extend()
 
 function Player:new()
     self.super:new()
@@ -97,7 +97,12 @@ function Player:walkState(dt)
             if self.animation:getAnimName() ~= "行走" then
                 self.animation:play("行走")
             end
-            self:move(dt, self.direction) --移动
+            local cols
+            local cols_len
+            cols,cols_len = self:move(dt, self.direction) --移动
+            for i=1,cols_len do
+                print(cols[i].name)
+            end
             isMove = true
             break
         end
