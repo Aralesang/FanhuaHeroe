@@ -37,10 +37,11 @@ function love.load()
     --加载场景
     print("加主场景...")
 
-    map = sti("scenes/测试地图.lua")
+    map = sti("scenes/测试地图.lua",{"bump"})
 
     --创建物理世界
     Game.world = bump.newWorld()
+    map:bump_init(Game.world)
     --实例化角色对象
     ---@type Player
     Player(50,0)

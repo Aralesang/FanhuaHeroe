@@ -739,7 +739,9 @@ local bump = {
   
   
   -- Public library functions
-  
+  ---创建一个新的物理世界
+  ---@param cellSize any
+  ---@return World
   bump.newWorld = function(cellSize)
     cellSize = cellSize or 64
     assertIsPositiveNumber(cellSize, 'cellSize')
