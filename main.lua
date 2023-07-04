@@ -8,6 +8,7 @@ local AnimManager = require "scripts.manager.AnimManager"
 local ItemManager = require "scripts.manager.ItemManager"
 local RoleManager = require "scripts.manager.RoleManager"
 local FSM         = require "scripts.game.FSM"
+local Role        = require "scripts.game.Role"
 
 ---@type Map 地图对象
 local map
@@ -69,8 +70,10 @@ function love.update(dt)
         end
         if gameObject.update then
             gameObject:update(dt)
-            --触发有限状态机
-            FSM.call(gameObject,dt)
+            --如果是角色对象,触发有限状态机
+            if gameObject:is(Role) then
+                FSM.call(gameObject --[[@as Role]],dt)
+            end
         end
         --然后触发对象所附加的组件更新
         if gameObject.components then

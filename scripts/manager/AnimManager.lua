@@ -2,6 +2,7 @@ local JSON = require "scripts.utils.JSON"
 local Anim = require "scripts.base.Anim"
 
 ---@class AnimJsonData 动画json结构体
+---@field id number 动画id
 ---@field name string 动画名称
 ---@field path string 动画所用的图像文件路径
 ---@field frame number 动画数量

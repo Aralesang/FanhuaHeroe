@@ -11,8 +11,6 @@ local Game       = require "scripts.game.Game"
 ---@field scale table 对象缩放比例因子{x,y}
 ---@field rotate number 对象旋转弧度
 ---@field components Component[] | nil 组件
----@field load function 对象加载
----@field update function 对象帧更新 参数: dt 与上一帧的时间间隔(毫秒)
 ---@field isDestroy boolean 销毁标记,持有此标记的对象，将会在本次帧事件的末尾被清除
 ---@field central Vector2 中心坐标,相对对象0,0坐标的中心坐标位置
 ---@field direction Direction 当前对象方向
@@ -67,17 +65,17 @@ function GameObject:__call(...)
     return obj
 end
 
----后一帧刷新帧之前调用一次
+---对象加载
 function GameObject:load()
 
 end
 
----每一帧调用一次
+---对象更新
 ---@param delayTime number 距离上一帧的间隔时间
 function GameObject:update(delayTime)
 end
 
----每一帧调用一次，并将帧改变后的图像绘制到屏幕
+---图像绘制
 function GameObject:draw()
 end
 

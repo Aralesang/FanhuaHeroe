@@ -1,59 +1,69 @@
 [
     {
+        "id":1,
         "name": "闲置",
         "path": "image/role/玩家/闲置.png",
         "frame": 1,
         "loop": true
     },
     {
+        "id":2,
         "name": "行走",
         "path": "image/role/玩家/行走.png",
         "frame": 8,
         "loop": true
     },
     {
+        "id":3,
         "name": "挥击",
         "path": "image/role/玩家/挥击.png",
         "frame": 5,
         "loop": false
     },
     {
+        "id":4,
         "name": "受伤",
         "path": "image/role/玩家/受伤.png",
         "frame": 3,
         "loop": false
     },
     {
+        "id":5,
         "name": "死亡",
         "path": "image/role/玩家/死亡.png",
         "frame": 8,
         "loop": false
     },
     {
+        "id":6,
         "name": "闲置_史莱姆",
         "path": "image/role/史莱姆/闲置.png",
         "frame": 2,
         "loop": true
     },
     {
+        "id":7,
         "name": "行走_史莱姆",
         "path": "image/role/史莱姆/行走.png",
         "frame": 5,
         "loop": true
     },
     {
+        "id":8,
         "name": "攻击_史莱姆",
         "path": "image/role/史莱姆/攻击.png",
         "frame": 5,
         "loop": false
     },
     {
+        "id":9,
         "name": "受伤_史莱姆",
         "path": "image/role/史莱姆/受伤.png",
         "frame": 3,
         "loop": false
     },
     {
+        "id":10,
         "name": "死亡_史莱姆",
         "path": "image/role/史莱姆/死亡.png",
         "frame": 5,

@@ -34,23 +34,24 @@ function FSM.init()
 end
 
 ---触发状态函数
----@param obj GameObject
-function FSM.call(obj,dt)
-    local state = obj.state
+---@param role Role 目标对象
+---@param dt number 距离上一帧的间隔时间
+function FSM.call(role,dt)
+    local state = role.state
     local func = FSM.funcs[state]
-    if obj[func] == nil then
+    if role[func] == nil then
         return
     end
-    obj[func](obj,dt)
+    role[func](role,dt)
 end
 
 ---改变目标状态
----@param obj GameObject 目标对象
+---@param role Role 目标对象
 ---@param state State 目标状态
 ---@return boolean result 是否成功
-function FSM.change(obj,state)
+function FSM.change(role,state)
     --获取目标当前状态
-    local curState = obj.state
+    local curState = role.state
     if curState == nil then
         error("目标对象状态未初始化")
     end
@@ -59,7 +60,7 @@ function FSM.change(obj,state)
     if branch[state] == nil then
         return false
     end
-    obj.state = state
+    role.state = state
     return true
 end
 
