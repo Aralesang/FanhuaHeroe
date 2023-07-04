@@ -11,13 +11,18 @@ local FSM = require "scripts.game.FSM"
 ---@field state State 状态
 local Role = GameObject:extend()
 
-function Role:new()
+---构造函数
+---@param x number
+---@param y number
+function Role:new(x,y)
     self.super:new()
     self.hp = 0
     self.hpMax = 0
     self.atk = 0
     self.def = 0
     self.state = State.idle
+    self.x = x
+    self.y = y
 end
 
 ---继承

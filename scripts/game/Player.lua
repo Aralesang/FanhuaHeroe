@@ -7,6 +7,8 @@ local Camera = require "scripts.base.Camera"
 local State = require "scripts.enums.State"
 local Game = require "scripts.game.Game"
 local Inventory = require "scripts.components.Inventory"
+local Item      = require "scripts.game.Item"
+local Drop      = require "scripts.game.Drop"
 
 ---@class Player:Role 玩家对象
 ---@field moveDir Direction 移动方向
@@ -20,14 +22,15 @@ local Inventory = require "scripts.components.Inventory"
 ---@field range number 射程
 local Player = Role:extend()
 
-function Player:new()
-    self.super:new()
+function Player:new(x,y)
+    self.super:new(x,y)
     self.moveDir = Direction.Down
     self.animation = self:addComponent(Animation)
-    self.equipment = self:addComponent(Equipment)
     self.inventory = self:addComponent(Inventory)
+    self.equipment = self:addComponent(Equipment)
+
     self.keyList = {}
-    local role = RoleManager.getRole(0)
+    local role = RoleManager.getRole(1)
     for k,v in pairs(role) do
         self[k] = v
     end
@@ -38,7 +41,7 @@ function Player:load()
     --播放默认动画
     self.animation:play("闲置")
     --设置头发
-    self.equipment:equip("头发", 2)
+    self.equipment:setHair(2)
     --添加装备
     -- self.equipment:equip("衣服", 3)
     -- self.equipment:equip("下装", 4)
@@ -101,11 +104,16 @@ function Player:walkState(dt)
             for i=1,cols_len do
                 --将接触到的所有掉落物收入库存
                 ---@type Drop
-                local item = cols[i].other
-                self.inventory:add(item.itemId)
-                Game.world:remove(item)
+                local drop = cols[i].other
+                --不是掉落物的跳过
+                if not drop:is(Drop) then
+                    goto continue
+                end
+                self.inventory:add(drop.itemId)
+                Game.world:remove(drop)
                 Game:removeGameObject(cols[i].other)
-                print("获得:"..item.name)
+                print("获得:"..drop.name)
+                ::continue::
             end
             isMove = true
             break
@@ -163,10 +171,17 @@ end
 function Player:keypressed(key)
     table.insert(self.keyList, key)
     if key == "q" then
-        self.inventory:use(0)
+        self.inventory:use(1)
     end
     if key == "e" then
-        self.inventory:equip(1)
+        --从背包中寻找装备
+        local items = self.inventory.items
+        for _,v in pairs(items) do
+            local id = v.id
+            if v["slot"] then
+                self.equipment:equip(id)
+            end
+        end
     end
 end
 

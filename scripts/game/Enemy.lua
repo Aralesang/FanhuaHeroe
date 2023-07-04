@@ -18,8 +18,8 @@ function Enemy:extend()
     return cls
 end
 
-function Enemy:new()
-    self.super:new()
+function Enemy:new(x,y)
+    self.super:new(x,y)
 end
 
 return Enemy

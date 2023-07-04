@@ -15,7 +15,7 @@ local Object = {}
 Object.__index = Object
 
 ---构造函数
-function Object:new()
+function Object:new(...)
   local obj = setmetatable({}, self)
   return obj
 end

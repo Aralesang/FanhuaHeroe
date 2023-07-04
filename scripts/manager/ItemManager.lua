@@ -66,6 +66,9 @@ end
 ---@param id number 道具id
 ---@return Item
 function ItemManager.getItem(id)
+    if id == nil then
+        error("道具模板id为nil!")
+    end
     if ItemManager.items == nil then
         error("道具模板列表为空！")
     end
@@ -110,7 +113,7 @@ end
 function ItemManager.batchItems()
     local i = ItemManager
     --微弱的治愈药剂
-    i.register(0, function(target, item)
+    i.register(1, function(target, item)
         target.hp = target.hp + item["hp"]
         print(string.format("%s恢复了%d点生命", target.name, item["hp"]))
     end)

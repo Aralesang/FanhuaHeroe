@@ -13,10 +13,13 @@ local ItemManager = require "scripts.manager.ItemManager"
 ---@field range number 射程
 local Slim = Enemy:extend()
 
-function Slim:new()
-    self.super:new()
+---构造函数
+---@param x number
+---@param y number
+function Slim:new(x,y)
+    self.super:new(x,y)
     self:setState(State.idle)
-    local role = RoleManager.getRole(1)
+    local role = RoleManager.getRole(2)
     for k,v in pairs(role) do
         self[k] = v
     end
@@ -121,7 +124,7 @@ function Slim:deathState()
             self:destroy()
              --在死亡位置创建一个掉落物
              math.randomseed(os.time())
-             local itemId = math.random(0,5)
+             local itemId = math.random(1,6)
              local drop = ItemManager.createDrop(itemId,self.x,self.y)
              print("掉落物品:"..drop.name)
              Game.world:remove(self)

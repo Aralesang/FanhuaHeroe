@@ -42,10 +42,15 @@ function love.load()
     Game.world = bump.newWorld()
     --实例化角色对象
     ---@type Player
-    Player()
+    Player(50,0)
     ---@type Slim
-    Slim()
+    Slim(0,0)
     ItemManager.createDrop(1,110,0)
+    ItemManager.createDrop(2,120,0)
+    ItemManager.createDrop(3,130,0)
+    ItemManager.createDrop(4,140,0)
+    ItemManager.createDrop(5,150,0)
+    ItemManager.createDrop(6,160,0)
     print("游戏初始化完毕!")
 end
 
