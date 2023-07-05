@@ -9,9 +9,11 @@ local ItemManager = require "scripts.manager.ItemManager"
 local RoleManager = require "scripts.manager.RoleManager"
 local FSM         = require "scripts.game.FSM"
 local Role        = require "scripts.game.Role"
+local gamera = require "scripts.utils.gamera"
 
 ---@type Map 地图对象
 local map
+local cam = gamera:new()
 
 function love.load()
     -- if love.system.getOS() == "Windows" then
@@ -47,7 +49,6 @@ function love.load()
     Player(50,0)
     ---@type Slim
     Slim(0,0)
-    Game.world:add({},100,0,50,50)
     print("游戏初始化完毕!")
 end
 
@@ -105,7 +106,9 @@ end
 --每帧绘制
 function love.draw()
     --绘制地图
-    map:draw(0, 0, 2)
+    map:draw(0, 0)
+    ---@diagnostic disable-next-line: undefined-field
+    map:bump_draw()
     --绘制对象
     for _, value in pairs(Game.gameObjects) do
         --绘制游戏对象

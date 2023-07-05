@@ -36,6 +36,7 @@ function GameObject:new()
     self.direction = Direction.Down
     self.isLoad = false
     self.speed = 0
+    self.central = {x = 8,y = 16}
 end
 
 ---继承
@@ -194,11 +195,11 @@ function GameObject:move(dt, dir)
     if dx ~= 0 or dy ~= 0 then
         local cols
         local cols_len = 0
-        local x = math.floor(self.x + dx)
-        local y = math.floor(self.y + dy)
-
-        self.x, self.y, cols, cols_len =  Game.world:move(self, x, y)
-        print(self.x)
+        local x = self.x + dx
+        local y = self.y + dy
+        self.x, self.y, cols, cols_len =  Game.world:move(self, x, y,function (item,other)
+            return "slide"
+        end)
         return cols, cols_len
     end
     return {},0
