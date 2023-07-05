@@ -194,7 +194,11 @@ function GameObject:move(dt, dir)
     if dx ~= 0 or dy ~= 0 then
         local cols
         local cols_len = 0
-        self.x, self.y, cols, cols_len =  Game.world:move(self, self.x + dx, self.y + dy)
+        local x = math.floor(self.x + dx)
+        local y = math.floor(self.y + dy)
+
+        self.x, self.y, cols, cols_len =  Game.world:move(self, x, y)
+        print(self.x)
         return cols, cols_len
     end
     return {},0

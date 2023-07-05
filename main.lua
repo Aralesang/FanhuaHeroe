@@ -47,12 +47,7 @@ function love.load()
     Player(50,0)
     ---@type Slim
     Slim(0,0)
-    ItemManager.createDrop(1,110,0)
-    ItemManager.createDrop(2,120,0)
-    ItemManager.createDrop(3,130,0)
-    ItemManager.createDrop(4,140,0)
-    ItemManager.createDrop(5,150,0)
-    ItemManager.createDrop(6,160,0)
+    Game.world:add({},100,0,50,50)
     print("游戏初始化完毕!")
 end
 

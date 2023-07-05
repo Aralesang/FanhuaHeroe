@@ -106,7 +106,7 @@ function Player:walkState(dt)
                 ---@type Drop
                 local drop = cols[i].other
                 --不是掉落物的跳过
-                if not drop:is(Drop) then
+                if not drop.is or not drop:is(Drop) then
                     goto continue
                 end
                 self.inventory:add(drop.itemId)
