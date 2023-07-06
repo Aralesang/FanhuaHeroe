@@ -65,6 +65,12 @@ local bump = {
     assertIsPositiveNumber(h, 'h')
   end
   
+  ---@alias filter
+  ---| '"slide"' 滑动
+  ---| '"cross"' 交叉
+  ---| '"touch"' 接触
+  ---| '"bounce"' 反弹
+
   local defaultFilter = function()
     return 'slide'
   end
@@ -692,7 +698,7 @@ local bump = {
   
     end
   end
-  
+
   function World:move(item, goalX, goalY, filter)
     local actualX, actualY, cols, len = self:check(item, goalX, goalY, filter)
   

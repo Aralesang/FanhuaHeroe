@@ -23,6 +23,7 @@ function Slim:new(x,y)
     for k,v in pairs(role) do
         self[k] = v
     end
+    self.tag = "slim"
     Game:addEnemys(self)
 end
 
@@ -42,7 +43,7 @@ function Slim:idleState()
     if self.animation:getAnimName() ~= "闲置_史莱姆" then
         self.animation:play("闲置_史莱姆")
     end
-    if self.target == nil or self.target.isDestroy then
+    if self.target == nil then
         self.target = nil
         return
     end
@@ -121,13 +122,12 @@ end
 function Slim:deathState()
     if self.animation:getAnimName() ~= "死亡_史莱姆" then
         self.animation:play("死亡_史莱姆", nil, function()
-            self:destroy()
              --在死亡位置创建一个掉落物
              math.randomseed(os.time())
              local itemId = math.random(1,6)
              local drop = ItemManager.createDrop(itemId,self.x,self.y)
              print("掉落物品:"..drop.name)
-             Game.world:remove(self)
+             self:destroy()
         end)
     end
 end

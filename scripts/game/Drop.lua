@@ -12,7 +12,7 @@ function Drop:new(itemId,name,x,y)
     self.x = x
     self.y = y
     self.name = name
-    
+    self.tag = "drop"
 end
 
 return Drop

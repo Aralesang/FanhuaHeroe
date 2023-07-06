@@ -40,10 +40,6 @@ end
 function Component:draw()
 end
 
---组件销毁前一帧率调用
-function Component:onDestroy()
-end
-
 ---键盘按下
 ---@param key number 键盘键入值
 function Component:keypressed(key)

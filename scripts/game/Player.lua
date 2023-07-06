@@ -1,14 +1,14 @@
-local Role = require "scripts.game.Role"
-local Direction = require "scripts.enums.Direction"
-local Animation = require "scripts.components.Animation"
-local Equipment = require "scripts.components.Equipment"
+local Role        = require "scripts.game.Role"
+local Direction   = require "scripts.enums.Direction"
+local Animation   = require "scripts.components.Animation"
+local Equipment   = require "scripts.components.Equipment"
 local RoleManager = require "scripts.manager.RoleManager"
-local Camera = require "scripts.base.Camera"
-local State = require "scripts.enums.State"
-local Game = require "scripts.game.Game"
-local Inventory = require "scripts.components.Inventory"
-local Item      = require "scripts.game.Item"
-local Drop      = require "scripts.game.Drop"
+local Camera      = require "scripts.base.Camera"
+local State       = require "scripts.enums.State"
+local Game        = require "scripts.game.Game"
+local Inventory   = require "scripts.components.Inventory"
+local Item        = require "scripts.game.Item"
+local Drop        = require "scripts.game.Drop"
 
 ---@class Player:Role 玩家对象
 ---@field moveDir Direction 移动方向
@@ -20,10 +20,10 @@ local Drop      = require "scripts.game.Drop"
 ---@field keyList string[] 按键记录
 ---@field state number 状态
 ---@field range number 射程
-local Player = Role:extend()
+local Player      = Role:extend()
 
-function Player:new(x,y)
-    self.super:new(x,y)
+function Player:new(x, y)
+    self.super:new(x, y)
     self.moveDir = Direction.Down
     self.animation = self:addComponent(Animation)
     self.inventory = self:addComponent(Inventory)
@@ -31,7 +31,7 @@ function Player:new(x,y)
 
     self.keyList = {}
     local role = RoleManager.getRole(1)
-    for k,v in pairs(role) do
+    for k, v in pairs(role) do
         self[k] = v
     end
     Game:addPlayer(self)
@@ -59,9 +59,6 @@ function Player:update(dt)
     local frameIndex = self.animation.frameIndex
     local animName = self.animation:getAnimName()
     self.equipment:changeAnim(animName, frameIndex)
-    --相机跟随
-    local width, height = love.window.getMode()
-    Camera:setPosition(self.x - width / 2, self.y - height / 2)
 end
 
 ---如果进入闲置状态
@@ -100,7 +97,17 @@ function Player:walkState(dt)
             end
             local cols
             local cols_len
-            cols,cols_len = self:move(dt, self.direction) --移动
+            cols, cols_len = self:move(dt, self.direction, function(item, other)
+                if not other.tag then
+                    return "slide"
+                end
+                --如果是掉落物
+                if other.tag == "drop" then
+                    return "cross"
+                end
+                return "slide"
+            end) --移动
+            --print(self.x)
             for i=1,cols_len do
                 --将接触到的所有掉落物收入库存
                 ---@type Drop
@@ -110,8 +117,7 @@ function Player:walkState(dt)
                     goto continue
                 end
                 self.inventory:add(drop.itemId)
-                Game.world:remove(drop)
-                Game:removeGameObject(cols[i].other)
+                Game:removeGameObject(drop)
                 print("获得:"..drop.name)
                 ::continue::
             end
@@ -152,7 +158,7 @@ end
 
 ---受伤状态
 function Player:damageState()
-    self.animation:play("受伤",nil,function ()
+    self.animation:play("受伤", nil, function()
         --print("受伤硬直结束")
         self:setState(State.idle)
     end)
@@ -162,7 +168,7 @@ end
 function Player:deathState()
     self.animation:play("死亡", nil, function()
         self:destroy()
-        print(self.name.."已死")
+        print(self.name .. "已死")
     end)
 end
 
@@ -176,7 +182,7 @@ function Player:keypressed(key)
     if key == "e" then
         --从背包中寻找装备
         local items = self.inventory.items
-        for _,v in pairs(items) do
+        for _, v in pairs(items) do
             local id = v.id
             if v["slot"] then
                 self.equipment:equip(id)
@@ -200,7 +206,7 @@ end
 ---@param obj GameObject
 ---@param atk number
 function Player:onDamage(obj, atk)
-    print(string.format("hp:%d/%d",self.hp,self.hpMax))
+    print(string.format("hp:%d/%d", self.hp, self.hpMax))
     self:setState(State.damage)
 end
 

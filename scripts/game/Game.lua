@@ -19,7 +19,7 @@ local Game =
 ---@param obj GameObject 游戏对象
 function Game:addGameObject(obj)
     self.gameObjects[obj] = obj
-    Game.world:add(obj,obj.x,obj.y,obj.w,obj.h)
+    self:addCollision(obj)
 end
 
 ---清除一个游戏对象
@@ -29,27 +29,41 @@ function Game:removeGameObject(obj)
     self.players[obj] = nil
     self.enemys[obj] = nil
     self.drops[obj] = nil
+    self.world:remove(obj)
 end
 
 ---添加玩家
 ---@param obj Player
 function Game:addPlayer(obj)
-    Game:addGameObject(obj)
+    self:addGameObject(obj)
     self.players[obj] = obj
 end
 
 ---添加敌人
 ---@param obj Enemy
 function Game:addEnemys(obj)
-    Game:addGameObject(obj)
+    self:addGameObject(obj)
     self.enemys[obj] = obj
 end
 
----添加敌人
+---添加掉落物
 ---@param obj Drop
 function Game:addDrops(obj)
-    Game:addGameObject(obj)
+    self:addGameObject(obj)
     self.drops[obj] = obj
+end
+
+---添加物理对象
+---@param obj {x:number,y:number,h:number,w:number,tag:string}
+function Game:addCollision(obj)
+    self.world:add(obj,obj.x or 0,obj.y or 0, obj.w or 1, obj.h or 1)
+end
+
+---检查碰撞
+---@param obj {x:number,y:number,h:number,w:number,tag:string}
+---@param filter fun(item:GameObject,other:GameObject):filter
+function Game:checkCollision(obj, filter)
+    Game.world:check(obj,obj.x,obj.y,filter)
 end
 
 return Game

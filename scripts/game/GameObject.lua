@@ -11,7 +11,6 @@ local Game       = require "scripts.game.Game"
 ---@field scale table 对象缩放比例因子{x,y}
 ---@field rotate number 对象旋转弧度
 ---@field components Component[] | nil 组件
----@field isDestroy boolean 销毁标记,持有此标记的对象，将会在本次帧事件的末尾被清除
 ---@field central Vector2 中心坐标,相对对象0,0坐标的中心坐标位置
 ---@field direction Direction 当前对象方向
 ---@field isLoad boolean 是否已经调用过load函数
@@ -22,21 +21,21 @@ local Game       = require "scripts.game.Game"
 local GameObject = Object:extend()
 
 ---构造函数
-function GameObject:new()
+function GameObject:new(x,y,w,h)
     self.name = ""
-    self.x = 0
-    self.y = 0
-    self.w = 0
-    self.h = 0
+    self.x = x or 0
+    self.y = y or 0
+    self.w = w or 0
+    self.h = h or 0
     self.scale = { x = 1, y = 1 }
     self.rotate = 0
     self.components = nil
-    self.isDestroy = false
     self.central = Vector2.zero()
     self.direction = Direction.Down
     self.isLoad = false
     self.speed = 0
     self.central = {x = 8,y = 16}
+    self.tag = ""
 end
 
 ---继承
@@ -153,7 +152,7 @@ end
 
 ---对象销毁
 function GameObject:destroy()
-    self.isDestroy = true
+    Game:removeGameObject(self)
 end
 
 ---设置对象方向
@@ -177,8 +176,9 @@ end
 ---移动
 ---@param dt number 距离上一帧的间隔时间
 ---@param dir Direction 移动方向
+---@param filter fun(item:table,other:table):filter
 ---@return table cols, number cols_len
-function GameObject:move(dt, dir)
+function GameObject:move(dt, dir, filter)
     local speed = self.speed
     local dx, dy = 0, 0
     --获取移动
@@ -197,9 +197,7 @@ function GameObject:move(dt, dir)
         local cols_len = 0
         local x = self.x + dx
         local y = self.y + dy
-        self.x, self.y, cols, cols_len =  Game.world:move(self, x, y,function (item,other)
-            return "slide"
-        end)
+        self.x, self.y, cols, cols_len =  Game.world:move(self, x, y, filter)
         return cols, cols_len
     end
     return {},0

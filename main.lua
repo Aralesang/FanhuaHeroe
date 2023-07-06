@@ -10,10 +10,11 @@ local RoleManager = require "scripts.manager.RoleManager"
 local FSM         = require "scripts.game.FSM"
 local Role        = require "scripts.game.Role"
 local gamera = require "scripts.utils.gamera"
+local GameObject = require "scripts.game.GameObject"
 
 ---@type Map 地图对象
 local map
-local cam = gamera:new()
+-- local cam = gamera:new()
 
 function love.load()
     -- if love.system.getOS() == "Windows" then
@@ -49,15 +50,17 @@ function love.load()
     Player(50,0)
     ---@type Slim
     Slim(0,0)
+
+    ---@type GameObject
+    local block = GameObject(100,0,16,16)
+    block.tag = "block"
+    Game:addCollision(block)
     print("游戏初始化完毕!")
 end
 
 --每帧逻辑处理
 ---@param dt number 距离上一帧的间隔时间
 function love.update(dt)
-    ---删除池
-    ---@type GameObject[]
-    local destroyPool = {}
     --触发对象更新
     for key, gameObject in pairs(Game.gameObjects) do
         --首先触发对象本身的更新
@@ -84,21 +87,8 @@ function love.update(dt)
                 if component.update then
                     component:update(dt)
                 end
-                --触发组件销毁
-                if component.onDestroy and gameObject.isDestroy then
-                    component:onDestroy()
-                end
             end
         end
-        if gameObject.isDestroy then
-            table.insert(destroyPool, key)
-            gameObject:onDestroy()
-        end
-    end
-
-    for i = #destroyPool, 1, -1 do
-        local obj = destroyPool[i]
-        Game:removeGameObject(obj)
     end
     map:update(dt)
 end
