@@ -17,7 +17,7 @@
         "id":3,
         "name": "挥击",
         "path": "image/role/玩家/挥击.png",
-        "frame": 5,
+        "frame": 4,
         "loop": false
     },
     {

@@ -25,6 +25,9 @@ function Player:new(x, y)
     self.inventory = self:addComponent(Inventory)
     self.equipment = self:addComponent(Equipment)
     self.keyList = {}
+    self.x = x
+    self.y = y
+    self.central = {x = 8,y = 16}
     local role = RoleManager.getRole(1)
     for k, v in pairs(role) do
         self[k] = v
@@ -36,7 +39,7 @@ function Player:load()
     --播放默认动画
     self.animation:play("闲置")
     --设置头发
-    self.equipment:setHair(2)
+    self.equipment:setHair(4)
     --添加装备
     -- self.equipment:equip("衣服", 3)
     -- self.equipment:equip("下装", 4)
@@ -54,8 +57,6 @@ function Player:update(dt)
     local frameIndex = self.animation.frameIndex
     local animName = self.animation:getAnimName()
     self.equipment:changeAnim(animName, frameIndex)
-    --同步相机
-    Game.camera:setPosition(self.x,self.y)
 end
 
 ---如果进入闲置状态
@@ -104,7 +105,6 @@ function Player:walkState(dt)
                 end
                 return "slide"
             end) --移动
-            print(self.x)
             for i=1,cols_len do
                 --将接触到的所有掉落物收入库存
                 ---@type Drop

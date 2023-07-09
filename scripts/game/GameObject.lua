@@ -34,7 +34,6 @@ function GameObject:new(x,y,w,h)
     self.direction = Direction.Down
     self.isLoad = false
     self.speed = 0
-    self.central = {x = 8,y = 16}
     self.tag = ""
 end
 

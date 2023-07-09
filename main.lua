@@ -11,8 +11,10 @@ local FSM         = require "scripts.game.FSM"
 local Role        = require "scripts.game.Role"
 local gamera = require "scripts.utils.gamera"
 local Timer = require "scripts.utils.hump.timer"
-
+local Camera = require "scripts.utils.hump.camera"
 local map
+local camera
+local player
 
 function love.load()
     -- if love.system.getOS() == "Windows" then
@@ -45,14 +47,14 @@ function love.load()
     map:bump_init(Game.world)
     --实例化角色对象
     ---@type Player
-    local player = Player(50,0)
+    player = Player(1280/4 - 25,720/4 + 50)
+    camera = Camera(0,0,3)
     ---@type Slim
-    Slim(0,0)
+    Slim(1280/4 - 16,720/4 -32 + 20)
     
-    --加载相机
-    local cam = gamera.new(0,0,1280,720)
-    Game.camera = cam
-    cam:setWindow(0,0,800,600)
+    ItemManager.createDrop(4,1280/4,720/4)
+    ItemManager.createDrop(5,1280/4,720/4)
+    ItemManager.createDrop(6,1280/4,720/4)
     print("游戏初始化完毕!")
 end
 
@@ -61,6 +63,7 @@ end
 function love.update(dt)
     Timer.update(dt)
     map:update(dt)
+    camera:lookAt(player.x,player.y)
     --触发对象更新
     for _, gameObject in pairs(Game.gameObjects) do
         --首先触发对象本身的更新
@@ -94,10 +97,10 @@ end
 
 --每帧绘制
 function love.draw()
-    --绘制地图
-    map:draw(0, 0)
     ---@diagnostic disable-next-line: undefined-field
-    map:bump_draw()
+    camera:attach()
+    --绘制地图
+    map:draw(1280 / 6  - player.x, 720/6 - player.y,3)
     --绘制对象
     for _, value in pairs(Game.gameObjects) do
         --绘制游戏对象
@@ -115,6 +118,8 @@ function love.draw()
             Debug.drawBox(value,0,1,0)
         end
     end
+    --map:bump_draw()
+    camera:detach()
     Debug.showFPS()
 end
 
