@@ -38,21 +38,6 @@ function GameObject:new(x,y,w,h)
     self.tag = ""
 end
 
----继承
----@return GameObject
-function GameObject:extend()
-    local cls = {}
-    for k, v in pairs(self) do
-        if k:find("__") == 1 then
-            cls[k] = v
-        end
-    end
-    cls.__index = cls
-    cls.super = self
-    setmetatable(cls, self)
-    return cls
-end
-
 ---元方法
 ---@private
 ---@vararg function
@@ -117,17 +102,17 @@ function GameObject:addComponent(componentType)
     if componentType == nil then
         error("附加组件失败,组件类型为空")
     end
-    ---@type Component
-    local component = componentType()
-    component.super:new()
     if self.components == nil then
         self.components = {}
     end
-    table.insert(self.components, component)
+    ---@type Component
+    local component = componentType()
+    component.super:new()
     component.gameObject = self
     if component.awake then
         component:awake()
     end
+    table.insert(self.components, component)
     return component
 end
 
@@ -138,9 +123,6 @@ end
 function GameObject:getComponent(componentType)
     if componentType == nil then
         error("componentType 为空")
-    end
-    if self.components == nil then
-        return nil
     end
     for _, v in pairs(self.components) do
         if v:is(componentType) then

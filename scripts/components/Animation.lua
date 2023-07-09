@@ -22,11 +22,12 @@ local Animation = Component:extend()
 ---@private
 function Animation:new()
     self.frameIndex = -1
-    self.eventList = nil
+    self.eventList = {}
     self.frameTime = 0.25
     self.currentTime = 0
     self.direction = Direction.Down
     self.state = AnimationState.Stop
+    self.anims = {}
 end
 
 ---创建一个动画
@@ -40,9 +41,6 @@ function Animation:create(name, imagePath, frame)
         return
     end
     local animLayer = Anim(name, image, frame)
-    if self.anims == nil then
-        self.anims = {}
-    end
     self.anims[name] = animLayer
     print("创建动画:[" .. animLayer.name .. "] 图像路径:" .. imagePath)
 end
@@ -51,9 +49,6 @@ end
 ---@param name string
 ---@return Anim
 function Animation:addAnim(name)
-    if self.anims == nil then
-        self.anims = {}
-    end
     local anim = AnimManager.careteAnim(name)
     self.anims[name] = anim
     return anim
@@ -72,9 +67,6 @@ end
 ---@param name string 目标动画名称
 ---@return Anim|nil anim 目标动画对象
 function Animation:getAnim(name)
-    if self.anims == nil then
-        self.anims = {}
-    end
     local anim = self.anims[name]
     --如果动画不存在，则尝试创建
     if anim == nil then

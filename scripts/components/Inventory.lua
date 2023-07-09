@@ -65,4 +65,8 @@ function Inventory:use(id)
     print("未拥有物品:" .. id)
 end
 
+function Inventory:__tostring()
+    return "Inventory"
+end
+
 return Inventory

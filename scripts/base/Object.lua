@@ -62,13 +62,6 @@ function Object:is(t)
   return false
 end
 
--- ---返回对象名称
--- ---@private
--- ---@return string
--- function Object:__tostring()
---   return "Object"
--- end
-
 ---元方法
 ---@private
 ---@vararg function

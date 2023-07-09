@@ -2,8 +2,6 @@ require "scripts.game.GameObject"
 require "scripts.components.Animation"
 require "scripts.components.DebugDraw"
 local JSON = require "scripts.utils.JSON"
-require "scripts.components.Equipment"
-local FSM = require "scripts.game.FSM"
 
 ---@class RoleJsonData 角色模板
 local RoleJsonData = {}

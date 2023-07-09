@@ -10,11 +10,9 @@ local RoleManager = require "scripts.manager.RoleManager"
 local FSM         = require "scripts.game.FSM"
 local Role        = require "scripts.game.Role"
 local gamera = require "scripts.utils.gamera"
-local GameObject = require "scripts.game.GameObject"
+local Timer = require "scripts.utils.hump.timer"
 
----@type Map 地图对象
 local map
--- local cam = gamera:new()
 
 function love.load()
     -- if love.system.getOS() == "Windows" then
@@ -47,22 +45,24 @@ function love.load()
     map:bump_init(Game.world)
     --实例化角色对象
     ---@type Player
-    Player(50,0)
+    local player = Player(50,0)
     ---@type Slim
     Slim(0,0)
-
-    ---@type GameObject
-    local block = GameObject(100,0,16,16)
-    block.tag = "block"
-    Game:addCollision(block)
+    
+    --加载相机
+    local cam = gamera.new(0,0,1280,720)
+    Game.camera = cam
+    cam:setWindow(0,0,800,600)
     print("游戏初始化完毕!")
 end
 
 --每帧逻辑处理
 ---@param dt number 距离上一帧的间隔时间
 function love.update(dt)
+    Timer.update(dt)
+    map:update(dt)
     --触发对象更新
-    for key, gameObject in pairs(Game.gameObjects) do
+    for _, gameObject in pairs(Game.gameObjects) do
         --首先触发对象本身的更新
         if gameObject.load and gameObject.isLoad == false then
             gameObject:load()
@@ -90,7 +90,6 @@ function love.update(dt)
             end
         end
     end
-    map:update(dt)
 end
 
 --每帧绘制

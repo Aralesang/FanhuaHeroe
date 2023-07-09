@@ -10,19 +10,6 @@ function Component:new()
   self.isLoad = false
 end
 
-function Component:extend()
-  local cls = {}
-  for k, v in pairs(self) do
-    if k:find("__") == 1 then
-      cls[k] = v
-    end
-  end
-  cls.__index = cls
-  cls.super = self
-  setmetatable(cls, self)
-  return cls
-end
-
 ---组件附加到对象后，立即调用一次
 function Component:awake()
 end

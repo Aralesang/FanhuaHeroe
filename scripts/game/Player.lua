@@ -1,20 +1,16 @@
 local Role        = require "scripts.game.Role"
 local Direction   = require "scripts.enums.Direction"
-local Animation   = require "scripts.components.Animation"
 local Equipment   = require "scripts.components.Equipment"
 local RoleManager = require "scripts.manager.RoleManager"
-local Camera      = require "scripts.base.Camera"
 local State       = require "scripts.enums.State"
 local Game        = require "scripts.game.Game"
-local Inventory   = require "scripts.components.Inventory"
-local Item        = require "scripts.game.Item"
 local Drop        = require "scripts.game.Drop"
+local Animation   = require "scripts.components.Animation"
+local Inventory   = require "scripts.components.Inventory"
 
 ---@class Player:Role 玩家对象
 ---@field moveDir Direction 移动方向
----@field animation Animation | nil 动画组件
 ---@field equipment Equipment | nil 装备组件
----@field inventory Inventory | nil 库存组件
 ---@field name string | nil 角色名称
 ---@field speed number 角色速度
 ---@field keyList string[] 按键记录
@@ -28,7 +24,6 @@ function Player:new(x, y)
     self.animation = self:addComponent(Animation)
     self.inventory = self:addComponent(Inventory)
     self.equipment = self:addComponent(Equipment)
-
     self.keyList = {}
     local role = RoleManager.getRole(1)
     for k, v in pairs(role) do
@@ -59,6 +54,8 @@ function Player:update(dt)
     local frameIndex = self.animation.frameIndex
     local animName = self.animation:getAnimName()
     self.equipment:changeAnim(animName, frameIndex)
+    --同步相机
+    Game.camera:setPosition(self.x,self.y)
 end
 
 ---如果进入闲置状态
@@ -107,7 +104,7 @@ function Player:walkState(dt)
                 end
                 return "slide"
             end) --移动
-            --print(self.x)
+            print(self.x)
             for i=1,cols_len do
                 --将接触到的所有掉落物收入库存
                 ---@type Drop
@@ -138,9 +135,8 @@ end
 ---普通攻击
 function Player:attackState()
     self.animation:play("挥击", function(index)
-        --print("普攻帧事件",index)
         if index == 3 then
-            --print("触发伤害帧!")
+            print("触发伤害帧!")
             --检查所有的敌对对象
             for _, enemy in pairs(Game.enemys) do
                 --敌人与玩家的距离

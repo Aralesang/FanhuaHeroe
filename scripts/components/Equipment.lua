@@ -185,4 +185,8 @@ function Equipment:changeAnim(animName, frameIndex)
     self.frameIndex = frameIndex
 end
 
+function Equipment:__tostring()
+    return "Equipment"
+end
+
 return Equipment

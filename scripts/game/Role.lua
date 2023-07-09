@@ -1,6 +1,9 @@
 local GameObject = require "scripts.game.GameObject"
 local State = require "scripts.enums.State"
 local FSM = require "scripts.game.FSM"
+local Animation   = require "scripts.components.Animation"
+local Inventory   = require "scripts.components.Inventory"
+
 
 ---@class Role:GameObject 角色对象
 ---@field speed number 移动速度
@@ -15,7 +18,7 @@ local Role = GameObject:extend()
 ---@param x number
 ---@param y number
 function Role:new(x,y)
-    self.super:new()
+    self.super:new(x,y)
     self.hp = 0
     self.hpMax = 0
     self.atk = 0
@@ -23,21 +26,6 @@ function Role:new(x,y)
     self.state = State.idle
     self.x = x
     self.y = y
-end
-
----继承
----@return Role
-function Role:extend()
-    local cls = {}
-    for k, v in pairs(self) do
-        if k:find("__") == 1 then
-            cls[k] = v
-        end
-    end
-    cls.__index = cls
-    cls.super = self
-    setmetatable(cls, self)
-    return cls
 end
 
 ---元受伤函数

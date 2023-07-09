@@ -1,12 +1,12 @@
 local Enemy = require "scripts.game.Enemy"
 local State = require "scripts.enums.State"
 local RoleManager = require "scripts.manager.RoleManager"
-local Animation = require "scripts.components.Animation"
 local Game = require "scripts.game.Game"
 local ItemManager = require "scripts.manager.ItemManager"
+local Animation   = require "scripts.components.Animation"
+local Inventory   = require "scripts.components.Inventory"
 
 ---@class Slim:Enemy 史莱姆
----@field animation Animation 动画组件
 ---@field sight number 视野范围
 ---@field state number 状态
 ---@field target GameObject 仇恨目标
@@ -18,6 +18,8 @@ local Slim = Enemy:extend()
 ---@param y number
 function Slim:new(x,y)
     self.super:new(x,y)
+    self.animation = self:addComponent(Animation)
+    self.inventory = self:addComponent(Inventory)
     self:setState(State.idle)
     local role = RoleManager.getRole(2)
     for k,v in pairs(role) do
@@ -28,9 +30,7 @@ function Slim:new(x,y)
 end
 
 function Slim:load()
-    self.animation = self:addComponent(Animation)
     self.animation:play("闲置_史莱姆")
-
     --测试代码：直接将第一个玩家作为仇恨目标
     for _, player in pairs(Game.players) do
         --self.target = player
