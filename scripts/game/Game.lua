@@ -5,7 +5,7 @@
 ---@field enemys Enemy[] 敌对对象集合
 ---@field drops Drop[] 掉落物集合
 ---@field world World 物理世界
----@field camera gamera 相机
+---@field camera Camera 相机
 ---@field timer Timer 计时器
 local Game =
 {

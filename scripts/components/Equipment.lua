@@ -4,7 +4,7 @@ local Animation = require "scripts.components.Animation"
 local Inventory = require "scripts.components.Inventory"
 
 ---@class Equipment:Component 装备组件
----@field private slots Slot[] 装备槽有序列表
+---@field slots Slot[] 装备槽有序列表
 ---@field animName string 当前动画名称
 ---@field frameIndex number 当前动画帧下标
 ---@field animation Animation | nil 动画组件
@@ -14,15 +14,15 @@ local Equipment = Component:extend()
 function Equipment:extend()
     local cls = {}
     for k, v in pairs(self) do
-      if k:find("__") == 1 then
-        cls[k] = v
-      end
+        if k:find("__") == 1 then
+            cls[k] = v
+        end
     end
     cls.__index = cls
     cls.super = self
     setmetatable(cls, self)
     return cls
-  end
+end
 
 ---构造函数
 function Equipment:new()
@@ -39,11 +39,13 @@ function Equipment:awake()
         error("对象未附加库存组件")
     end
     --添加装备插槽
-    self:addSlot("发型","身体部件")
-    self:addSlot("帽子","装备")
-    self:addSlot("上衣","装备")
-    self:addSlot("下装","装备")
-    self:addSlot("武器","装备")
+    self:addSlot("发型", "身体部件")
+    self:addSlot("帽子", "装备")
+    self:addSlot("上衣", "装备")
+    self:addSlot("下装", "装备")
+    self:addSlot("武器", "装备")
+    self:addSlot("戒指", "饰品")
+    self:addSlot("项链", "饰品")
 end
 
 function Equipment:update(dt)
@@ -96,18 +98,21 @@ end
 ---| '"下装"'
 ---| '"武器"'
 ---| '"发型"'
+---| '"戒指"'
+---| '"项链"'
 
 ---@alias body
 ---| '"装备"'
 ---| '"身体部件"'
+---| '"饰品"'
 
 ---添加一个装备槽
 ---@private
 ---@param name slot 装备槽名称
 ---@param type? body 装备槽类型
-function Equipment:addSlot(name,type)
+function Equipment:addSlot(name, type)
     ---@type Slot
-    local slot = Slot(name,type or "装备")
+    local slot = Slot(name, type or "装备")
     table.insert(self.slots, slot)
 end
 
@@ -127,30 +132,35 @@ end
 ---@param itemId number 要装备的道具的id
 function Equipment:equip(itemId)
     local items = self.inventory.items
-     --库存中寻找目标道具
-     for _, v in pairs(items) do
+    --库存中寻找目标道具
+    for _, v in pairs(items) do
         if v.id == itemId then
             --装备目标物品
             local slotName = v["slot"]
             --如果目标道具没有可用装备槽
             if slotName == nil then
-                print("目标道具["..v.id.."]没有设置slot")
+                print("目标道具[" .. v.id .. "]没有设置slot")
                 return
             end
             --检查目标槽中是否有装备
             local slot = self:getSlot(slotName)
             if slot == nil then
-                print("装备槽:"..slotName.."不存在")
+                print("装备槽:" .. slotName .. "不存在")
                 return
             end
-            --装备槽中本来就装备该装备，则无需操作
+            --装备槽中本来就装备该装备，则卸除
             if slot.itemId == itemId then
+                self:unequip(slotName)
                 return
             elseif slot.itemId ~= 0 and slot.itemId ~= itemId then --装备槽不为空，且装备的和目标装备不同，则先卸除已有装备
                 self:unequip(slotName)
             end
+            local item = self.inventory:get(itemId)
+            if item then
+                item:use(self.gameObject)
+            end
             slot.itemId = itemId
-            print("装备:"..v.name)
+            print("装备:" .. v.name)
             return
         end
     end
@@ -163,6 +173,11 @@ function Equipment:unequip(name)
     local slot = self:getSlot(name)
     if slot == nil then
         error("装备槽 [" .. name .. "] 不存在!")
+    end
+    local item = self.inventory:get(slot.itemId)
+    if item then
+        item:unequip(self.gameObject)
+        print("卸除:"..item.name)
     end
     slot.itemId = 0
 end
@@ -183,6 +198,20 @@ end
 function Equipment:changeAnim(animName, frameIndex)
     self.animName = animName
     self.frameIndex = frameIndex
+end
+
+---检查物品是否正在被装备
+---@param itemId number
+---@return boolean
+function Equipment:isEquip(itemId)
+    for _, value in pairs(self.slots) do
+        if value.type ~= "身体部件" then
+            if value.itemId == itemId then
+                return true
+            end
+        end
+    end
+    return false
 end
 
 function Equipment:__tostring()

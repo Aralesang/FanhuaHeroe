@@ -65,6 +65,22 @@ function Inventory:use(id)
     print("未拥有物品:" .. id)
 end
 
+---获取道具
+---@param id number 道具id
+---@return Item|nil item
+function Inventory:get(id)
+    if id == 0 then
+        return nil
+    end
+    --库存中寻找目标道具
+    for _, v in pairs(self.items) do
+        if v.id == id then
+            return v
+        end
+    end
+    return nil
+end
+
 function Inventory:__tostring()
     return "Inventory"
 end

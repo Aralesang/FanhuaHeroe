@@ -9,11 +9,11 @@ local ItemManager = require "scripts.manager.ItemManager"
 local RoleManager = require "scripts.manager.RoleManager"
 local FSM         = require "scripts.game.FSM"
 local Role        = require "scripts.game.Role"
-local gamera = require "scripts.utils.gamera"
 local Timer = require "scripts.utils.hump.timer"
 local Camera = require "scripts.utils.hump.camera"
+local SkillManager = require "scripts.manager.SkillManager"
+
 local map
-local camera
 local player
 
 function love.load()
@@ -34,6 +34,8 @@ function love.load()
     AnimManager.init()
     ItemManager.init()
     RoleManager.init()
+    SkillManager.init()
+    
     --加载有限状态机
     FSM.init()
 
@@ -48,13 +50,16 @@ function love.load()
     --实例化角色对象
     ---@type Player
     player = Player(1280/4 - 25,720/4 + 50)
-    camera = Camera(0,0,3)
+    Game.camera = Camera(0,0,3)
     ---@type Slim
     Slim(1280/4 - 16,720/4 -32 + 20)
     
     ItemManager.createDrop(4,1280/4,720/4)
     ItemManager.createDrop(5,1280/4,720/4)
     ItemManager.createDrop(6,1280/4,720/4)
+    ItemManager.createDrop(7,1280/4,720/4)
+    ItemManager.createDrop(8,1280/4,720/4)
+    ItemManager.createDrop(1,1280/4,720/4)
     print("游戏初始化完毕!")
 end
 
@@ -63,7 +68,7 @@ end
 function love.update(dt)
     Timer.update(dt)
     map:update(dt)
-    camera:lookAt(player.x,player.y)
+    Game.camera:lookAt(player.x,player.y)
     --触发对象更新
     for _, gameObject in pairs(Game.gameObjects) do
         --首先触发对象本身的更新
@@ -98,7 +103,7 @@ end
 --每帧绘制
 function love.draw()
     ---@diagnostic disable-next-line: undefined-field
-    camera:attach()
+    Game.camera:attach()
     --绘制地图
     map:draw(1280 / 6  - player.x, 720/6 - player.y,3)
     --绘制对象
@@ -115,11 +120,10 @@ function love.draw()
         end
         if Config.ShowCollision then
             --绘制碰撞体积
-            Debug.drawBox(value,0,1,0)
+            map:bump_draw()
         end
     end
-    --map:bump_draw()
-    camera:detach()
+    Game.camera:detach()
     Debug.showFPS()
 end
 

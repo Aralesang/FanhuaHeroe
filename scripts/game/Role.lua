@@ -12,6 +12,7 @@ local Inventory   = require "scripts.components.Inventory"
 ---@field atk number 攻击力
 ---@field def number 防御力
 ---@field state State 状态
+---@field skills number[] 技能列表
 local Role = GameObject:extend()
 
 ---构造函数
@@ -24,8 +25,7 @@ function Role:new(x,y)
     self.atk = 0
     self.def = 0
     self.state = State.idle
-    self.x = x
-    self.y = y
+    self.skills = {}
 end
 
 ---元受伤函数

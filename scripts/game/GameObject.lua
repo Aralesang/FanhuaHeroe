@@ -133,6 +133,7 @@ end
 
 ---对象销毁
 function GameObject:destroy()
+    self:onDestroy()
     Game:removeGameObject(self)
 end
 

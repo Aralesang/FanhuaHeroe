@@ -24,6 +24,10 @@ function Slot:getAnim(name)
     if self.itemId == 0 then
         return nil
     end
+    --饰品是看不到的
+    if self.type == "饰品" then
+        return nil
+    end
     if self.anims == nil then
         self.anims = {}
     end

@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-field
 --[[
 Copyright (c) 2010-2015 Matthias Richter
 
@@ -26,7 +27,7 @@ THE SOFTWARE.
 
 local _PATH = (...):match('^(.*[%./])[^%.%/]+$') or ''
 local cos, sin = math.cos, math.sin
-
+---@class Camera
 local camera = {}
 camera.__index = camera
 

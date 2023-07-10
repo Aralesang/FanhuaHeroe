@@ -27,7 +27,7 @@ function Player:new(x, y)
     self.keyList = {}
     self.x = x
     self.y = y
-    self.central = {x = 8,y = 16}
+    self.central = { x = 8, y = 16 }
     local role = RoleManager.getRole(1)
     for k, v in pairs(role) do
         self[k] = v
@@ -105,7 +105,7 @@ function Player:walkState(dt)
                 end
                 return "slide"
             end) --移动
-            for i=1,cols_len do
+            for i = 1, cols_len do
                 --将接触到的所有掉落物收入库存
                 ---@type Drop
                 local drop = cols[i].other
@@ -115,7 +115,7 @@ function Player:walkState(dt)
                 end
                 self.inventory:add(drop.itemId)
                 Game:removeGameObject(drop)
-                print("获得:"..drop.name)
+                print("获得:" .. drop.name)
                 ::continue::
             end
             isMove = true
@@ -136,7 +136,7 @@ end
 function Player:attackState()
     self.animation:play("挥击", function(index)
         if index == 3 then
-            print("触发伤害帧!")
+            --print("触发伤害帧!")
             --检查所有的敌对对象
             for _, enemy in pairs(Game.enemys) do
                 --敌人与玩家的距离
@@ -184,6 +184,39 @@ function Player:keypressed(key)
                 self.equipment:equip(id)
             end
         end
+    end
+    if key == "c" then
+        print("=======玩家状态======")
+        print("hp:" .. self.hp)
+        print("atk:" .. self.atk)
+        local slots = self.equipment.slots
+        for _, slot in pairs(slots) do
+            if slot.type ~= "身体部件" then
+                local itemId = slot.itemId
+                local item = self.inventory:get(itemId)
+                if item then
+                    print(slot.name .. ":" .. item.name)
+                end
+            end
+        end
+    end
+    if key == "b" then
+        print("=======背包======")
+        local items = self.inventory.items
+        for _, value in pairs(items) do
+            local name = value.name
+            if self.equipment:isEquip(value.id) then
+                name = name.."E"
+            end
+            print(name)
+        end
+    end
+    if key == "k" then
+        local skill = self.skills[1]
+        if not skill then
+            print("未掌握技能")
+        end
+        
     end
 end
 

@@ -96,28 +96,22 @@ end
 ---注册道具
 ---@param id number 道具id
 ---@param use? fun(item:Item,target:GameObject) 使用道具的逻辑
----@param equip? fun(item:Item,target: GameObject) 装备道具的逻辑
-function ItemManager.register(id, use, equip)
+---@param unequip? fun(item:Item,target: GameObject) 卸下道具的逻辑
+function ItemManager.register(id, use, equip,unequip)
     if ItemManager.items[id] == nil then
         error("注册道具时出错,目标id不存在:" .. id)
     end
     if use then
         ItemManager.items[id].use = use
     end
-    if equip then
-        ItemManager.items[id].equip = equip
+    if unequip then
+        ItemManager.items[id].unequip = unequip
     end
 end
 
----批量注册道具
+---注册道具特殊效果
 function ItemManager.batchItems()
     local i = ItemManager
-    --微弱的治愈药剂
-    i.register(1, function(item,target)
-        local hp = item["hp"]
-        target.hp = target.hp + hp
-        print(string.format("使用[%s]恢复了%d点生命", item.name, hp))
-    end)
 end
 
 ---创建一个掉落物

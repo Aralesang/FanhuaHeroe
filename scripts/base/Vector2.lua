@@ -10,7 +10,29 @@ local Vector2={
 function Vector2:new(x,y)
     ---@type Vector2
     local o = {}
-    setmetatable(o,{__index=self})
+    setmetatable(o,{
+        __index=self;
+        --重载操作符
+        __add = function (t1, t2)
+            local v = Vector2:new(t1.x + t2.x,t2.y + t2.y)
+            return v
+        end;
+        __sub = function (t1, t2)
+            local v = Vector2:new(t1.x - t2.x,t2.y - t2.y)
+            return v
+        end;
+        __mul = function (t1, t2)
+            local v = Vector2:new(t1.x * t2.x,t2.y * t2.y)
+            return v
+        end;
+        __div = function (t1, t2)
+            local v = Vector2:new(t1.x / t2.x,t2.y / t2.y)
+            return v
+        end;
+        __tostring = function (t)
+            return t.x..","..t.y
+        end
+    })
 
     o.x = x or 0
     o.y = y or 0
