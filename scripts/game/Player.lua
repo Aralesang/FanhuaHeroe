@@ -1,15 +1,15 @@
-local Role        = require "scripts.game.Role"
-local Direction   = require "scripts.enums.Direction"
-local Equipment   = require "scripts.components.Equipment"
-local RoleManager = require "scripts.manager.RoleManager"
-local State       = require "scripts.enums.State"
-local Game        = require "scripts.game.Game"
-local Drop        = require "scripts.game.Drop"
-local Animation   = require "scripts.components.Animation"
-local SkillManager= require "scripts.manager.SkillManager"
-local Tool        = require "scripts.utils.Tool"
-local ItemManager = require "scripts.manager.ItemManager"
-local GameObject  = require "scripts.game.GameObject"
+local Role         = require "scripts.game.Role"
+local Direction    = require "scripts.enums.Direction"
+local Equipment    = require "scripts.components.Equipment"
+local RoleManager  = require "scripts.manager.RoleManager"
+local State        = require "scripts.enums.State"
+local Game         = require "scripts.game.Game"
+local Drop         = require "scripts.game.Drop"
+local Animation    = require "scripts.components.Animation"
+local SkillManager = require "scripts.manager.SkillManager"
+local Tool         = require "scripts.utils.Tool"
+local ItemManager  = require "scripts.manager.ItemManager"
+local GameObject   = require "scripts.game.GameObject"
 
 ---@class Player:Role 玩家对象
 ---@field moveDir Direction 移动方向
@@ -19,10 +19,10 @@ local GameObject  = require "scripts.game.GameObject"
 ---@field keyList string[] 按键记录
 ---@field state number 状态
 ---@field range number 射程
-local Player      = Class('Player',Role)
+local Player       = Class('Player', Role)
 
 function Player:initialize(x, y)
-    Role.initialize(self,1,x,y)
+    Role.initialize(self, 1, x, y)
     self.moveDir = Direction.Down
     self.animation = self:addComponent(Animation)
     self.equipment = self:addComponent(Equipment)
@@ -103,15 +103,13 @@ function Player:walkState(dt)
                 --将接触到的所有掉落物收入库存
                 ---@type Drop
                 local drop = cols[i].other
-                print(drop)
                 --不是掉落物的跳过
-                if not drop.class == "class Drop" then
-                    goto continue
+                if drop.tag == "drop" then
+                    print(drop.class)
+                    self:addItem(drop.itemId, drop.itemNum)
+                    Game:removeGameObject(drop)
+                    print("获得:" .. drop.name)
                 end
-                self:addItem(drop.itemId,drop.itemNum)
-                Game:removeGameObject(drop)
-                print("获得:" .. drop.name)
-                ::continue::
             end
             isMove = true
             break
@@ -136,7 +134,7 @@ function Player:attackState()
             for _, enemy in pairs(Game.enemys) do
                 --敌人与玩家的距离
                 local dis = self:getDistance(enemy)
-                if dis <=  self.stats["range"] then
+                if dis <= self.stats["range"] then
                     --处于射程中的敌人,调用受伤函数
                     enemy:damage(self, self.stats["atk"])
                 end
@@ -168,7 +166,7 @@ end
 function Player:keypressed(key)
     table.insert(self.keyList, key)
     if key == "q" then
-       ItemManager:use(1,self)
+        ItemManager:use(1, self)
     end
     if key == "e" then
         --从库存中寻找装备
@@ -184,7 +182,7 @@ function Player:keypressed(key)
         print("=======玩家状态======")
         print("hp:" .. self.stats["hp"])
         print("atk:" .. self.stats["atk"])
-        print("name".. self.name)
+        print("name" .. self.name)
         local slots = self.equipment.slots
         for _, slot in pairs(slots) do
             if slot.type ~= "身体部件" and slot.itemId ~= 0 then
@@ -202,19 +200,18 @@ function Player:keypressed(key)
         for _, value in pairs(items) do
             local name = value.name
             if self.equipment:isEquip(value.id) then
-                name = name.."E"
+                name = name .. "E"
             end
             print(name)
         end
     end
     if key == "k" then
-        local skill = SkillManager:getSkill(1,self.skills)
+        local skill = SkillManager:getSkill(1, self.skills)
         if not skill then
             print("未掌握技能")
         else
             skill:use(self)
         end
-        
     end
 end
 

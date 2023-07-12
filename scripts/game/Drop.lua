@@ -6,12 +6,10 @@ local GameObject = require "scripts.game.GameObject"
 local Drop = Class('Drop',GameObject)
 
 function Drop:initialize(itemId,name,x,y)
-    GameObject.initialize(self)
+    GameObject.initialize(self,x,y)
     self.w = 32
     self.h = 32
     self.itemId = itemId
-    self.x = x
-    self.y = y
     self.name = name
     self.tag = "drop"
 end

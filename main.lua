@@ -81,7 +81,7 @@ function love.update(dt)
         if gameObject.update then
             gameObject:update(dt)
             --如果是角色对象,触发有限状态机
-            if gameObject.class == "class Role" then
+            if gameObject["state"] then
                 FSM.call(gameObject --[[@as Role]],dt)
             end
         end

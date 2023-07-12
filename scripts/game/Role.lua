@@ -112,7 +112,6 @@ function Role:move(dt, dir, filter)
         local x = self.x + dx
         local y = self.y + dy
         self.x, self.y, cols, cols_len =  Game.world:move(self, x, y, filter)
-        print(self.x,self.y)
         return cols, cols_len
     end
     return {},0
