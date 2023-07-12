@@ -6,7 +6,7 @@ local FSM        = require "scripts.game.FSM"
 local Game       = require "scripts.game.Game"
 
 ---游戏对象基本类
----@class GameObject : Object
+---@class GameObject:class
 ---@field name string 对象名称
 ---@field scale table 对象缩放比例因子{x,y}
 ---@field rotate number 对象旋转弧度
@@ -18,10 +18,9 @@ local Game       = require "scripts.game.Game"
 ---@field y number 对象空间垂直坐标
 ---@field w number 对象宽度
 ---@field h number 对象高度
-local GameObject = Object:extend()
-
+local GameObject = Class("GameObject")
 ---构造函数
-function GameObject:new(x,y,w,h)
+function GameObject:initialize(x,y,w,h)
     self.name = ""
     self.x = x or 0
     self.y = y or 0
@@ -35,18 +34,6 @@ function GameObject:new(x,y,w,h)
     self.isLoad = false
     self.speed = 0
     self.tag = ""
-end
-
----元方法
----@private
----@vararg function
----@return GameObject
-function GameObject:__call(...)
-    local obj = setmetatable({}, self)
-    ---@cast obj GameObject
-    ---@diagnostic disable-next-line: redundant-parameter
-    obj:new(...)
-    return obj
 end
 
 ---对象加载

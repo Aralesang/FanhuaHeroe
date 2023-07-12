@@ -25,7 +25,12 @@ function ItemManager:init()
     self.items = {}
 
     for _, v in pairs(itemJson) do
-        self.items[v["id"]] = v
+        ---@type Item
+        local item = Item()
+        for key, value in pairs(v) do
+            item[key] = value
+        end
+        self.items[item.id] = item
     end
 
     --加载模板
@@ -47,19 +52,6 @@ function ItemManager:init()
 
     --注册道具
     self:batchItems()
-end
-
----创造一个道具对象
----@param id number 道具id
----@return Item
-function ItemManager:createItem(id)
-    local itemTemp = self:getItem(id)
-    ---@type Item
-    local item = Item()
-    for k, v in pairs(itemTemp) do
-        item[k] = v
-    end
-    return item
 end
 
 ---获取道具模板
@@ -122,9 +114,25 @@ end
 function ItemManager:createDrop(itemId, x, y)
     local item = self:getItem(itemId)
     ---@type Drop
-    local drop = Drop(itemId, item.name, x, y)
+    local drop = Drop:new(itemId, item.name, x, y)
     Game:addDrops(drop)
     return drop
+end
+
+---使用道具
+---@param id number 道具id
+---@param target Role 使用对象
+function ItemManager:use(id,target)
+    --库存中寻找目标道具
+    if not target.items[id] then
+        print("未拥有物品:" .. id)
+        return false
+    end
+    local item = ItemManager:getItem(id)
+     --调用目标物品的使用函数
+     item:use(target)
+     target:removeItem(id,1)
+    
 end
 
 return ItemManager

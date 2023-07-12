@@ -1,4 +1,6 @@
 local Object = require "scripts.base.Object"
+local Tool   = require "scripts.utils.Tool"
+
 ---@class Skill : Object 技能基类
 ---@field id number 技能id
 ---@field name string 技能名称
@@ -18,9 +20,11 @@ function Skill:use(target)
     end
     --学会记述在道具上的技能
     local skills = self.skills
-    if skills then
-        for _, skill in pairs(skills) do
-            print("学会了:"..skill)
+
+    if skills and target.skills then
+        for _, id in pairs(skills) do
+            target.skills[id] = id
+            print("学会了:"..id)
         end
     end
 end

@@ -52,8 +52,10 @@ end
 function FSM.change(role,state)
     --获取目标当前状态
     local curState = role.state
+    --如果目前没有任何状态,则无视条件成功
     if curState == nil then
-        error("目标对象状态未初始化")
+        role.state = state
+        return true
     end
     --判断是否可以进入目标分支
     local branch = FSM.branchs[curState]

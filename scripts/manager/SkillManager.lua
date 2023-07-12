@@ -46,14 +46,7 @@ function SkillManager:getSkill(id, filter)
         error("技能模板列表为空！")
     end
     if filter then
-        local isOk = false
-        for _, value in pairs(filter) do
-            if value == id then
-                isOk = true
-                break
-            end
-        end
-        if not isOk then
+        if not filter[id] then
             return nil
         end
     end

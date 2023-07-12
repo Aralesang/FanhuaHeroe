@@ -1,10 +1,10 @@
 local Role = require "scripts.game.Role"
 
 ---@class Enemy:Role 敌人基类
-local Enemy = Role:extend()
+local Enemy = Class('Enemy',Role)
 
-function Enemy:new(x,y)
-    self.super:new(x,y)
+function Enemy:initialize(roleId,x,y)
+    Role.initialize(self,roleId,x,y)
 end
 
 return Enemy

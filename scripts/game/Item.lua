@@ -1,4 +1,5 @@
 local Object = require "scripts.base.Object"
+local Tool   = require "scripts.utils.Tool"
 
 ---@class Item : Object 道具
 ---@field id number 道具id
@@ -6,6 +7,7 @@ local Object = require "scripts.base.Object"
 ---@field description string 道具描述
 ---@field stats table<string,number> 影响的属性列表
 ---@field skills number[] 能学会的技能列表
+---@field slot string 可以装备到哪个槽
 local Item = Object:extend()
 
 ---构造函数
@@ -27,6 +29,7 @@ function Item:use(target)
     end
     --学会记述在道具上的技能
     local skills = self.skills
+
     if skills and target.skills then
         for _, id in pairs(skills) do
             target.skills[id] = id
@@ -42,7 +45,7 @@ function Item:unequip(target)
     local stats = self.stats
     if stats then
         for key, value in pairs(stats) do
-            target:changeStats(key,value)
+            target:changeStats(key,-value)
         end
     end
     --遗忘记述在道具上的技能

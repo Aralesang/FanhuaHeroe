@@ -3,20 +3,36 @@ local State      = require "scripts.enums.State"
 local FSM        = require "scripts.game.FSM"
 local Direction  = require "scripts.enums.Direction"
 local Game       = require "scripts.game.Game"
+local RoleManager= require "scripts.manager.RoleManager"
 
 ---@class Role:GameObject 角色对象
----@field stats table 玩家属性
+---@field stats table<string,number> 玩家属性列表
 ---@field state State 状态
 ---@field skills number[] 技能列表
-local Role = GameObject:extend()
+---@field items table<number,number> 道具列表
+---@field equipments table<string,number> 装备列表
+---@field bodys table<string,number> 身体部件列表
+local Role = Class('Role',GameObject)
 
 ---构造函数
+---@param roleId number
 ---@param x number
 ---@param y number
-function Role:new(x, y)
-    self.super:new(x, y)
+function Role:initialize(roleId, x, y)
+    GameObject.initialize(self,x,y)
     self.state = State.idle
     self.skills = {}
+    self.items = {}
+    local role = RoleManager:getRole(roleId or 1)
+    for k, v in pairs(role) do
+        if k == "skills" then
+            for _, skill in pairs(v) do
+                v[skill] = skill
+            end
+        else
+            self[k] = v
+        end
+    end
 end
 
 ---元受伤函数
@@ -96,9 +112,34 @@ function Role:move(dt, dir, filter)
         local x = self.x + dx
         local y = self.y + dy
         self.x, self.y, cols, cols_len =  Game.world:move(self, x, y, filter)
+        print(self.x,self.y)
         return cols, cols_len
     end
     return {},0
+end
+
+---添加道具
+---@param id number 道具id
+---@param num? number 道具数量
+function Role:addItem(id,num)
+    num = num or 1
+    local curNum = self.items[id]
+    curNum = curNum or 0
+    self.items[id] = curNum + num
+end
+
+---去除道具
+---@param id number 道具id
+---@param num number 道具数量
+function Role:removeItem(id,num)
+    local curNum = self.items[id]
+    curNum = curNum == nil and 0 or curNum
+    local newNum = curNum - num
+    if newNum <= 0 then
+        self.items[id] = nil
+    else
+        self.items[id] = newNum
+    end
 end
 
 return Role

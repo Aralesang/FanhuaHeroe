@@ -4,27 +4,21 @@ local RoleManager = require "scripts.manager.RoleManager"
 local Game = require "scripts.game.Game"
 local ItemManager = require "scripts.manager.ItemManager"
 local Animation   = require "scripts.components.Animation"
-local Inventory   = require "scripts.components.Inventory"
 
 ---@class Slim:Enemy 史莱姆
 ---@field sight number 视野范围
 ---@field state number 状态
 ---@field target GameObject 仇恨目标
 ---@field range number 射程
-local Slim = Enemy:extend()
+local Slim = Class('Slim',Enemy)
 
 ---构造函数
 ---@param x number
 ---@param y number
-function Slim:new(x,y)
-    self.super:new(x,y)
+function Slim:initialize(x,y)
+    Enemy.initialize(self,2,x,y)
     self.animation = self:addComponent(Animation)
-    self.inventory = self:addComponent(Inventory)
     self:setState(State.idle)
-    local role = RoleManager:getRole(2)
-    for k,v in pairs(role) do
-        self[k] = v
-    end
     self.tag = "slim"
     Game:addEnemys(self)
 end

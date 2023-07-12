@@ -6,34 +6,30 @@ local State       = require "scripts.enums.State"
 local Game        = require "scripts.game.Game"
 local Drop        = require "scripts.game.Drop"
 local Animation   = require "scripts.components.Animation"
-local Inventory   = require "scripts.components.Inventory"
 local SkillManager= require "scripts.manager.SkillManager"
 local Tool        = require "scripts.utils.Tool"
+local ItemManager = require "scripts.manager.ItemManager"
+local GameObject  = require "scripts.game.GameObject"
 
 ---@class Player:Role 玩家对象
 ---@field moveDir Direction 移动方向
----@field equipment Equipment | nil 装备组件
----@field name string | nil 角色名称
+---@field equipment Equipment 装备组件
+---@field name string 角色名称
 ---@field speed number 角色速度
 ---@field keyList string[] 按键记录
 ---@field state number 状态
 ---@field range number 射程
-local Player      = Role:extend()
+local Player      = Class('Player',Role)
 
-function Player:new(x, y)
-    self.super:new(x, y)
+function Player:initialize(x, y)
+    Role.initialize(self,1,x,y)
     self.moveDir = Direction.Down
     self.animation = self:addComponent(Animation)
-    self.inventory = self:addComponent(Inventory)
     self.equipment = self:addComponent(Equipment)
     self.keyList = {}
     self.x = x
     self.y = y
     self.central = { x = 8, y = 16 }
-    local role = RoleManager:getRole(1)
-    for k, v in pairs(role) do
-        self[k] = v
-    end
     Game:addPlayer(self)
 end
 
@@ -42,10 +38,6 @@ function Player:load()
     self.animation:play("闲置")
     --设置头发
     self.equipment:setHair(4)
-    --添加装备
-    -- self.equipment:equip("衣服", 3)
-    -- self.equipment:equip("下装", 4)
-    --self.equipment:equip("武器", 5)
 end
 
 function Player:update(dt)
@@ -111,11 +103,12 @@ function Player:walkState(dt)
                 --将接触到的所有掉落物收入库存
                 ---@type Drop
                 local drop = cols[i].other
+                print(drop)
                 --不是掉落物的跳过
-                if not drop.is or not drop:is(Drop) then
+                if not drop.class == "class Drop" then
                     goto continue
                 end
-                self.inventory:add(drop.itemId)
+                self:addItem(drop.itemId,drop.itemNum)
                 Game:removeGameObject(drop)
                 print("获得:" .. drop.name)
                 ::continue::
@@ -138,12 +131,12 @@ end
 function Player:attackState()
     self.animation:play("挥击", function(index)
         if index == 3 then
-            --print("触发伤害帧!")
+            print("触发伤害帧!")
             --检查所有的敌对对象
             for _, enemy in pairs(Game.enemys) do
                 --敌人与玩家的距离
                 local dis = self:getDistance(enemy)
-                if dis <= self.range then
+                if dis <=  self.stats["range"] then
                     --处于射程中的敌人,调用受伤函数
                     enemy:damage(self, self.stats["atk"])
                 end
@@ -175,14 +168,14 @@ end
 function Player:keypressed(key)
     table.insert(self.keyList, key)
     if key == "q" then
-        self.inventory:use(1)
+       ItemManager:use(1,self)
     end
     if key == "e" then
-        --从背包中寻找装备
-        local items = self.inventory.items
-        for _, v in pairs(items) do
-            local id = v.id
-            if v["slot"] then
+        --从库存中寻找装备
+        local items = self.items
+        for id, num in pairs(items) do
+            local item = ItemManager:getItem(id)
+            if item.slot then
                 self.equipment:equip(id)
             end
         end
@@ -191,11 +184,12 @@ function Player:keypressed(key)
         print("=======玩家状态======")
         print("hp:" .. self.stats["hp"])
         print("atk:" .. self.stats["atk"])
+        print("name".. self.name)
         local slots = self.equipment.slots
         for _, slot in pairs(slots) do
-            if slot.type ~= "身体部件" then
+            if slot.type ~= "身体部件" and slot.itemId ~= 0 then
                 local itemId = slot.itemId
-                local item = self.inventory:get(itemId)
+                local item = ItemManager:getItem(itemId)
                 if item then
                     print(slot.name .. ":" .. item.name)
                 end
@@ -204,7 +198,7 @@ function Player:keypressed(key)
     end
     if key == "b" then
         print("=======背包======")
-        local items = self.inventory.items
+        local items = self.items
         for _, value in pairs(items) do
             local name = value.name
             if self.equipment:isEquip(value.id) then

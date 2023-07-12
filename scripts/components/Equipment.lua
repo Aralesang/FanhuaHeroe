@@ -1,14 +1,13 @@
 local Slot = require "scripts.game.Slot"
-local Component = require "scripts.base.Component"
 local Animation = require "scripts.components.Animation"
-local Inventory = require "scripts.components.Inventory"
+local Component = require "scripts.base.Component"
+local ItemManager = require "scripts.manager.ItemManager"
 
 ---@class Equipment:Component 装备组件
 ---@field slots Slot[] 装备槽有序列表
 ---@field animName string 当前动画名称
 ---@field frameIndex number 当前动画帧下标
 ---@field animation Animation | nil 动画组件
----@field inventory Inventory | nil 库存组件
 local Equipment = Component:extend()
 
 function Equipment:extend()
@@ -33,10 +32,6 @@ function Equipment:awake()
     self.animation = self.gameObject:getComponent(Animation)
     if self.animation == nil then
         error("对象未附加Animation组件")
-    end
-    self.inventory = self.gameObject:getComponent(Inventory)
-    if self.inventory == nil then
-        error("对象未附加库存组件")
     end
     --添加装备插槽
     self:addSlot("发型", "身体部件")
@@ -131,15 +126,16 @@ end
 ---装备道具
 ---@param itemId number 要装备的道具的id
 function Equipment:equip(itemId)
-    local items = self.inventory.items
+    local items = self.gameObject["items"]
     --库存中寻找目标道具
-    for _, v in pairs(items) do
-        if v.id == itemId then
+    for id, num in pairs(items) do
+        if id == itemId then
+            local item = ItemManager:getItem(id)
             --装备目标物品
-            local slotName = v["slot"]
+            local slotName = item.slot
             --如果目标道具没有可用装备槽
             if slotName == nil then
-                print("目标道具[" .. v.id .. "]没有设置slot")
+                print("目标道具[" .. id .. "]没有设置slot")
                 return
             end
             --检查目标槽中是否有装备
@@ -155,7 +151,7 @@ function Equipment:equip(itemId)
             elseif slot.itemId ~= 0 and slot.itemId ~= itemId then --装备槽不为空，且装备的和目标装备不同，则先卸除已有装备
                 self:unequip(slotName)
             end
-            local item = self.inventory:get(itemId)
+            local item = ItemManager:getItem(itemId)
             if item then
                 item:use(self.gameObject --[[@as Role]])
             end
@@ -173,7 +169,7 @@ function Equipment:unequip(name)
     if slot == nil then
         error("装备槽 [" .. name .. "] 不存在!")
     end
-    local item = self.inventory:get(slot.itemId)
+    local item = ItemManager:getItem(slot.itemId)
     if item then
         item:unequip(self.gameObject --[[@as Role]])
         print("卸除:"..item.name)
