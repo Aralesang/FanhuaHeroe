@@ -7,6 +7,8 @@ local Game        = require "scripts.game.Game"
 local Drop        = require "scripts.game.Drop"
 local Animation   = require "scripts.components.Animation"
 local Inventory   = require "scripts.components.Inventory"
+local SkillManager= require "scripts.manager.SkillManager"
+local Tool        = require "scripts.utils.Tool"
 
 ---@class Player:Role 玩家对象
 ---@field moveDir Direction 移动方向
@@ -28,7 +30,7 @@ function Player:new(x, y)
     self.x = x
     self.y = y
     self.central = { x = 8, y = 16 }
-    local role = RoleManager.getRole(1)
+    local role = RoleManager:getRole(1)
     for k, v in pairs(role) do
         self[k] = v
     end
@@ -143,7 +145,7 @@ function Player:attackState()
                 local dis = self:getDistance(enemy)
                 if dis <= self.range then
                     --处于射程中的敌人,调用受伤函数
-                    enemy:damage(self, self.atk)
+                    enemy:damage(self, self.stats["atk"])
                 end
             end
         end
@@ -187,8 +189,8 @@ function Player:keypressed(key)
     end
     if key == "c" then
         print("=======玩家状态======")
-        print("hp:" .. self.hp)
-        print("atk:" .. self.atk)
+        print("hp:" .. self.stats["hp"])
+        print("atk:" .. self.stats["atk"])
         local slots = self.equipment.slots
         for _, slot in pairs(slots) do
             if slot.type ~= "身体部件" then
@@ -212,9 +214,11 @@ function Player:keypressed(key)
         end
     end
     if key == "k" then
-        local skill = self.skills[1]
+        local skill = SkillManager:getSkill(1,self.skills)
         if not skill then
             print("未掌握技能")
+        else
+            skill:use(self)
         end
         
     end
@@ -235,7 +239,7 @@ end
 ---@param obj GameObject
 ---@param atk number
 function Player:onDamage(obj, atk)
-    print(string.format("hp:%d/%d", self.hp, self.hpMax))
+    print(string.format("hp:%d/%d", self.stats["hp"], self.stats["hpMax"]))
     self:setState(State.damage)
 end
 

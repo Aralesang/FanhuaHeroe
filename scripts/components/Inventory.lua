@@ -24,7 +24,7 @@ function Inventory:add(id)
     if itemNum >= self.cellNum then
         return false
     end
-    local item = ItemManager.createItem(id)
+    local item = ItemManager:createItem(id)
     table.insert(self.items, item)
     return true
 end
@@ -57,7 +57,7 @@ function Inventory:use(id)
     for _, v in pairs(self.items) do
         if v.id == id then
             --调用目标物品的使用函数
-            v:use(self.gameObject)
+            v:use(self.gameObject --[[@as Role]])
             self:remove(id)
             return
         end

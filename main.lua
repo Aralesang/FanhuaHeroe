@@ -12,6 +12,7 @@ local Role        = require "scripts.game.Role"
 local Timer = require "scripts.utils.hump.timer"
 local Camera = require "scripts.utils.hump.camera"
 local SkillManager = require "scripts.manager.SkillManager"
+local UiManager    = require "scripts.manager.UiManager"
 
 local map
 local player
@@ -31,10 +32,10 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
 
     --加载系统管理器
-    AnimManager.init()
-    ItemManager.init()
-    RoleManager.init()
-    SkillManager.init()
+    AnimManager:init()
+    ItemManager:init()
+    RoleManager:init()
+    SkillManager:init()
     
     --加载有限状态机
     FSM.init()
@@ -54,12 +55,12 @@ function love.load()
     ---@type Slim
     Slim(1280/4 - 16,720/4 -32 + 20)
     
-    ItemManager.createDrop(4,1280/4,720/4)
-    ItemManager.createDrop(5,1280/4,720/4)
-    ItemManager.createDrop(6,1280/4,720/4)
-    ItemManager.createDrop(7,1280/4,720/4)
-    ItemManager.createDrop(8,1280/4,720/4)
-    ItemManager.createDrop(1,1280/4,720/4)
+    ItemManager:createDrop(4,1280/4,720/4)
+    ItemManager:createDrop(5,1280/4,720/4)
+    ItemManager:createDrop(6,1280/4,720/4)
+    ItemManager:createDrop(7,1280/4,720/4)
+    ItemManager:createDrop(8,1280/4,720/4)
+    ItemManager:createDrop(1,1280/4,720/4)
     print("游戏初始化完毕!")
 end
 
@@ -98,6 +99,12 @@ function love.update(dt)
             end
         end
     end
+
+    --触发ui更新
+    local uis = UiManager.uis
+    for _, ui in pairs(uis) do
+        ui:update(dt)
+    end
 end
 
 --每帧绘制
@@ -124,6 +131,11 @@ function love.draw()
         end
     end
     Game.camera:detach()
+    --触发ui绘制
+    local uis = UiManager.uis
+    for _, ui in pairs(uis) do
+        ui:drwa()
+    end
     Debug.showFPS()
 end
 

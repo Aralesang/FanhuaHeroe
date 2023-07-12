@@ -157,10 +157,9 @@ function Equipment:equip(itemId)
             end
             local item = self.inventory:get(itemId)
             if item then
-                item:use(self.gameObject)
+                item:use(self.gameObject --[[@as Role]])
             end
             slot.itemId = itemId
-            print("装备:" .. v.name)
             return
         end
     end
@@ -176,7 +175,7 @@ function Equipment:unequip(name)
     end
     local item = self.inventory:get(slot.itemId)
     if item then
-        item:unequip(self.gameObject)
+        item:unequip(self.gameObject --[[@as Role]])
         print("卸除:"..item.name)
     end
     slot.itemId = 0

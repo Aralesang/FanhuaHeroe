@@ -8,7 +8,7 @@ local Game = require "scripts.game.Game"
 ---@field hairs any[] 头发模板列表
 local ItemManager = {}
 
-function ItemManager.init()
+function ItemManager:init()
     print("加载道具管理器...")
 
     --加载模板
@@ -22,10 +22,10 @@ function ItemManager.init()
         error("道具管理器初始化失败,item对象创建失败")
     end
 
-    ItemManager.items = {}
+    self.items = {}
 
     for _, v in pairs(itemJson) do
-        ItemManager.items[v["id"]] = v
+        self.items[v["id"]] = v
     end
 
     --加载模板
@@ -39,21 +39,21 @@ function ItemManager.init()
         error("道具管理器初始化失败,hair对象创建失败")
     end
 
-    ItemManager.hairs = {}
+    self.hairs = {}
 
     for _, v in pairs(hairJson) do
-        ItemManager.hairs[v["id"]] = v
+        self.hairs[v["id"]] = v
     end
 
     --注册道具
-    ItemManager.batchItems()
+    self:batchItems()
 end
 
 ---创造一个道具对象
 ---@param id number 道具id
 ---@return Item
-function ItemManager.createItem(id)
-    local itemTemp = ItemManager.getItem(id)
+function ItemManager:createItem(id)
+    local itemTemp = self:getItem(id)
     ---@type Item
     local item = Item()
     for k, v in pairs(itemTemp) do
@@ -65,14 +65,14 @@ end
 ---获取道具模板
 ---@param id number 道具id
 ---@return Item
-function ItemManager.getItem(id)
+function ItemManager:getItem(id)
     if id == nil then
         error("道具模板id为nil!")
     end
-    if ItemManager.items == nil then
+    if self.items == nil then
         error("道具模板列表为空！")
     end
-    local item = ItemManager.items[id]
+    local item = self.items[id]
     if item == nil then
         error(string.format("目标id的道具不存在:%d",id))
     end
@@ -82,11 +82,11 @@ end
 ---获取发型模板
 ---@param id number 发型id
 ---@return {id:number, name:string, description:string}
-function ItemManager.getHair(id)
-    if ItemManager.hairs == nil then
+function ItemManager:getHair(id)
+    if self.hairs == nil then
         error("发型模板列表为空！")
     end
-    local hair = ItemManager.hairs[id]
+    local hair = self.hairs[id]
     if hair == nil then
         error("目标id的发型不存在:" .. id)
     end
@@ -97,21 +97,21 @@ end
 ---@param id number 道具id
 ---@param use? fun(item:Item,target:GameObject) 使用道具的逻辑
 ---@param unequip? fun(item:Item,target: GameObject) 卸下道具的逻辑
-function ItemManager.register(id, use, equip,unequip)
-    if ItemManager.items[id] == nil then
+function ItemManager:register(id, use, equip,unequip)
+    if self.items[id] == nil then
         error("注册道具时出错,目标id不存在:" .. id)
     end
     if use then
-        ItemManager.items[id].use = use
+        self.items[id].use = use
     end
     if unequip then
-        ItemManager.items[id].unequip = unequip
+        self.items[id].unequip = unequip
     end
 end
 
 ---注册道具特殊效果
-function ItemManager.batchItems()
-    local i = ItemManager
+function ItemManager:batchItems()
+    
 end
 
 ---创建一个掉落物
@@ -119,8 +119,8 @@ end
 ---@param x number 掉落物所在x轴坐标
 ---@param y number 掉落物所在y轴坐标
 ---@return Drop drop 掉落物
-function ItemManager.createDrop(itemId, x, y)
-    local item = ItemManager.getItem(itemId)
+function ItemManager:createDrop(itemId, x, y)
+    local item = self:getItem(itemId)
     ---@type Drop
     local drop = Drop(itemId, item.name, x, y)
     Game:addDrops(drop)

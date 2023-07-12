@@ -38,9 +38,9 @@ function Slot:getAnim(name)
         local equName --装备名称
         local itemId = self.itemId
         if self.type == "装备" then
-            equName = ItemManager.getItem(itemId).name
+            equName = ItemManager:getItem(itemId).name
         elseif self.type == "身体部件" then
-            equName = ItemManager.getHair(itemId).name
+            equName = ItemManager:getHair(itemId).name
         end
 
         --动画图片路径组合规则:以装备id为文件夹区分，以动画id为最小单位

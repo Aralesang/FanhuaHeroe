@@ -21,7 +21,7 @@ function Slim:new(x,y)
     self.animation = self:addComponent(Animation)
     self.inventory = self:addComponent(Inventory)
     self:setState(State.idle)
-    local role = RoleManager.getRole(2)
+    local role = RoleManager:getRole(2)
     for k,v in pairs(role) do
         self[k] = v
     end
@@ -75,8 +75,8 @@ function Slim:walkState(dt)
     local dx = math.abs(self.x - self.target.x)
     local dy = math.abs(self.y - self.target.y)
     local angle = math.atan2(dy, dx)
-    local x = self.x + math.cos(angle) * self.speed * dt
-    local y = self.y + math.sin(angle) * self.speed * dt
+    local x = self.x + math.cos(angle) * self.stats.speed * dt
+    local y = self.y + math.sin(angle) * self.stats.speed * dt
     self:move(x, y) --移动
 end
 
@@ -91,7 +91,7 @@ function Slim:attackState()
                 --在射程内找到一个玩家
                 if dis <= self.range then
                     --扣除对象的生命值
-                    v:damage(self, self.atk)
+                    v:damage(self, self.stats["atk"])
                 end
             end
         end
@@ -125,7 +125,7 @@ function Slim:deathState()
              --在死亡位置创建一个掉落物
              math.randomseed(os.time())
              local itemId = math.random(1,6)
-             local drop = ItemManager.createDrop(itemId,self.x,self.y)
+             local drop = ItemManager:createDrop(itemId,self.x,self.y)
              print("掉落物品:"..drop.name)
              self:destroy()
         end)

@@ -14,4 +14,17 @@ function Tool.fileExists(fileName)
     end
 end
 
+---检查列表中是否包含指定值
+---@param t table 要检查的列表
+---@param target any 可能包含的值
+---@return boolean
+function Tool.isContains(t,target)
+    for key, value in pairs(t) do
+        if value == target then
+            return true
+        end
+    end
+    return false
+end
+
 return Tool

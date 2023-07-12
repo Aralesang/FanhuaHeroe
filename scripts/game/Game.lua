@@ -1,6 +1,6 @@
 ---游戏对象全局变量合集
 ---@class Game
----@field public gameObjects GameObject[] 游戏对象集合
+---@field gameObjects GameObject[] 游戏对象集合
 ---@field players Player[] 玩家对象集合
 ---@field enemys Enemy[] 敌对对象集合
 ---@field drops Drop[] 掉落物集合

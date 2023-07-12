@@ -155,36 +155,6 @@ function GameObject:setDir(dir)
     end
 end
 
----移动
----@param dt number 距离上一帧的间隔时间
----@param dir Direction 移动方向
----@param filter fun(item:table,other:table):filter
----@return table cols, number cols_len
-function GameObject:move(dt, dir, filter)
-    local speed = self.speed
-    local dx, dy = 0, 0
-    --获取移动
-    if dir == Direction.Left then
-        dx = -speed * dt
-    elseif dir == Direction.Right then
-        dx = speed * dt
-    elseif dir == Direction.Up then
-        dy = -speed * dt
-    elseif dir == Direction.Down then
-        dy = speed * dt
-    end
-
-    if dx ~= 0 or dy ~= 0 then
-        local cols
-        local cols_len = 0
-        local x = self.x + dx
-        local y = self.y + dy
-        self.x, self.y, cols, cols_len =  Game.world:move(self, x, y, filter)
-        return cols, cols_len
-    end
-    return {},0
-end
-
 ---获取与目标对象之间的距离
 ---@param target GameObject
 ---@return number
