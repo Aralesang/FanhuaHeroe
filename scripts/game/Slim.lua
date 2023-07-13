@@ -17,7 +17,6 @@ local Slim = Class('Slim',Enemy)
 ---@param y number
 function Slim:initialize(x,y)
     Enemy.initialize(self,2,x,y)
-    self.animation = self:addComponent(Animation)
     self:setState(State.idle)
     self.tag = "slim"
     Game:addEnemys(self)

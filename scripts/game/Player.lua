@@ -1,19 +1,13 @@
 local Role         = require "scripts.game.Role"
 local Direction    = require "scripts.enums.Direction"
-local Equipment    = require "scripts.components.Equipment"
-local RoleManager  = require "scripts.manager.RoleManager"
 local State        = require "scripts.enums.State"
 local Game         = require "scripts.game.Game"
-local Drop         = require "scripts.game.Drop"
 local Animation    = require "scripts.components.Animation"
 local SkillManager = require "scripts.manager.SkillManager"
-local Tool         = require "scripts.utils.Tool"
 local ItemManager  = require "scripts.manager.ItemManager"
-local GameObject   = require "scripts.game.GameObject"
 
----@class Player:Role 玩家对象
+---@class Player : Role 玩家对象
 ---@field moveDir Direction 移动方向
----@field equipment Equipment 装备组件
 ---@field name string 角色名称
 ---@field speed number 角色速度
 ---@field keyList string[] 按键记录
@@ -24,8 +18,6 @@ local Player       = Class('Player', Role)
 function Player:initialize(x, y)
     Role.initialize(self, 1, x, y)
     self.moveDir = Direction.Down
-    self.animation = self:addComponent(Animation)
-    self.equipment = self:addComponent(Equipment)
     self.keyList = {}
     self.x = x
     self.y = y
@@ -105,7 +97,6 @@ function Player:walkState(dt)
                 local drop = cols[i].other
                 --不是掉落物的跳过
                 if drop.tag == "drop" then
-                    print(drop.class)
                     self:addItem(drop.itemId, drop.itemNum)
                     Game:removeGameObject(drop)
                     print("获得:" .. drop.name)
@@ -180,29 +171,21 @@ function Player:keypressed(key)
     end
     if key == "c" then
         print("=======玩家状态======")
-        print("hp:" .. self.stats["hp"])
-        print("atk:" .. self.stats["atk"])
-        print("name" .. self.name)
-        local slots = self.equipment.slots
-        for _, slot in pairs(slots) do
-            if slot.type ~= "身体部件" and slot.itemId ~= 0 then
-                local itemId = slot.itemId
-                local item = ItemManager:getItem(itemId)
-                if item then
-                    print(slot.name .. ":" .. item.name)
-                end
-            end
+        for key, value in pairs(self.stats) do
+            print(key..":"..value)
         end
     end
+
     if key == "b" then
         print("=======背包======")
         local items = self.items
-        for _, value in pairs(items) do
-            local name = value.name
-            if self.equipment:isEquip(value.id) then
+        for id, num in pairs(items) do
+            local item = ItemManager:getItem(id)
+            local name = item.name
+            if self.equipment:isEquip(id) then
                 name = name .. "E"
             end
-            print(name)
+            print(name,num)
         end
     end
     if key == "k" then

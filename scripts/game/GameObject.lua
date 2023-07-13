@@ -1,12 +1,9 @@
 local Vector2    = require "scripts.base.Vector2"
 local Direction  = require "scripts.enums.Direction"
-local State      = require "scripts.enums.State"
-local Object     = require "scripts.base.Object"
-local FSM        = require "scripts.game.FSM"
 local Game       = require "scripts.game.Game"
 
 ---游戏对象基本类
----@class GameObject:class
+---@class GameObject:Class
 ---@field name string 对象名称
 ---@field scale table 对象缩放比例因子{x,y}
 ---@field rotate number 对象旋转弧度
@@ -28,7 +25,7 @@ function GameObject:initialize(x,y,w,h)
     self.h = h or 0
     self.scale = { x = 1, y = 1 }
     self.rotate = 0
-    self.components = nil
+    self.components = {}
     self.central = Vector2.zero()
     self.direction = Direction.Down
     self.isLoad = false
@@ -88,17 +85,12 @@ function GameObject:addComponent(componentType)
     if componentType == nil then
         error("附加组件失败,组件类型为空")
     end
-    if self.components == nil then
-        self.components = {}
-    end
     ---@type Component
-    local component = componentType()
-    component.super:new()
-    component.gameObject = self
+    local component = componentType(self)
     if component.awake then
         component:awake()
     end
-    table.insert(self.components, component)
+    self.components[component.class.name] = component
     return component
 end
 
@@ -110,12 +102,7 @@ function GameObject:getComponent(componentType)
     if componentType == nil then
         error("componentType 为空")
     end
-    for _, v in pairs(self.components) do
-        if v:is(componentType) then
-            return v
-        end
-    end
-    return nil
+    return self.components[componentType.name]
 end
 
 ---对象销毁

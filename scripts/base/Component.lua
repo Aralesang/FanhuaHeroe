@@ -1,12 +1,12 @@
-local Object = require "scripts.base.Object"
 
 ---组件基类
----@class Component : Object
+---@class Component : Class
 ---@field gameObject GameObject 组件所附加到的游戏物体
 ---@field isLoad boolean 是否已经调用过初始化函数
-local Component = Object:extend()
+local Component = Class('Component')
 
-function Component:new()
+function Component:initialize(target)
+  self.gameObject = target
   self.isLoad = false
 end
 

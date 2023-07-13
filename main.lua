@@ -54,7 +54,7 @@ function love.load()
     player = Player:new(1280/4 - 25,720/4 + 50)
     Game.camera = Camera(0,0,3)
     ---@type Slim
-    Slim:new(1280/4 - 16,720/4 -32 + 20)
+    --Slim:new(1280/4 - 16,720/4 -32 + 20)
     
     ItemManager:createDrop(4,1280/4,720/4)
     ItemManager:createDrop(5,1280/4,720/4)

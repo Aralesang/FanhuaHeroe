@@ -1,13 +1,11 @@
-local Object = require "scripts.base.Object"
-local Tool   = require "scripts.utils.Tool"
 
----@class Skill : Object 技能基类
+---@class Skill : Class 技能基类
 ---@field id number 技能id
 ---@field name string 技能名称
 ---@field description string 技能描述
 ---@field stats table<string,number> 影响的属性列表
 ---@field skills number[] 能学会的技能列表
-local Skill = Object:extend()
+local Skill = Class('Skill')
 
 ---使用技能
 ---@param target Role 技能的目标

@@ -8,28 +8,17 @@ local ItemManager = require "scripts.manager.ItemManager"
 ---@field animName string 当前动画名称
 ---@field frameIndex number 当前动画帧下标
 ---@field animation Animation | nil 动画组件
-local Equipment = Component:extend()
-
-function Equipment:extend()
-    local cls = {}
-    for k, v in pairs(self) do
-        if k:find("__") == 1 then
-            cls[k] = v
-        end
-    end
-    cls.__index = cls
-    cls.super = self
-    setmetatable(cls, self)
-    return cls
-end
+local Equipment = Class('Equipment',Component)
 
 ---构造函数
-function Equipment:new()
+function Equipment:initialize(target)
+    Component.initialize(self,target)
+    self.gameObject = target
+    self.animation = target:getComponent(Animation)
     self.slots = {}
 end
 
 function Equipment:awake()
-    self.animation = self.gameObject:getComponent(Animation)
     if self.animation == nil then
         error("对象未附加Animation组件")
     end
@@ -135,7 +124,7 @@ function Equipment:equip(itemId)
             local slotName = item.slot
             --如果目标道具没有可用装备槽
             if slotName == nil then
-                print("目标道具[" .. id .. "]没有设置slot")
+                print("目标道具[" .. id .. "]没有不可装备！")
                 return
             end
             --检查目标槽中是否有装备
@@ -156,6 +145,7 @@ function Equipment:equip(itemId)
                 item:use(self.gameObject --[[@as Role]])
             end
             slot.itemId = itemId
+            print("装备:"..item.name)
             return
         end
     end
@@ -207,10 +197,6 @@ function Equipment:isEquip(itemId)
         end
     end
     return false
-end
-
-function Equipment:__tostring()
-    return "Equipment"
 end
 
 return Equipment

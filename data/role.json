@@ -11,7 +11,8 @@
             "speed": 100,
             "range": 1164
         },
-        "skills":[2]
+        "skills":[2],
+        "items":[{"id":1},{"id":4,"equip":true},{"id":5,"equip":true}]
     },
     {
         "id": 2,

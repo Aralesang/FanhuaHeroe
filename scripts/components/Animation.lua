@@ -1,8 +1,8 @@
-local Component = require "scripts.base.Component"
 local AnimationState = require "scripts.enums.AnimaState"
 local Anim = require "scripts.base.Anim"
 local Direction = require "scripts.enums.Direction"
 local AnimManager = require "scripts.manager.AnimManager"
+local Component   = require "scripts.base.Component"
 
 ---动画组件
 ---@class Animation : Component
@@ -16,11 +16,12 @@ local AnimManager = require "scripts.manager.AnimManager"
 ---@field frameCall fun(index:number) |nil 动画帧回调,每帧开始之前调用
 ---@field endCall fun()|nil 动画结束回调,动画最后一帧绘制完成时调用
 ---@field frameIndex number 当前动画帧
-local Animation = Component:extend()
+local Animation = Class('Animation')
 
 --创建一个新的动画对象
 ---@private
-function Animation:new()
+function Animation:initialize(target)
+    Component.initialize(self,target)
     self.frameIndex = -1
     self.eventList = {}
     self.frameTime = 0.25

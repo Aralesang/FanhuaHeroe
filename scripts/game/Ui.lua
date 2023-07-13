@@ -1,7 +1,6 @@
-local Object = require "scripts.base.Object"
 
----@class Ui:Object 交互界面基类
-local Ui = Object:extend()
+---@class Ui : Class 交互界面基类
+local Ui = Class('Ui')
 
 function Ui:show()
     

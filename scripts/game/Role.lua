@@ -1,33 +1,50 @@
-local GameObject = require "scripts.game.GameObject"
-local State      = require "scripts.enums.State"
-local FSM        = require "scripts.game.FSM"
-local Direction  = require "scripts.enums.Direction"
-local Game       = require "scripts.game.Game"
-local RoleManager= require "scripts.manager.RoleManager"
+local GameObject  = require "scripts.game.GameObject"
+local State       = require "scripts.enums.State"
+local FSM         = require "scripts.game.FSM"
+local Direction   = require "scripts.enums.Direction"
+local Game        = require "scripts.game.Game"
+local Equipment   = require "scripts.components.Equipment"
+local RoleManager = require "scripts.manager.RoleManager"
+local Animation   = require "scripts.components.Animation"
 
----@class Role:GameObject 角色对象
+---@class Role : GameObject 角色对象
 ---@field stats table<string,number> 玩家属性列表
 ---@field state State 状态
 ---@field skills number[] 技能列表
 ---@field items table<number,number> 道具列表
----@field equipments table<string,number> 装备列表
----@field bodys table<string,number> 身体部件列表
-local Role = Class('Role',GameObject)
+---@field equipment Equipment 装备组件
+---@field animation Animation 动画组件
+local Role        = Class('Role', GameObject)
 
 ---构造函数
 ---@param roleId number
 ---@param x number
 ---@param y number
 function Role:initialize(roleId, x, y)
-    GameObject.initialize(self,x,y)
+    GameObject.initialize(self, x, y)
     self.state = State.idle
+    self.animation = self:addComponent(Animation)
+    self.equipment = self:addComponent(Equipment)
     self.skills = {}
     self.items = {}
     local role = RoleManager:getRole(roleId or 1)
     for k, v in pairs(role) do
         if k == "skills" then
             for _, skill in pairs(v) do
-                v[skill] = skill
+                self.skills[skill] = skill
+            end
+        elseif k == "items" then
+            for _, item in pairs(v) do
+                local id = tonumber(item.id)
+                if not id then
+                    error("道具配置错误:" .. item.id)
+                end
+                local num = item.num or 1       --不填num的情况下默认1个
+                self.items[id] = num
+                local equip = item.equip or false --该道具是否装备到了对象身上
+                if equip then
+                    self.equipment:equip(id)
+                end
             end
         else
             self[k] = v
@@ -111,16 +128,16 @@ function Role:move(dt, dir, filter)
         local cols_len = 0
         local x = self.x + dx
         local y = self.y + dy
-        self.x, self.y, cols, cols_len =  Game.world:move(self, x, y, filter)
+        self.x, self.y, cols, cols_len = Game.world:move(self, x, y, filter)
         return cols, cols_len
     end
-    return {},0
+    return {}, 0
 end
 
 ---添加道具
 ---@param id number 道具id
 ---@param num? number 道具数量
-function Role:addItem(id,num)
+function Role:addItem(id, num)
     num = num or 1
     local curNum = self.items[id]
     curNum = curNum or 0
@@ -130,7 +147,7 @@ end
 ---去除道具
 ---@param id number 道具id
 ---@param num number 道具数量
-function Role:removeItem(id,num)
+function Role:removeItem(id, num)
     local curNum = self.items[id]
     curNum = curNum == nil and 0 or curNum
     local newNum = curNum - num

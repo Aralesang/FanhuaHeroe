@@ -1,4 +1,4 @@
----@class class
+---@class Class
 ---@field initialize fun(...)
 ---@field new fun(...)
 middleclass = {
