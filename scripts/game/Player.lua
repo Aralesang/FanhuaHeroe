@@ -2,7 +2,6 @@ local Role         = require "scripts.game.Role"
 local Direction    = require "scripts.enums.Direction"
 local State        = require "scripts.enums.State"
 local Game         = require "scripts.game.Game"
-local Animation    = require "scripts.components.Animation"
 local SkillManager = require "scripts.manager.SkillManager"
 local ItemManager  = require "scripts.manager.ItemManager"
 

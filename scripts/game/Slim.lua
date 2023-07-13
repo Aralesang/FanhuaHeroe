@@ -1,9 +1,7 @@
 local Enemy = require "scripts.game.Enemy"
 local State = require "scripts.enums.State"
-local RoleManager = require "scripts.manager.RoleManager"
 local Game = require "scripts.game.Game"
 local ItemManager = require "scripts.manager.ItemManager"
-local Animation   = require "scripts.components.Animation"
 
 ---@class Slim:Enemy 史莱姆
 ---@field sight number 视野范围
@@ -17,7 +15,6 @@ local Slim = Class('Slim',Enemy)
 ---@param y number
 function Slim:initialize(x,y)
     Enemy.initialize(self,2,x,y)
-    self:setState(State.idle)
     self.tag = "slim"
     Game:addEnemys(self)
 end

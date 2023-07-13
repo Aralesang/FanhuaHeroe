@@ -12,6 +12,8 @@ local Animation   = require "scripts.components.Animation"
 ---@field state State 状态
 ---@field skills number[] 技能列表
 ---@field items table<number,number> 道具列表
+---@field equips table<string,number> 装备列表
+---@field bodys table<string,number> 身体组件列表
 ---@field equipment Equipment 装备组件
 ---@field animation Animation 动画组件
 local Role        = Class('Role', GameObject)
@@ -22,7 +24,7 @@ local Role        = Class('Role', GameObject)
 ---@param y number
 function Role:initialize(roleId, x, y)
     GameObject.initialize(self, x, y)
-    self.state = State.idle
+    self:setState(State.idle)
     self.animation = self:addComponent(Animation)
     self.equipment = self:addComponent(Equipment)
     self.skills = {}
