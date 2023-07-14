@@ -7,6 +7,7 @@
 ---@field world World 物理世界
 ---@field camera Camera 相机
 ---@field timer Timer 计时器
+---@field variables table<number,number> 全局变量
 local Game =
 {
     gameObjects = {}, --游戏对象集合
@@ -16,7 +17,8 @@ local Game =
     drops = {},
     world = {},
     camera = {},
-    timer = {}
+    timer = {},
+    variables = {}
 }
 
 ---添加一个游戏对象
@@ -68,6 +70,20 @@ end
 ---@param filter fun(item:GameObject,other:GameObject):filter
 function Game:checkCollision(obj, filter)
     Game.world:check(obj,obj.x,obj.y,filter)
+end
+
+function Game:getVar(id)
+    local var = self.variables[id] or 0
+    return var
+end
+
+function Game:setVar(id,value)
+    self.variables[id] = value
+end
+
+function Game:addVar(id,value)
+    local curr = self:getVar(id)
+    self.variables[id] = curr + value
 end
 
 return Game

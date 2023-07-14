@@ -75,6 +75,7 @@ function Role:damage(obj, atk)
         stats["hp"] = hpMax
     end
     if hp == 0 then
+        print("史莱姆死亡")
         self:setState(State.death)
     end
     self:onDamage(obj, atk)

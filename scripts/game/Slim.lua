@@ -117,6 +117,7 @@ function Slim:deathState()
              local itemId = math.random(1,6)
              local drop = ItemManager:createDrop(itemId,self.x,self.y)
              print("掉落物品:"..drop.name)
+             Game:addVar(3,1)
              self:destroy()
         end)
     end
