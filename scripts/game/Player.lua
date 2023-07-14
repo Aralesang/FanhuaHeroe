@@ -1,12 +1,10 @@
 local Role         = require "scripts.game.Role"
 local Direction    = require "scripts.enums.Direction"
 local State        = require "scripts.enums.State"
-local Game         = require "scripts.game.Game"
 local SkillManager = require "scripts.manager.SkillManager"
 local ItemManager  = require "scripts.manager.ItemManager"
 
 ---@class Player : Role 玩家对象
----@field moveDir Direction 移动方向
 ---@field name string 角色名称
 ---@field speed number 角色速度
 ---@field keyList string[] 按键记录
@@ -16,10 +14,8 @@ local Player       = Class('Player', Role)
 
 function Player:initialize(x, y)
     Role.initialize(self, 1, x, y)
-    self.moveDir = Direction.Down
+    self.tag = "Player"
     self.keyList = {}
-    self.x = x
-    self.y = y
     self.central = { x = 8, y = 16 }
     Game:addPlayer(self)
 end
@@ -27,8 +23,6 @@ end
 function Player:load()
     --播放默认动画
     self.animation:play("闲置")
-    --设置头发
-    self.equipment:setHair(4)
 end
 
 function Player:update(dt)
@@ -90,6 +84,7 @@ function Player:walkState(dt)
                 end
                 return "slide"
             end) --移动
+            --print(self.x,self.y)
             for i = 1, cols_len do
                 --将接触到的所有掉落物收入库存
                 ---@type Drop
@@ -98,7 +93,6 @@ function Player:walkState(dt)
                 if drop.tag == "drop" then
                     self:addItem(drop.itemId, drop.itemNum)
                     Game:removeGameObject(drop)
-                    print("获得:" .. drop.name)
                 end
             end
             isMove = true
@@ -188,11 +182,18 @@ function Player:keypressed(key)
         end
     end
     if key == "k" then
-        local skill = SkillManager:getSkill(1, self.skills)
+        local skill = SkillManager:getSkill(2, self.skills)
         if not skill then
             print("未掌握技能")
         else
             skill:use(self)
+        end
+    end
+    if key == "f" then
+        local touch = self:getOperate()
+        if touch ~= nil and touch.tag == "Npc" then
+            ---@cast touch Npc
+            touch:talk(self)
         end
     end
 end

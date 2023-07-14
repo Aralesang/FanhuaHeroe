@@ -2,10 +2,10 @@ local GameObject  = require "scripts.game.GameObject"
 local State       = require "scripts.enums.State"
 local FSM         = require "scripts.game.FSM"
 local Direction   = require "scripts.enums.Direction"
-local Game        = require "scripts.game.Game"
 local Equipment   = require "scripts.components.Equipment"
 local RoleManager = require "scripts.manager.RoleManager"
 local Animation   = require "scripts.components.Animation"
+local ItemManager = require "scripts.manager.ItemManager"
 
 ---@class Role : GameObject 角色对象
 ---@field stats table<string,number> 玩家属性列表
@@ -48,6 +48,8 @@ function Role:initialize(roleId, x, y)
                     self.equipment:equip(id)
                 end
             end
+        elseif k == "hair" then
+            self.equipment:setHair(v)
         else
             self[k] = v
         end
@@ -144,6 +146,8 @@ function Role:addItem(id, num)
     local curNum = self.items[id]
     curNum = curNum or 0
     self.items[id] = curNum + num
+    local item = ItemManager:getItem(id)
+    print("获得:" .. item.name.."*"..num)
 end
 
 ---去除道具

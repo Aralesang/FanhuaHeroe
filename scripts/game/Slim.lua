@@ -1,6 +1,5 @@
 local Enemy = require "scripts.game.Enemy"
 local State = require "scripts.enums.State"
-local Game = require "scripts.game.Game"
 local ItemManager = require "scripts.manager.ItemManager"
 
 ---@class Slim:Enemy 史莱姆
@@ -15,8 +14,9 @@ local Slim = Class('Slim',Enemy)
 ---@param y number
 function Slim:initialize(x,y)
     Enemy.initialize(self,2,x,y)
-    self.tag = "slim"
+    self.tag = "Slim"
     Game:addEnemys(self)
+    print("史莱姆坐标:"..x..","..y)
 end
 
 function Slim:load()

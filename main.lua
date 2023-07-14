@@ -1,5 +1,5 @@
 Class      = require "scripts.utils.middleclass"
-local Game = require "scripts.game.Game"
+Game = require "scripts.game.Game"
 local sti = require "scripts.utils.sti"
 local Player = require "scripts.game.Player"
 local bump = require "scripts.utils.bump"
@@ -14,6 +14,7 @@ local Timer = require "scripts.utils.hump.timer"
 local Camera = require "scripts.utils.hump.camera"
 local SkillManager = require "scripts.manager.SkillManager"
 local UiManager    = require "scripts.manager.UiManager"
+local Lubi         = require "scripts.game.npc.Lubi"
 
 local map
 local player
@@ -51,10 +52,13 @@ function love.load()
     map:bump_init(Game.world)
     --实例化角色对象
     ---@type Player
-    player = Player:new(1280/4 - 25,720/4 + 50)
+    player = Player:new(1280/4 - 16,720/4 + 50)
+    player.name = ""
     Game.camera = Camera(0,0,3)
     ---@type Slim
-    --Slim:new(1280/4 - 16,720/4 -32 + 20)
+    Slim:new(1280/4 - 16,720/4 -12)
+
+    Lubi:new(1280/4 - 16,720/4 + 100)
     
     ItemManager:createDrop(4,1280/4,720/4)
     ItemManager:createDrop(5,1280/4,720/4)

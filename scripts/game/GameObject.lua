@@ -1,6 +1,5 @@
 local Vector2    = require "scripts.base.Vector2"
 local Direction  = require "scripts.enums.Direction"
-local Game       = require "scripts.game.Game"
 
 ---游戏对象基本类
 ---@class GameObject:Class
@@ -18,7 +17,7 @@ local Game       = require "scripts.game.Game"
 local GameObject = Class("GameObject")
 ---构造函数
 function GameObject:initialize(x,y,w,h)
-    self.name = ""
+    self.name = "游戏对象"
     self.x = x or 0
     self.y = y or 0
     self.w = w or 0
@@ -138,6 +137,34 @@ function GameObject:getDistance(target)
     local dy = math.abs(self.y - target.y)
     local distance = math.sqrt(dx * dx + dy * dy)
     return distance
+end
+
+---获取该对象目前可以操作到的对象
+---@return GameObject | nil
+function GameObject:getOperate()
+    --假设对象直线前进，找出一个身位内的可碰撞对象
+    local x,y
+    local touch = 5
+    if self.direction == Direction.Up then
+        x = self.x
+        y = self.y - touch
+    elseif self.direction == Direction.Down then
+        x = self.x
+        y = self.y + touch
+    elseif self.direction == Direction.Left then
+        x = self.x - touch
+        y = self.y
+    elseif self.direction == Direction.Right then
+        x = self.x + touch
+        y = self.y
+    end
+    local goalX, goalY, cols, len = Game.world:check(self,x,y)
+    local obj
+    for i = 1, len do
+        obj = cols[i]
+        return obj.other
+    end
+    return nil
 end
 
 return GameObject

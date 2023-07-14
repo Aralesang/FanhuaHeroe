@@ -9,9 +9,9 @@
             "hpMax": 10,
             "atk": 1,
             "speed": 100,
-            "range": 1164
+            "range": 100
         },
-        "bodys":[{"hair:":4}],
+        "hair":4,
         "skills":[2],
         "items":[{"id":1},{"id":4,"equip":true},{"id":5,"equip":true}]
     },
@@ -28,5 +28,13 @@
             "speed": 100,
             "range": 32
         }
+    },
+    {
+        "id": 3,
+        "name": "露比",
+        "w": 16,
+        "h": 16,
+        "hair":2,
+        "items":[{"id":2,"equip":true},{"id":3,"equip":true}]
     }
 ]

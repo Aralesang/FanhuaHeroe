@@ -1,7 +1,6 @@
 local JSON = require "scripts.utils.JSON"
 local Item = require "scripts.game.Item"
 local Drop = require "scripts.game.Drop"
-local Game = require "scripts.game.Game"
 
 ---@class ItemManager 道具管理器
 ---@field items Item[] 道具模板列表
