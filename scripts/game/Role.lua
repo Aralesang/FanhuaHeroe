@@ -2,10 +2,10 @@ local GameObject  = require "scripts.game.GameObject"
 local State       = require "scripts.enums.State"
 local FSM         = require "scripts.game.FSM"
 local Direction   = require "scripts.enums.Direction"
-local Equipment   = require "scripts.components.Equipment"
 local RoleManager = require "scripts.manager.RoleManager"
-local Animation   = require "scripts.components.Animation"
 local ItemManager = require "scripts.manager.ItemManager"
+local Equipment   = require "scripts.components.Equipment"
+local Animation   = require "scripts.components.Animation"
 
 ---@class Role : GameObject 角色对象
 ---@field stats table<string,number> 玩家属性列表
@@ -25,8 +25,8 @@ local Role        = Class('Role', GameObject)
 function Role:initialize(roleId, x, y)
     GameObject.initialize(self, x, y)
     self:setState(State.idle)
-    self.animation = self:addComponent(Animation)
-    self.equipment = self:addComponent(Equipment)
+    self.animation = Animation:new(self)
+    self.equipment = Equipment:new(self)
     self.skills = {}
     self.items = {}
     local role = RoleManager:getRole(roleId or 1)

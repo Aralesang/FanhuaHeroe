@@ -59,13 +59,6 @@ function love.load()
     Slim:new(1280/4 - 16,720/4 -12)
 
     Lubi:new(1280/4 - 16,720/4 + 100)
-    
-    ItemManager:createDrop(4,1280/4,720/4)
-    ItemManager:createDrop(5,1280/4,720/4)
-    ItemManager:createDrop(6,1280/4,720/4)
-    ItemManager:createDrop(7,1280/4,720/4)
-    ItemManager:createDrop(8,1280/4,720/4)
-    ItemManager:createDrop(1,1280/4,720/4)
     print("游戏初始化完毕!")
 end
 
@@ -89,19 +82,12 @@ function love.update(dt)
                 FSM.call(gameObject --[[@as Role]],dt)
             end
         end
-        --然后触发对象所附加的组件更新
-        if gameObject.components then
-            for _, component in pairs(gameObject.components) do
-                --触发组件load函数
-                if component.load and component.isLoad == false then
-                    component:load()
-                    component.isLoad = true
-                end
-                --触发组件更新
-                if component.update then
-                    component:update(dt)
-                end
-            end
+        ---@cast gameObject Role
+        if gameObject.animation then
+            gameObject.animation:update(dt)
+        end
+        if gameObject.equipment then
+            gameObject.equipment:update(dt)
         end
     end
 
@@ -119,21 +105,20 @@ function love.draw()
     --绘制地图
     map:draw(1280 / 6  - player.x, 720/6 - player.y,3)
     --绘制对象
-    for _, value in pairs(Game.gameObjects) do
+    for _, gameObject in pairs(Game.gameObjects) do
         --绘制游戏对象
-        value:draw()
-        if value.components then
-            --触发组件绘制
-            for _, component in pairs(value.components) do
-                if component.draw ~= nil then
-                    component:draw()
-                end
-            end
+        gameObject:draw()
+        ---@cast gameObject Role
+        if gameObject.animation then
+            gameObject.animation:draw()
         end
-        if Config.ShowCollision then
-            --绘制碰撞体积
-            map:bump_draw()
+        if gameObject.equipment then
+            gameObject.equipment:draw()
         end
+    end
+    if Config.ShowCollision then
+        --绘制碰撞体积
+        map:bump_draw()
     end
     Game.camera:detach()
     --触发ui绘制
@@ -150,13 +135,6 @@ function love.keypressed(key)
     --触发对象输入事件
     for _, value in pairs(Game.gameObjects) do
         value:keypressed(key)
-        if value.components then
-            for _, component in pairs(value.components) do
-                if component.keypressed then
-                    component:keypressed(key)
-                end
-            end
-        end
     end
 end
 
@@ -166,12 +144,5 @@ function love.keyreleased(key)
     --触发对象输入事件
     for _, value in pairs(Game.gameObjects) do
         value:keyreleased(key)
-        if value.components then
-            for _, component in pairs(value.components) do
-                if component.keyreleased then
-                    component:keyreleased(key)
-                end
-            end
-        end
     end
 end

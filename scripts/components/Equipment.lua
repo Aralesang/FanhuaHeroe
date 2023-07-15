@@ -4,7 +4,7 @@ local Component = require "scripts.base.Component"
 local ItemManager = require "scripts.manager.ItemManager"
 
 ---@class Equipment:Component 装备组件
----@field slots Slot[] 装备槽有序列表
+---@field slots table<string,Slot> 装备槽
 ---@field animName string 当前动画名称
 ---@field frameIndex number 当前动画帧下标
 ---@field animation Animation | nil 动画组件
@@ -14,14 +14,8 @@ local Equipment = Class('Equipment',Component)
 function Equipment:initialize(target)
     Component.initialize(self,target)
     self.gameObject = target
-    self.animation = target:getComponent(Animation)
+    self.animation = target.animation
     self.slots = {}
-end
-
-function Equipment:awake()
-    if self.animation == nil then
-        error("对象未附加Animation组件")
-    end
     --添加装备插槽
     self:addSlot("发型", "身体部件")
     self:addSlot("帽子", "装备")
@@ -59,12 +53,24 @@ function Equipment:draw()
     if self.animName == nil or self.frameIndex == nil then
         return
     end
-    for _, slot in pairs(self.slots) do
-        local anim = slot:getAnim(self.animName)
-        if anim == nil then
-            goto continue
-        end
-        local image = anim.image
+    self:drawEquip("发型")
+    self:drawEquip("上衣")
+    self:drawEquip("下装")
+    self:drawEquip("武器")
+end
+
+---绘制装备
+---@param name slot
+function Equipment:drawEquip(name)
+    local slot = self:getSlot(name)
+    if slot == nil then
+        return
+    end
+    local anim = slot:getAnim(self.animName)
+    if anim == nil then
+        return
+    end
+    local image = anim.image
         local quad = anim.quad
         local gameObject = self.gameObject
         local x = gameObject.x - self.gameObject.central.x * self.gameObject.scale.x
@@ -72,8 +78,6 @@ function Equipment:draw()
         x = math.floor(x)
         y = math.floor(y)
         love.graphics.draw(image, quad, x, y, gameObject.rotate, gameObject.scale.x, gameObject.scale.y, 0, 0, 0, 0)
-        ::continue::
-    end
 end
 
 ---@alias slot
@@ -97,19 +101,14 @@ end
 function Equipment:addSlot(name, type)
     ---@type Slot
     local slot = Slot(name, type or "装备")
-    table.insert(self.slots, slot)
+    self.slots[name] = slot
 end
 
 ---根据槽名称获取装备槽对象
 ---@param name string
 ---@return Slot | nil
 function Equipment:getSlot(name)
-    for _, value in pairs(self.slots) do
-        if value.name == name then
-            return value
-        end
-    end
-    return nil
+    return self.slots[name]
 end
 
 ---装备道具
