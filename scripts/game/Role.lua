@@ -41,7 +41,7 @@ function Role:initialize(roleId, x, y)
                 if not id then
                     error("道具配置错误:" .. item.id)
                 end
-                local num = item.num or 1       --不填num的情况下默认1个
+                local num = item.num or 1         --不填num的情况下默认1个
                 self.items[id] = num
                 local equip = item.equip or false --该道具是否装备到了对象身上
                 if equip then
@@ -72,10 +72,10 @@ function Role:damage(obj, atk)
         hp = 0
     end
     if hp > hpMax then
-        stats["hp"] = hpMax
+        hp = hpMax
     end
+    stats["hp"] = hpqqq
     if hp == 0 then
-        print("史莱姆死亡")
         self:setState(State.death)
     end
     self:onDamage(obj, atk)
@@ -148,7 +148,7 @@ function Role:addItem(id, num)
     curNum = curNum or 0
     self.items[id] = curNum + num
     local item = ItemManager:getItem(id)
-    print("获得:" .. item.name.."*"..num)
+    print("获得:" .. item.name .. "*" .. num)
 end
 
 ---去除道具
