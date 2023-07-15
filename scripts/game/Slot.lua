@@ -41,13 +41,8 @@ function Slot:getAnim(name)
         elseif self.type == "身体部件" then
             equName = ItemManager:getHair(itemId).name
         end
-
         --动画图片路径组合规则:以装备id为文件夹区分，以动画id为最小单位
-        local imgPath = "image/equipment/" .. name .. "/" .. equName .. ".png"
-        -- if not Tool.fileExists(imgPath) then
-        --     error("错误:装备["..equName.."]的动画文件没有找到")
-        --     return nil
-        -- end
+        local imgPath = "image/anim/" .. equName .. "/" .. name .. ".png"
         local img = love.graphics.newImage(imgPath)
         if img == nil then
             error("目标装备动画不存在:" .. imgPath)

@@ -232,10 +232,10 @@ function Animation:getEvent(key)
 end
 
 ---获取当前正在播放的动画名称
----@return string
+---@return string | nil
 function Animation:getAnimName()
     if self.anim == nil then
-        return ""
+        return nil
     end
     return self.anim.name
 end

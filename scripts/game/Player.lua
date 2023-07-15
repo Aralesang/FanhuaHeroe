@@ -35,7 +35,9 @@ function Player:update(dt)
     --同步装备动画
     local frameIndex = self.animation.frameIndex
     local animName = self.animation:getAnimName()
-    self.equipment:changeAnim(animName, frameIndex)
+    if animName then
+        self.equipment:changeAnim(animName, frameIndex)
+    end
 end
 
 ---如果进入闲置状态
@@ -165,7 +167,7 @@ function Player:keypressed(key)
     if key == "c" then
         print("=======玩家状态======")
         for key, value in pairs(self.stats) do
-            print(key..":"..value)
+            print(key .. ":" .. value)
         end
     end
 
@@ -178,7 +180,7 @@ function Player:keypressed(key)
             if self.equipment:isEquip(id) then
                 name = name .. "E"
             end
-            print(name,num)
+            print(name, num)
         end
     end
     if key == "k" then
