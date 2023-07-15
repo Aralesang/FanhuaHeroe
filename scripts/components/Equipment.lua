@@ -5,8 +5,6 @@ local ItemManager = require "scripts.manager.ItemManager"
 
 ---@class Equipment:Component 装备组件
 ---@field slots table<string,Slot> 装备槽
----@field animName string 当前动画名称
----@field frameIndex number 当前动画帧下标
 ---@field animation Animation | nil 动画组件
 local Equipment = Class('Equipment',Component)
 
@@ -31,17 +29,19 @@ function Equipment:update(dt)
     if self.animation == nil then
         error("对象未附加Animation组件")
     end
-    if self.animName == nil then
+    local animName = self.animation:getAnimName()
+    local frameIndex = self.animation:getFrame()
+    if animName == nil then
         return
     end
     for _, slot in pairs(self.slots) do
-        local anim = slot:getAnim(self.animName)
+        local anim = slot:getAnim(animName)
         if anim == nil then
             goto continue
         end
         local quad = anim.quad
         local row = self.gameObject.direction
-        quad:setViewport(self.frameIndex * anim.width, row * anim.height, anim.width, anim.height,
+        quad:setViewport(frameIndex * anim.width, row * anim.height, anim.width, anim.height,
             anim.image:getWidth(),
             anim.image:getHeight())
         ::continue::
@@ -50,9 +50,7 @@ end
 
 ---绘制装备图像,按照装备槽被创建的先后顺序绘制
 function Equipment:draw()
-    if self.animName == nil or self.frameIndex == nil then
-        return
-    end
+    --同步装备动画
     self:drawEquip("发型")
     self:drawEquip("上衣")
     self:drawEquip("下装")
@@ -62,11 +60,15 @@ end
 ---绘制装备
 ---@param name slot
 function Equipment:drawEquip(name)
+    local animName = self.animation:getAnimName()
+    if animName == nil then
+        return
+    end
     local slot = self:getSlot(name)
     if slot == nil then
         return
     end
-    local anim = slot:getAnim(self.animName)
+    local anim = slot:getAnim(animName)
     if anim == nil then
         return
     end
@@ -174,14 +176,6 @@ function Equipment:setHair(id)
         error("装备槽 [发型] 不存在!")
     end
     slot.itemId = id
-end
-
----变更动画
----@param animName string
----@param frameIndex number
-function Equipment:changeAnim(animName, frameIndex)
-    self.animName = animName
-    self.frameIndex = frameIndex
 end
 
 ---检查物品是否正在被装备

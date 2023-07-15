@@ -74,7 +74,7 @@ function Role:damage(obj, atk)
     if hp > hpMax then
         hp = hpMax
     end
-    stats["hp"] = hpqqq
+    stats["hp"] = hp
     if hp == 0 then
         self:setState(State.death)
     end

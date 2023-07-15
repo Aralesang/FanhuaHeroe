@@ -6,11 +6,12 @@ local Lubi = Class('Lubi', Npc)
 
 function Lubi:initialize(x, y)
     Npc.initialize(self, 3, x, y)
+    self.central = { x = 8, y = 16 }
 end
 
 function Lubi:load()
     self.animation:play("闲置")
-    self.direction = Direction.Up
+    self.direction = Direction.Down
 end
 
 ---对话

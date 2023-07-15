@@ -8,7 +8,7 @@
             "hp": 5,
             "hpMax": 10,
             "atk": 1,
-            "speed": 100,
+            "speed": 50,
             "range": 100
         },
         "hair":4,

@@ -15,7 +15,7 @@ local Component   = require "scripts.base.Component"
 ---@field private direction Direction 当前动画方向
 ---@field frameCall fun(index:number) |nil 动画帧回调,每帧开始之前调用
 ---@field endCall fun()|nil 动画结束回调,动画最后一帧绘制完成时调用
----@field frameIndex number 当前动画帧
+---@field private frameIndex number 当前动画帧
 local Animation = Class('Animation')
 
 --创建一个新的动画对象
@@ -24,7 +24,7 @@ function Animation:initialize(target)
     Component.initialize(self,target)
     self.frameIndex = -1
     self.eventList = {}
-    self.frameTime = 0.25
+    self.frameTime = 0.1
     self.currentTime = 0
     self.direction = Direction.Down
     self.state = AnimationState.Stop
@@ -238,6 +238,11 @@ function Animation:getAnimName()
         return nil
     end
     return self.anim.name
+end
+
+---获取当前动画帧
+function Animation:getFrame()
+    return self.frameIndex
 end
 
 return Animation

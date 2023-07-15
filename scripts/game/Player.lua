@@ -32,12 +32,7 @@ function Player:update(dt)
     if self.equipment == nil then
         error("角色未找到装备组件")
     end
-    --同步装备动画
-    local frameIndex = self.animation.frameIndex
-    local animName = self.animation:getAnimName()
-    if animName then
-        self.equipment:changeAnim(animName, frameIndex)
-    end
+    
 end
 
 ---如果进入闲置状态

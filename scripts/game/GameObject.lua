@@ -13,6 +13,7 @@ local Direction  = require "scripts.enums.Direction"
 ---@field y number 对象空间垂直坐标
 ---@field w number 对象宽度
 ---@field h number 对象高度
+---@field isLoad boolean 是否加载过
 local GameObject = Class("GameObject")
 ---构造函数
 function GameObject:initialize(x,y,w,h)
@@ -28,6 +29,7 @@ function GameObject:initialize(x,y,w,h)
     self.direction = Direction.Down
     self.speed = 0
     self.tag = ""
+    self.isLoad = false
 end
 
 ---对象加载
