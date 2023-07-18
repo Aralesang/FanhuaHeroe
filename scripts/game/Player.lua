@@ -3,6 +3,7 @@ local Direction    = require "scripts.enums.Direction"
 local State        = require "scripts.enums.State"
 local SkillManager = require "scripts.manager.SkillManager"
 local ItemManager  = require "scripts.manager.ItemManager"
+local Bag          = require "scripts.game.Bag"
 
 ---@class Player : Role 玩家对象
 ---@field name string 角色名称
@@ -165,16 +166,7 @@ function Player:keypressed(key)
     end
 
     if key == "b" then
-        print("=======背包======")
-        local items = self.items
-        for id, num in pairs(items) do
-            local item = ItemManager:getItem(id)
-            local name = item.name
-            if self.equipment:isEquip(id) then
-                name = name .. "E"
-            end
-            print(name, num)
-        end
+        Bag:show()
     end
     if key == "k" then
         local skill = SkillManager:getSkill(2, self.skills)

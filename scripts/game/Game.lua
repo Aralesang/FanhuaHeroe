@@ -1,7 +1,7 @@
 ---游戏对象全局变量合集
 ---@class Game
 ---@field gameObjects GameObject[] 游戏对象集合
----@field players Player[] 玩家对象集合
+---@field player Player 玩家对象
 ---@field enemys Enemy[] 敌对对象集合
 ---@field drops Drop[] 掉落物集合
 ---@field world World 物理世界
@@ -12,7 +12,7 @@ local Game =
 {
     gameObjects = {}, --游戏对象集合
     controllers = {}, --碰撞器字典
-    players = {},
+    player = {},
     enemys = {},
     drops = {},
     world = {},
@@ -32,7 +32,6 @@ end
 ---@param obj GameObject 游戏对象
 function Game:removeGameObject(obj)
     self.gameObjects[obj] = nil
-    self.players[obj] = nil
     self.enemys[obj] = nil
     self.drops[obj] = nil
     self.world:remove(obj)
@@ -42,7 +41,7 @@ end
 ---@param obj Player
 function Game:addPlayer(obj)
     self:addGameObject(obj)
-    self.players[obj] = obj
+    self.player = obj
 end
 
 ---添加敌人

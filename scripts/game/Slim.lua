@@ -7,25 +7,21 @@ local ItemManager = require "scripts.manager.ItemManager"
 ---@field state number 状态
 ---@field target GameObject 仇恨目标
 ---@field range number 射程
-local Slim = Class('Slim',Enemy)
+local Slim = Class('Slim', Enemy)
 
 ---构造函数
 ---@param x number
 ---@param y number
-function Slim:initialize(x,y)
-    Enemy.initialize(self,2,x,y)
+function Slim:initialize(x, y)
+    Enemy.initialize(self, 2, x, y)
     self.tag = "Slim"
     Game:addEnemys(self)
-    print("史莱姆坐标:"..x..","..y)
+    print("史莱姆坐标:" .. x .. "," .. y)
 end
 
 function Slim:load()
     self.animation:play("闲置_史莱姆")
-    --测试代码：直接将第一个玩家作为仇恨目标
-    for _, player in pairs(Game.players) do
-        --self.target = player
-        break
-    end
+    --测试代码：直接将玩家作为仇恨目标
 end
 
 ---如果进入闲置状态
@@ -75,14 +71,13 @@ function Slim:attackState()
     self.animation:play("攻击_史莱姆", function(index)
         if index == 4 then
             --print("触发伤害帧!")
-            --查找所有的玩家对象，并检查距离
-            for _, v in pairs(Game.players) do
-                local dis = self:getDistance(v)
-                --在射程内找到一个玩家
-                if dis <= self.range then
-                    --扣除对象的生命值
-                    v:damage(self, self.stats["atk"])
-                end
+            --查找所玩家对象，并检查距离
+            local player = Game.player
+            local dis = self:getDistance(player)
+            --在射程内找到一个玩家
+            if dis <= self.range then
+                --扣除对象的生命值
+                player:damage(self, self.stats["atk"])
             end
         end
     end, function()
@@ -104,7 +99,7 @@ end
 ---@param obj GameObject
 ---@param atk number
 function Slim:onDamage(obj, atk)
-    print(self.name.."受到了" .. obj.name .. "的" .. atk .. "点攻击")
+    print(self.name .. "受到了" .. obj.name .. "的" .. atk .. "点攻击")
     self:setState(State.damage)
 end
 
@@ -112,24 +107,24 @@ end
 function Slim:deathState()
     if self.animation:getAnimName() ~= "死亡_史莱姆" then
         self.animation:play("死亡_史莱姆", nil, function()
-             --在死亡位置创建一个掉落物
-             math.randomseed(os.time())
-             local itemId = math.random(1,6)
-             local drop = ItemManager:createDrop(itemId,self.x,self.y)
-             print("掉落物品:"..drop.name)
-             Game:addVar(3,1)
-             self:destroy()
+            --在死亡位置创建一个掉落物
+            math.randomseed(os.time())
+            local itemId = math.random(1, 6)
+            local drop = ItemManager:createDrop(itemId, self.x, self.y)
+            print("掉落物品:" .. drop.name)
+            Game:addVar(3, 1)
+            self:destroy()
         end)
     end
 end
 
 function Slim:onDestroy()
-    print(self.name.."死了")
+    print(self.name .. "死了")
 end
 
 ---受伤状态
 function Slim:damageState()
-    self.animation:play("受伤_史莱姆",nil,function ()
+    self.animation:play("受伤_史莱姆", nil, function()
         --print("史莱姆挨打结束")
         self:setState(State.idle)
     end)

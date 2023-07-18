@@ -87,6 +87,7 @@ end
 ---注册道具
 ---@param id number 道具id
 ---@param use? fun(item:Item,target:GameObject) 使用道具的逻辑
+---@param equip? fun(item:Item,target:GameObject) 装备道具的逻辑
 ---@param unequip? fun(item:Item,target: GameObject) 卸下道具的逻辑
 function ItemManager:register(id, use, equip,unequip)
     if self.items[id] == nil then
@@ -94,6 +95,9 @@ function ItemManager:register(id, use, equip,unequip)
     end
     if use then
         self.items[id].use = use
+    end
+    if equip then
+        self.items[id].equip = equip
     end
     if unequip then
         self.items[id].unequip = unequip
