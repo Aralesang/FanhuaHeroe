@@ -31,14 +31,34 @@ function Item:use(target)
     if skills and target.skills then
         for _, id in pairs(skills) do
             target.skills[id] = id
-            print("学会了:"..id)
+            print(target.name .. " 学会了:"..id)
         end
     end
+end
+
+---装备该物品时
+---@param target Role 装备的对象
+function Item:equip(target)
+    --如果没有装备槽则无法装备
+    if not self.slot then
+        print("该道具无法装备")
+        return
+    end
+    self:use(target)
+    --如果是装备,则穿到玩家身上
+    target.equips[self.slot] = self.id
+    print(target.name .. " 装备:"..self.name)
 end
 
 ---卸载该物品时
 ---@param target Role 卸载道具的对象
 function Item:unequip(target)
+    --如果没有装备槽则无法装备
+    if not self.slot then
+        print("该道具无法卸载")
+        return
+    end
+    print(target.name .. " 卸除:"..self.name)
     --清除道具带来的属性
     local stats = self.stats
     if stats then
@@ -51,9 +71,10 @@ function Item:unequip(target)
     if skills then
         for _, id in pairs(skills) do
             target.skills[id] = nil
-            print("遗忘了:"..id)
+            print(target.name .. " 遗忘了:"..id)
         end
     end
+    target.equips[self.slot] = 0
 end
 
 return Item

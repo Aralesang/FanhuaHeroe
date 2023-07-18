@@ -28,7 +28,7 @@ function Lubi:talk(target)
     elseif Game:getVar(3) >= 1 and Game:getVar(4) == 0 then
         print("非常感谢你！这是谢礼！")
         Game:setVar(4,1)
-        target:addItem(1,5)
+        target:addItem(7)
     else
         print("有空再来玩哦!")
     end

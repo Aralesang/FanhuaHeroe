@@ -1,5 +1,4 @@
 local Slot = require "scripts.game.Slot"
-local Animation = require "scripts.components.Animation"
 local Component = require "scripts.base.Component"
 local ItemManager = require "scripts.manager.ItemManager"
 
@@ -125,7 +124,7 @@ function Equipment:equip(itemId)
             local slotName = item.slot
             --如果目标道具没有可用装备槽
             if slotName == nil then
-                print("目标道具[" .. id .. "]没有不可装备！")
+                print("目标道具[" .. id .. "]不可装备！")
                 return
             end
             --检查目标槽中是否有装备
@@ -143,10 +142,9 @@ function Equipment:equip(itemId)
             end
             local item = ItemManager:getItem(itemId)
             if item then
-                item:use(self.gameObject --[[@as Role]])
+                item:equip(self.gameObject --[[@as Role]])
             end
             slot.itemId = itemId
-            print("装备:"..item.name)
             return
         end
     end
@@ -163,7 +161,6 @@ function Equipment:unequip(name)
     local item = ItemManager:getItem(slot.itemId)
     if item then
         item:unequip(self.gameObject --[[@as Role]])
-        print("卸除:"..item.name)
     end
     slot.itemId = 0
 end

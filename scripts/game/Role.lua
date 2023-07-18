@@ -29,30 +29,41 @@ function Role:initialize(roleId, x, y)
     self.equipment = Equipment:new(self)
     self.skills = {}
     self.items = {}
+    self.equips = {}
     local role = RoleManager:getRole(roleId or 1)
     for k, v in pairs(role) do
-        if k == "skills" then
-            for _, skill in pairs(v) do
-                self.skills[skill] = skill
-            end
-        elseif k == "items" then
-            for _, item in pairs(v) do
-                local id = tonumber(item.id)
-                if not id then
-                    error("道具配置错误:" .. item.id)
-                end
-                local num = item.num or 1         --不填num的情况下默认1个
-                self.items[id] = num
-                local equip = item.equip or false --该道具是否装备到了对象身上
-                if equip then
-                    self.equipment:equip(id)
-                end
-            end
-        elseif k == "hair" then
-            self.equipment:setHair(v)
-        else
+        if type(v) ~= "table" and k ~= "hair" then
             self[k] = v
         end
+    end
+    local stats = role["stats"]
+    if stats then
+        self.stats = stats
+    end
+    local skills = role["skills"]
+    if skills then
+        for _, skill in pairs(skills) do
+            self.skills[skill] = skill
+        end
+    end
+    local items = role["items"]
+    if items then
+        for _, item in pairs(items) do
+            local id = tonumber(item.id)
+            if not id then
+                error("道具配置错误:" .. item.id)
+            end
+            local num = item.num or 1         --不填num的情况下默认1个
+            self.items[id] = num
+            local equip = item.equip or false --该道具是否装备到了对象身上
+            if equip then
+                self.equipment:equip(item.id)
+            end
+        end
+    end
+    local hair = role["hair"]
+    if hair then
+        self.equipment:setHair(hair)
     end
 end
 
