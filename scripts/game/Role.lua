@@ -29,6 +29,7 @@ function Role:initialize(roleId, x, y)
     self.equipment = Equipment:new(self)
     self.skills = {}
     self.items = {}
+    self.stats = {}
     local role = RoleManager:getRole(roleId or 1)
     for k, v in pairs(role) do
         if k == "skills" then
@@ -97,7 +98,7 @@ end
 ---@param value number 属性值
 function Role:changeStats(key, value)
     --如果是hp则不能超过hpMax,也不能低于0
-    local curr = self.stats[key]
+    local curr = self.stats[key] or 0
     local newValue = curr + value
     if key == "hp" then
         newValue = math.min(newValue, self.stats["hpMax"])

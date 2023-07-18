@@ -1,5 +1,6 @@
 Class      = require "scripts.utils.middleclass"
 Game = require "scripts.game.Game"
+Tool = require "scripts.utils.Tool"
 local sti = require "scripts.utils.sti"
 local Player = require "scripts.game.Player"
 local bump = require "scripts.utils.bump"

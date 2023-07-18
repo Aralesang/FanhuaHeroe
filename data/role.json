@@ -13,7 +13,7 @@
         },
         "hair":4,
         "skills":[2],
-        "items":[{"id":1},{"id":4,"equip":true},{"id":5,"equip":true}]
+        "items":[{"id":1},{"id":4,"equip":true},{"id":5,"equip":true},{"id":6,"equip":true}]
     },
     {
         "id": 2,

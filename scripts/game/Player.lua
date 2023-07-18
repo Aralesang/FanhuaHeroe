@@ -6,9 +6,7 @@ local ItemManager  = require "scripts.manager.ItemManager"
 
 ---@class Player : Role 玩家对象
 ---@field name string 角色名称
----@field speed number 角色速度
 ---@field keyList string[] 按键记录
----@field state number 状态
 ---@field range number 射程
 local Player       = Class('Player', Role)
 
