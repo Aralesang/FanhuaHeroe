@@ -3,6 +3,7 @@ local Direction    = require "scripts.enums.Direction"
 local State        = require "scripts.enums.State"
 local SkillManager = require "scripts.manager.SkillManager"
 local ItemManager  = require "scripts.manager.ItemManager"
+---@type Bag
 local Bag          = require "scripts.game.Bag"
 
 ---@class Player : Role 玩家对象

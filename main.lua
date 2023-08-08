@@ -10,12 +10,11 @@ local AnimManager = require "scripts.manager.AnimManager"
 local ItemManager = require "scripts.manager.ItemManager"
 local RoleManager = require "scripts.manager.RoleManager"
 local FSM         = require "scripts.game.FSM"
-local Role        = require "scripts.game.Role"
 local Timer = require "scripts.utils.hump.timer"
 local Camera = require "scripts.utils.hump.camera"
 local SkillManager = require "scripts.manager.SkillManager"
 local UiManager    = require "scripts.manager.UiManager"
-local Lubi         = require "scripts.game.npc.Lubi"
+local Lubi         = require "scripts.game.npc.Ruby"
 
 local map
 local player
@@ -39,6 +38,7 @@ function love.load()
     ItemManager:init()
     RoleManager:init()
     SkillManager:init()
+    UiManager:init()
     
     --加载有限状态机
     FSM.init()

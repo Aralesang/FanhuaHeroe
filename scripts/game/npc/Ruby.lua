@@ -1,22 +1,22 @@
 local Npc = require "scripts.game.npc.Npc"
 local Direction = require "scripts.enums.Direction"
 
----@class Lubi : Npc 露比
-local Lubi = Class('Lubi', Npc)
+---@class Ruby : Npc 露比
+local Ruby = Class('Ruby', Npc)
 
-function Lubi:initialize(x, y)
+function Ruby:initialize(x, y)
     Npc.initialize(self, 3, x, y)
     self.central = { x = 8, y = 16 }
 end
 
-function Lubi:load()
+function Ruby:load()
     self.animation:play("闲置")
     self.direction = Direction.Down
 end
 
 ---对话
 ---@param target Player
-function Lubi:talk(target)
+function Ruby:talk(target)
     if Game:getVar(1) == 0 then
         print("我的名字是露比！欢迎来到繁花镇！")
         Game:setVar(1, 1)
@@ -34,4 +34,4 @@ function Lubi:talk(target)
     end
 end
 
-return Lubi
+return Ruby

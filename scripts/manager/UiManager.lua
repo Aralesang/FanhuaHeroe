@@ -6,13 +6,13 @@ local UiManager = {
 }
 
 function UiManager:init()
-    self.uis["bag"] = Bag()
+    self.uis["bag"] = Bag:new()
 end
 
 ---显示UI
 ---@param name string ui名称
 function UiManager:show(name)
-    
+    self.uis[name]:show()
 end
 
 return UiManager

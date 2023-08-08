@@ -12,10 +12,8 @@ local Game =
 {
     gameObjects = {}, --游戏对象集合
     controllers = {}, --碰撞器字典
-    player = {},
     enemys = {},
     drops = {},
-    world = {},
     camera = {},
     timer = {},
     variables = {}
