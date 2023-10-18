@@ -86,9 +86,9 @@ end
 
 ---注册道具
 ---@param id number 道具id
----@param use? fun(item:Item,target:GameObject) 使用道具的逻辑
----@param equip? fun(item:Item,target:GameObject) 装备道具的逻辑
----@param unequip? fun(item:Item,target: GameObject) 卸下道具的逻辑
+---@param use? fun(item:Item,target:game_object) 使用道具的逻辑
+---@param equip? fun(item:Item,target:game_object) 装备道具的逻辑
+---@param unequip? fun(item:Item,target: game_object) 卸下道具的逻辑
 function ItemManager:register(id, use, equip,unequip)
     if self.items[id] == nil then
         error("注册道具时出错,目标id不存在:" .. id)

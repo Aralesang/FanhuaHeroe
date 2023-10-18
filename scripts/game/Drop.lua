@@ -1,6 +1,6 @@
 local GameObject = require "scripts.game.game_object"
 
----@class Drop:GameObject 掉落物
+---@class Drop:game_object 掉落物
 ---@field itemId number 对应的物品id
 ---@field itemNum number 堆中的物品数量
 ---@field icon string 物品图标

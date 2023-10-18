@@ -1,5 +1,5 @@
 ---方向枚举
----@enum Direction
+---@enum direction
 local Direction = {
     ---下
     Down = 0,

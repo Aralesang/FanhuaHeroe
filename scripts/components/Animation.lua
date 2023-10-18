@@ -12,7 +12,7 @@ local Component   = require "scripts.base.component"
 ---@field private anim anim 当前使用的动画对象
 ---@field private frameTime number 每帧动画间隔
 ---@field private currentTime number 当前已持续的时间(秒)
----@field private direction Direction 当前动画方向
+---@field private direction direction 当前动画方向
 ---@field frameCall fun(index:number) |nil 动画帧回调,每帧开始之前调用
 ---@field endCall fun()|nil 动画结束回调,动画最后一帧绘制完成时调用
 ---@field private frameIndex number 当前动画帧

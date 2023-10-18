@@ -57,7 +57,7 @@ function love.load()
     player = player_class:new(300,100)
     player.name = ""
     Game.camera = camera(0,0,3)
-    ---@type Slim
+    ---@type slim
     slim:new(390,40)
 
     ruby:new(300,50)

@@ -82,7 +82,7 @@ function Debug.size(table)
 end
 
 ---绘制碰撞体积
----@param box GameObject
+---@param box game_object
 ---@param r number
 ---@param g number
 ---@param b number
