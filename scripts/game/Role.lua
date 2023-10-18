@@ -1,11 +1,11 @@
-local GameObject  = require "scripts.game.GameObject"
-local State       = require "scripts.enums.State"
-local FSM         = require "scripts.game.FSM"
-local Direction   = require "scripts.enums.Direction"
-local RoleManager = require "scripts.manager.RoleManager"
-local ItemManager = require "scripts.manager.ItemManager"
-local Equipment   = require "scripts.components.Equipment"
-local Animation   = require "scripts.components.Animation"
+local GameObject  = require "scripts.game.game_object"
+local State       = require "scripts.enums.state"
+local FSM         = require "scripts.game.fsm"
+local Direction   = require "scripts.enums.direction"
+local RoleManager = require "scripts.manager.role_manager"
+local ItemManager = require "scripts.manager.item_manager"
+local Equipment   = require "scripts.components.equipment"
+local Animation   = require "scripts.components.animation"
 
 ---@class Role : GameObject 角色对象
 ---@field stats table<string,number> 玩家属性列表

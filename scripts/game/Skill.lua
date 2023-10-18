@@ -1,5 +1,5 @@
 
----@class Skill : Class 技能基类
+---@class Skill : class 技能基类
 ---@field id number 技能id
 ---@field name string 技能名称
 ---@field description string 技能描述

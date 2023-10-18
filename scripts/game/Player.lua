@@ -1,10 +1,10 @@
-local Role         = require "scripts.game.Role"
-local Direction    = require "scripts.enums.Direction"
-local State        = require "scripts.enums.State"
-local SkillManager = require "scripts.manager.SkillManager"
-local ItemManager  = require "scripts.manager.ItemManager"
+local Role         = require "scripts.game.role"
+local Direction    = require "scripts.enums.direction"
+local State        = require "scripts.enums.state"
+local SkillManager = require "scripts.manager.skill_manager"
+local ItemManager  = require "scripts.manager.item_manager"
 ---@type Bag
-local Bag          = require "scripts.game.Bag"
+local Bag          = require "scripts.game.bag"
 
 ---@class Player : Role 玩家对象
 ---@field name string 角色名称

@@ -1,15 +1,15 @@
-local AnimationState = require "scripts.enums.AnimaState"
-local Anim = require "scripts.base.Anim"
-local Direction = require "scripts.enums.Direction"
-local AnimManager = require "scripts.manager.AnimManager"
-local Component   = require "scripts.base.Component"
+local AnimationState = require "scripts.enums.anima_state"
+local Anim = require "scripts.base.anim"
+local Direction = require "scripts.enums.direction"
+local AnimManager = require "scripts.manager.anim_manager"
+local Component   = require "scripts.base.component"
 
 ---动画组件
 ---@class Animation : Component
 ---@field private state AnimationState 动画状态
 ---@field private eventList function[] | nil 动画事件字典 关键帧:程序处理器
----@field private anims Anim[] | nil 动画列表
----@field private anim Anim 当前使用的动画对象
+---@field private anims anim[] | nil 动画列表
+---@field private anim anim 当前使用的动画对象
 ---@field private frameTime number 每帧动画间隔
 ---@field private currentTime number 当前已持续的时间(秒)
 ---@field private direction Direction 当前动画方向
@@ -48,7 +48,7 @@ end
 
 ---向动画组件添加一个动画
 ---@param name string
----@return Anim
+---@return anim
 function Animation:addAnim(name)
     local anim = AnimManager.careteAnim(name)
     self.anims[name] = anim
@@ -66,7 +66,7 @@ end
 
 ---获取一个动画对象
 ---@param name string 目标动画名称
----@return Anim|nil anim 目标动画对象
+---@return anim|nil anim 目标动画对象
 function Animation:getAnim(name)
     local anim = self.anims[name]
     --如果动画不存在，则尝试创建

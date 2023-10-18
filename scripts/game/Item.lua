@@ -1,11 +1,12 @@
 
----@class Item : Class 道具
+---@class Item : class 道具
 ---@field id number 道具id
 ---@field name string 道具名称
 ---@field description string 道具描述
 ---@field stats table<string,number> 影响的属性列表
 ---@field skills number[] 能学会的技能列表
 ---@field slot string 可以装备到哪个槽
+---@field icon string 道具的图像路径
 local Item = Class('Item')
 
 ---构造函数

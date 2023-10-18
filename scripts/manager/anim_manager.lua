@@ -1,5 +1,5 @@
 local JSON = require "scripts.utils.JSON"
-local Anim = require "scripts.base.Anim"
+local Anim = require "scripts.base.anim"
 
 ---@class AnimJsonData 动画json结构体
 ---@field id number 动画id
@@ -33,7 +33,7 @@ end
 
 ---创建动画对象
 ---@param name string 动画名称
----@return Anim anim
+---@return anim anim
 function AnimManager.careteAnim(name)
     local temp = AnimManager.anims[name]
     if temp == nil then

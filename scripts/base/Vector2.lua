@@ -9,7 +9,7 @@ local Vector2={
 
 function Vector2:new(x,y)
     ---@type Vector2
-    local o = {}
+    local o = {x=0,y=0}
     setmetatable(o,{
         __index=self;
         --重载操作符

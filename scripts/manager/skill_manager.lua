@@ -1,5 +1,5 @@
 local JSON = require "scripts.utils.JSON"
-local Skill = require "scripts.game.Skill"
+local Skill = require "scripts.game.skill"
 
 ---@class SkillManager 技能管理器
 ---@field skills table<number,Skill>

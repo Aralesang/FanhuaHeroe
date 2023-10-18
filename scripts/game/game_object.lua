@@ -1,9 +1,9 @@
-local Vector2    = require "scripts.base.Vector2"
-local Direction  = require "scripts.enums.Direction"
+local Vector2    = require "scripts.base.vector2"
+local Direction  = require "scripts.enums.direction"
 
 
 ---游戏对象基本类
----@class GameObject:Class
+---@class GameObject:class
 ---@field name string 对象名称
 ---@field scale table 对象缩放比例因子{x,y}
 ---@field rotate number 对象旋转弧度

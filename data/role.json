@@ -9,7 +9,7 @@
             "hpMax": 10,
             "atk": 1,
             "speed": 50,
-            "range": 100
+            "range": 20
         },
         "hair":4,
         "skills":[2],

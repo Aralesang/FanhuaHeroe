@@ -1,4 +1,4 @@
-local Bag = require "scripts.game.Bag"
+local Bag = require "scripts.game.bag"
 ---@class UiManager 界面管理器
 ---@field uis Ui[] ui集合
 local UiManager = {

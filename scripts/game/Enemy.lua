@@ -1,4 +1,4 @@
-local Role = require "scripts.game.Role"
+local Role = require "scripts.game.role"
 
 ---@class Enemy:Role 敌人基类
 local Enemy = Class('Enemy',Role)

@@ -1,6 +1,6 @@
 local JSON = require "scripts.utils.JSON"
-local Item = require "scripts.game.Item"
-local Drop = require "scripts.game.Drop"
+local Item = require "scripts.game.item"
+local Drop = require "scripts.game.drop"
 
 ---@class ItemManager 道具管理器
 ---@field items Item[] 道具模板列表
@@ -117,7 +117,7 @@ end
 function ItemManager:createDrop(itemId, x, y)
     local item = self:getItem(itemId)
     ---@type Drop
-    local drop = Drop:new(itemId, item.name, x, y)
+    local drop = Drop:new(itemId, item.name, x, y,item.icon)
     Game:addDrops(drop)
     return drop
 end

@@ -1,4 +1,4 @@
-local Role = require "scripts.game.Role"
+local Role = require "scripts.game.role"
 
 ---@class Npc : Role Npc基类
 local Npc = Class('Npc',Role)
