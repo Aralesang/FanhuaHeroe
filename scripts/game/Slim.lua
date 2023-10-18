@@ -1,5 +1,5 @@
-local Enemy = require "scripts.game.Enemy"
-local State = require "scripts.enums.State"
+local Enemy = require "scripts.game.enemy"
+local State = require "scripts.enums.state"
 local ItemManager = require "scripts.manager.item_manager"
 
 ---@class Slim:Enemy 史莱姆
