@@ -1,8 +1,8 @@
 ---游戏对象全局变量合集
 ---@class Game
----@field gameObjects GameObject[] 游戏对象集合
+---@field gameObjects game_object[] 游戏对象集合
 ---@field player Player 玩家对象
----@field enemys Enemy[] 敌对对象集合
+---@field enemys enemy[] 敌对对象集合
 ---@field drops Drop[] 掉落物集合
 ---@field world World 物理世界
 ---@field camera Camera 相机
@@ -20,14 +20,14 @@ local Game =
 }
 
 ---添加一个游戏对象
----@param obj GameObject 游戏对象
+---@param obj game_object 游戏对象
 function Game:addGameObject(obj)
     self.gameObjects[obj] = obj
     self:addCollision(obj)
 end
 
 ---清除一个游戏对象
----@param obj GameObject 游戏对象
+---@param obj game_object 游戏对象
 function Game:removeGameObject(obj)
     self.gameObjects[obj] = nil
     self.enemys[obj] = nil
@@ -43,7 +43,7 @@ function Game:addPlayer(obj)
 end
 
 ---添加敌人
----@param obj Enemy
+---@param obj enemy
 function Game:addEnemys(obj)
     self:addGameObject(obj)
     self.enemys[obj] = obj
@@ -64,7 +64,7 @@ end
 
 ---检查碰撞
 ---@param obj {x:number,y:number,h:number,w:number,tag:string}
----@param filter fun(item:GameObject,other:GameObject):filter
+---@param filter fun(item:game_object,other:game_object):filter
 function Game:checkCollision(obj, filter)
     Game.world:check(obj,obj.x,obj.y,filter)
 end

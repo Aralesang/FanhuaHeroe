@@ -1,6 +1,6 @@
 
 ---动画
----@class Anim:Class
+---@class anim:class
 ---@field name string 动画名称
 ---@field image love.Texture 用于创建动画的序列帧位图
 ---@field frame number 帧数量
@@ -9,14 +9,14 @@
 ---@field row number 当前所使用的动画行
 ---@field quad love.Quad 视图窗口
 ---@field loop boolean 是否循环
-local Anim = Class('Anim')
+local anim = Class('Anim')
 
 ---构造函数
 ---@param name string 动画名称
 ---@param image love.Texture 用于创建动画的序列帧位图
 ---@param frame number 帧数量
 ---@param loop boolean 动画是否循环
-function Anim:initialize(name, image, frame, loop)
+function anim:initialize(name, image, frame, loop)
     self.name = name
     self.image = image
     self.frame = frame
@@ -30,4 +30,4 @@ function Anim:initialize(name, image, frame, loop)
     self.loop = loop
 end
 
-return Anim
+return anim

@@ -22,7 +22,7 @@ local floor = math.floor
 local lg    = require(cwd .. "graphics")
 local atlas = require(cwd .. "atlas")
 
----@class Map 地图对象
+---@class map 地图对象
 ---@field tilesets any
 ---@field tilewidth number
 ---@field tileheight number
@@ -32,6 +32,7 @@ local atlas = require(cwd .. "atlas")
 ---@field staggerindex string
 ---@field renderorder string
 ---@field height number
+---@field bump_draw fun()
 local Map   = {}
 Map.__index = Map
 

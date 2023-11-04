@@ -1,6 +1,6 @@
-local Slot = require "scripts.game.Slot"
-local Component = require "scripts.base.Component"
-local ItemManager = require "scripts.manager.ItemManager"
+local Slot = require "scripts.game.slot"
+local Component = require "scripts.base.component"
+local ItemManager = require "scripts.manager.item_manager"
 
 ---@class Equipment:Component 装备组件
 ---@field slots table<string,Slot> 装备槽

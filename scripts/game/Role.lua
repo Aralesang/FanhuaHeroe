@@ -1,13 +1,13 @@
-local GameObject  = require "scripts.game.GameObject"
-local State       = require "scripts.enums.State"
-local FSM         = require "scripts.game.FSM"
-local Direction   = require "scripts.enums.Direction"
-local RoleManager = require "scripts.manager.RoleManager"
-local ItemManager = require "scripts.manager.ItemManager"
-local Equipment   = require "scripts.components.Equipment"
-local Animation   = require "scripts.components.Animation"
+local GameObject  = require "scripts.game.game_object"
+local State       = require "scripts.enums.state"
+local FSM         = require "scripts.game.fsm"
+local Direction   = require "scripts.enums.direction"
+local RoleManager = require "scripts.manager.role_manager"
+local ItemManager = require "scripts.manager.item_manager"
+local Equipment   = require "scripts.components.equipment"
+local Animation   = require "scripts.components.animation"
 
----@class Role : GameObject 角色对象
+---@class Role : game_object 角色对象
 ---@field stats table<string,number> 玩家属性列表
 ---@field state State 状态
 ---@field skills number[] 技能列表
@@ -69,7 +69,7 @@ function Role:initialize(roleId, x, y)
 end
 
 ---元受伤函数
----@param obj GameObject 伤害来源
+---@param obj game_object 伤害来源
 ---@param atk number 攻击力
 function Role:damage(obj, atk)
     --如果已经处于死亡或已经在受伤状态，则不会再受伤
@@ -94,7 +94,7 @@ function Role:damage(obj, atk)
 end
 
 ---抽象受伤函数
----@param obj GameObject 伤害来源
+---@param obj game_object 伤害来源
 ---@param atk number 攻击力
 function Role:onDamage(obj, atk) end
 
@@ -123,7 +123,7 @@ end
 
 ---移动
 ---@param dt number 距离上一帧的间隔时间
----@param dir Direction 移动方向
+---@param dir direction 移动方向
 ---@param filter fun(item:table,other:table):filter
 ---@return table cols, number cols_len
 function Role:move(dt, dir, filter)

@@ -3,6 +3,7 @@
         "id": 1,
         "name": "微弱的治愈药剂",
         "description": "细小的伤口缓缓的治愈了,但是即使一瓶全部喝下去,也只治好了猫抓程度的伤口",
+        "icon": "image/icon/item/微弱的治愈药剂.png",
         "stats":{
             "hp": 2
         }
@@ -23,8 +24,8 @@
         "id": 4,
         "name": "工作装",
         "description": "这种结实的背带装,轻便,整洁,外形也十分不错",
-        "slot":"上衣",
-        "icon":"image/icon/item/工作装.png" 
+        "icon": "image/icon/item/工作装.png",
+        "slot":"上衣"
     },
     {
         "id": 5,

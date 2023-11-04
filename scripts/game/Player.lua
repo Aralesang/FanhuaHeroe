@@ -1,10 +1,10 @@
-local Role         = require "scripts.game.Role"
-local Direction    = require "scripts.enums.Direction"
-local State        = require "scripts.enums.State"
-local SkillManager = require "scripts.manager.SkillManager"
-local ItemManager  = require "scripts.manager.ItemManager"
+local Role         = require "scripts.game.role"
+local Direction    = require "scripts.enums.direction"
+local State        = require "scripts.enums.state"
+local SkillManager = require "scripts.manager.skill_manager"
+local ItemManager  = require "scripts.manager.item_manager"
 ---@type Bag
-local Bag          = require "scripts.game.Bag"
+local Bag          = require "scripts.game.bag"
 
 ---@class Player : Role 玩家对象
 ---@field name string 角色名称
@@ -64,7 +64,7 @@ function Player:walkState(dt)
         if key == "up" or key == "down" or
             key == "left" or key == "right" then
             --找到了一个方向键,改变玩家移动状态
-            self:setDir(key)
+            self:set_dir(key)
             --如果当前动画不是行走，则改为行走
             if self.animation:getAnimName() ~= "行走" then
                 self.animation:play("行走")
@@ -114,7 +114,7 @@ function Player:attackState()
             --检查所有的敌对对象
             for _, enemy in pairs(Game.enemys) do
                 --敌人与玩家的距离
-                local dis = self:getDistance(enemy)
+                local dis = self:get_distance(enemy)
                 if dis <= self.stats["range"] then
                     --处于射程中的敌人,调用受伤函数
                     enemy:damage(self, self.stats["atk"])
@@ -178,7 +178,7 @@ function Player:keypressed(key)
         end
     end
     if key == "f" then
-        local touch = self:getOperate()
+        local touch = self:get_operate()
         if touch ~= nil and touch.tag == "Npc" then
             ---@cast touch Npc
             touch:talk(self)
@@ -198,7 +198,7 @@ function Player:keyreleased(key)
 end
 
 ---受伤
----@param obj GameObject
+---@param obj game_object
 ---@param atk number
 function Player:onDamage(obj, atk)
     print(string.format("hp:%d/%d", self.stats["hp"], self.stats["hpMax"]))

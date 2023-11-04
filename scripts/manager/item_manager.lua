@@ -1,6 +1,6 @@
 local JSON = require "scripts.utils.JSON"
-local Item = require "scripts.game.Item"
-local Drop = require "scripts.game.Drop"
+local Item = require "scripts.game.item"
+local Drop = require "scripts.game.drop"
 
 ---@class ItemManager 道具管理器
 ---@field items Item[] 道具模板列表
@@ -86,9 +86,9 @@ end
 
 ---注册道具
 ---@param id number 道具id
----@param use? fun(item:Item,target:GameObject) 使用道具的逻辑
----@param equip? fun(item:Item,target:GameObject) 装备道具的逻辑
----@param unequip? fun(item:Item,target: GameObject) 卸下道具的逻辑
+---@param use? fun(item:Item,target:game_object) 使用道具的逻辑
+---@param equip? fun(item:Item,target:game_object) 装备道具的逻辑
+---@param unequip? fun(item:Item,target: game_object) 卸下道具的逻辑
 function ItemManager:register(id, use, equip,unequip)
     if self.items[id] == nil then
         error("注册道具时出错,目标id不存在:" .. id)
@@ -117,8 +117,7 @@ end
 function ItemManager:createDrop(itemId, x, y)
     local item = self:getItem(itemId)
     ---@type Drop
-    local drop = Drop:new(itemId, item.name, x, y)
-    drop.icon = item.icon
+    local drop = Drop:new(itemId, item.name, x, y,item.icon)
     Game:addDrops(drop)
     return drop
 end

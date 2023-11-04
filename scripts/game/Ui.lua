@@ -1,5 +1,5 @@
 
----@class Ui : Class 交互界面基类
+---@class Ui : class 交互界面基类
 ---@field visible boolean 是否可见
 local Ui = Class('Ui')
 
