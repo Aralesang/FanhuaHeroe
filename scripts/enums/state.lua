@@ -1,4 +1,4 @@
----@enum State 状态
+---@enum state 状态
 local state = {
     idle = 1,    --闲置
     walking = 2, --移动中

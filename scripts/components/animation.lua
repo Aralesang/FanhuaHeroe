@@ -144,7 +144,7 @@ function animation:set_row(row, animIndex)
     if quad == nil then return end
     self.frame_index = animIndex or 0
     self.current_time = 0
-    quad:set_viewport(0, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
+    quad:setViewport(0, anim.row * anim.height, anim.width, anim.height, anim.image:getWidth(), anim.image:getHeight())
 end
 
 ---设置动画帧

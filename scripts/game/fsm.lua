@@ -1,7 +1,7 @@
 local JSON = require "scripts.utils.JSON"
 
 ---@class FSM 有限状态机
----@field states State[] 状态列表
+---@field states state[] 状态列表
 ---@field branchs table<number,number[]> 状态可进入的分支
 ---@field funcs string[] 状态机触发的函数名
 local FSM = {}
@@ -34,7 +34,7 @@ function FSM.init()
 end
 
 ---触发状态函数
----@param role Role 目标对象
+---@param role role 目标对象
 ---@param dt number 距离上一帧的间隔时间
 function FSM.call(role,dt)
     local state = role.state
@@ -46,8 +46,8 @@ function FSM.call(role,dt)
 end
 
 ---改变目标状态
----@param role Role 目标对象
----@param state State 目标状态
+---@param role role 目标对象
+---@param state state 目标状态
 ---@return boolean result 是否成功
 function FSM.change(role,state)
     --获取目标当前状态

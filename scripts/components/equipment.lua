@@ -1,4 +1,4 @@
-local slot = require "scripts.game.slot"
+local slot_class = require "scripts.game.slot"
 local component = require "scripts.base.component"
 local item_manager = require "scripts.manager.item_manager"
 
@@ -57,7 +57,7 @@ function equipment:draw()
 end
 
 ---绘制装备
----@param name slot
+---@param name slot_alias
 function equipment:draw_equip(name)
     local anim_name = self.animation:get_anim_name()
     if anim_name == nil then
@@ -101,12 +101,12 @@ end
 ---@param type? body 装备槽类型
 function equipment:add_slot(name, type)
     ---@type slot
-    local slot = slot(name, type or "装备")
+    local slot = slot_class(name, type or "装备")
     self.slots[name] = slot
 end
 
 ---根据槽名称获取装备槽对象
----@param name string
+---@param name slot_alias
 ---@return slot | nil
 function equipment:get_slot(name)
     return self.slots[name]
@@ -142,7 +142,7 @@ function equipment:equip(itemId)
             end
             local item = item_manager:getItem(itemId)
             if item then
-                item:equip(self.game_object --[[@as Rolex]])
+                item:equip(self.game_object --[[@as role]])
             end
             slot.itemId = itemId
             return
@@ -152,7 +152,7 @@ function equipment:equip(itemId)
 end
 
 ---卸除装备
----@param name slot 要卸除的槽
+---@param name slot_alias 要卸除的槽
 function equipment:unequip(name)
     local slot = self:get_slot(name)
     if slot == nil then
@@ -160,7 +160,7 @@ function equipment:unequip(name)
     end
     local item = item_manager:getItem(slot.itemId)
     if item then
-        item:unequip(self.game_object --[[@as Role]])
+        item:unequip(self.game_object --[[@as role]])
     end
     slot.itemId = 0
 end

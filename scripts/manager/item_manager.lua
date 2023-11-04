@@ -124,7 +124,7 @@ end
 
 ---使用道具
 ---@param id number 道具id
----@param target Role 使用对象
+---@param target role 使用对象
 function ItemManager:use(id,target)
     --库存中寻找目标道具
     if not target.items[id] then

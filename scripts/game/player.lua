@@ -5,7 +5,7 @@ local item_manager  = require "scripts.manager.item_manager"
 ---@type bag
 local bag          = require "scripts.game.bag"
 
----@class player : Role 玩家对象
+---@class player : role 玩家对象
 ---@field nickname string 角色名称
 ---@field key_list string[] 按键记录
 ---@field range number 射程
@@ -179,7 +179,7 @@ function player:keypressed(key)
     if key == "f" then
         local touch = self:get_operate()
         if touch ~= nil and touch.tag == "Npc" then
-            ---@cast touch Npc
+            ---@cast touch npc
             touch:talk(self)
         end
     end

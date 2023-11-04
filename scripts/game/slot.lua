@@ -20,7 +20,7 @@ end
 ---根据动画名称获取装备对应的动画
 ---@param name string 动画名称
 ---@return anim|nil
-function Slot:getAnim(name)
+function Slot:get_anim(name)
     --如果没有装备，则无需创建动画
     if self.itemId == 0 then
         return nil

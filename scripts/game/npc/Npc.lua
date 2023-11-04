@@ -1,16 +1,16 @@
-local Role = require "scripts.game.role"
+local role_class = require "scripts.game.role"
 
----@class Npc : Role Npc基类
-local Npc = Class('Npc',Role)
+---@class npc : role Npc基类
+local npc = Class('Npc',role_class)
 
-function Npc:initialize(roleId,x,y)
-    Role.initialize(self,roleId,x,y)
+function npc:initialize(roleId,x,y)
+    role_class.initialize(self,roleId,x,y)
     self.tag = "Npc"
     Game:addGameObject(self)
 end
 
 ---对话
 ---@param target player
-function Npc:talk(target) end
+function npc:talk(target) end
 
-return Npc
+return npc

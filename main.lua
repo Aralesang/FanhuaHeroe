@@ -80,10 +80,10 @@ function love.update(dt)
             gameObject:update(dt)
             --如果是角色对象,触发有限状态机
             if gameObject["state"] then
-                fsm.call(gameObject --[[@as Role]],dt)
+                fsm.call(gameObject --[[@as role]],dt)
             end
         end
-        ---@cast gameObject Role
+        ---@cast gameObject role
         if gameObject.animation then
             gameObject.animation:update(dt)
         end
@@ -111,7 +111,7 @@ function love.draw()
     for _, gameObject in pairs(Game.gameObjects) do
         --绘制游戏对象
         gameObject:draw()
-        ---@cast gameObject Role
+        ---@cast gameObject role
         if gameObject.animation then
             gameObject.animation:draw()
         end
