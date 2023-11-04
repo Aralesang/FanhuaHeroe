@@ -1,7 +1,6 @@
 local vector2    = require "scripts.base.vector2"
 local direction  = require "scripts.enums.direction"
 
-
 ---游戏对象基本类
 ---@class game_object:class
 ---@field name string 对象名称

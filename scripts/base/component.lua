@@ -1,6 +1,6 @@
 
 ---组件基类
----@class component
+---@class component:class
 ---@field game_object game_object 组件所附加到的游戏物体
 ---@field isLoad boolean 是否已经调用过初始化函数
 local component = Class('Component')
