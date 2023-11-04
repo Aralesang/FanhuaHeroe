@@ -1,7 +1,7 @@
 local ItemManager = require "scripts.manager.item_manager"
 local Ui          = require "scripts.game.ui"
 
----@class Bag:Ui 背包
+---@class bag:Ui 背包
 ---@field cells table<number,number> 格子<格子id,道具id>
 local Bag = Class("Bag",Ui)
 

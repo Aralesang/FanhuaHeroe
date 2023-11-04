@@ -15,7 +15,7 @@ function Ruby:load()
 end
 
 ---对话
----@param target Player
+---@param target player
 function Ruby:talk(target)
     if Game:getVar(1) == 0 then
         print("我的名字是露比！欢迎来到繁花镇！")
@@ -28,7 +28,7 @@ function Ruby:talk(target)
     elseif Game:getVar(3) >= 1 and Game:getVar(4) == 0 then
         print("非常感谢你！这是谢礼！")
         Game:setVar(4,1)
-        target:addItem(7)
+        target:add_item(7)
     else
         print("有空再来玩哦!")
     end

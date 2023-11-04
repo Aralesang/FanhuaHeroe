@@ -1,5 +1,5 @@
 
----@class Item : class 道具
+---@class item : class 道具
 ---@field id number 道具id
 ---@field name string 道具名称
 ---@field description string 道具描述

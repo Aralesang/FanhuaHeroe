@@ -3,7 +3,7 @@ local Item = require "scripts.game.item"
 local Drop = require "scripts.game.drop"
 
 ---@class ItemManager 道具管理器
----@field items Item[] 道具模板列表
+---@field items item[] 道具模板列表
 ---@field hairs any[] 头发模板列表
 local ItemManager = {}
 
@@ -24,7 +24,7 @@ function ItemManager:init()
     self.items = {}
 
     for _, v in pairs(itemJson) do
-        ---@type Item
+        ---@type item
         local item = Item()
         for key, value in pairs(v) do
             item[key] = value
@@ -55,7 +55,7 @@ end
 
 ---获取道具模板
 ---@param id number 道具id
----@return Item
+---@return item
 function ItemManager:getItem(id)
     if id == nil then
         error("道具模板id为nil!")
@@ -86,9 +86,9 @@ end
 
 ---注册道具
 ---@param id number 道具id
----@param use? fun(item:Item,target:game_object) 使用道具的逻辑
----@param equip? fun(item:Item,target:game_object) 装备道具的逻辑
----@param unequip? fun(item:Item,target: game_object) 卸下道具的逻辑
+---@param use? fun(item:item,target:game_object) 使用道具的逻辑
+---@param equip? fun(item:item,target:game_object) 装备道具的逻辑
+---@param unequip? fun(item:item,target: game_object) 卸下道具的逻辑
 function ItemManager:register(id, use, equip,unequip)
     if self.items[id] == nil then
         error("注册道具时出错,目标id不存在:" .. id)

@@ -10,7 +10,7 @@ function Npc:initialize(roleId,x,y)
 end
 
 ---对话
----@param target Player
+---@param target player
 function Npc:talk(target) end
 
 return Npc

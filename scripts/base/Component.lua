@@ -1,40 +1,40 @@
 
 ---组件基类
----@class Component : class
----@field gameObject game_object 组件所附加到的游戏物体
+---@class component
+---@field game_object game_object 组件所附加到的游戏物体
 ---@field isLoad boolean 是否已经调用过初始化函数
-local Component = Class('Component')
+local component = Class('Component')
 
-function Component:initialize(target)
-  self.gameObject = target
+function component:initialize(target)
+  self.game_object = target
   self.isLoad = false
 end
 
 ---组件附加到对象后，立即调用一次
-function Component:awake()
+function component:awake()
 end
 
 ---组件附加到对象后，后一帧刷新帧之前调用一次
-function Component:load()
+function component:load()
 end
 
 --组件附加到对象后，每一帧调用一次
 ---@param delayTime number 距离上一帧的间隔时间
-function Component:update(delayTime)
+function component:update(delayTime)
 end
 
 ---组件附加到对象后，每一帧调用一次，并将帧改变后的图像绘制到屏幕
-function Component:draw()
+function component:draw()
 end
 
 ---键盘按下
 ---@param key number 键盘键入值
-function Component:keypressed(key)
+function component:keypressed(key)
 end
 
 ---按键释放
 ---@param key number 键盘释放的键值
-function Component:keyreleased(key)
+function component:keyreleased(key)
 end
 
-return Component
+return component

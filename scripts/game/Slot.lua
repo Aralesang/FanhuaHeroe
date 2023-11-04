@@ -2,7 +2,7 @@ local ItemManager = require "scripts.manager.item_manager"
 local AnimManager = require "scripts.manager.anim_manager"
 local Anim = require "scripts.base.anim"
 
----@class Slot : class 装备槽
+---@class slot : class 装备槽
 ---@field name string 装备槽名称
 ---@field itemId number 所装备的物品id
 ---@field anims table<string,anim> 装备动画列表

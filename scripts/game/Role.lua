@@ -1,11 +1,11 @@
-local GameObject  = require "scripts.game.game_object"
-local State       = require "scripts.enums.state"
-local FSM         = require "scripts.game.fsm"
-local Direction   = require "scripts.enums.direction"
-local RoleManager = require "scripts.manager.role_manager"
-local ItemManager = require "scripts.manager.item_manager"
-local Equipment   = require "scripts.components.equipment"
-local Animation   = require "scripts.components.animation"
+local game_object  = require "scripts.game.game_object"
+local state       = require "scripts.enums.state"
+local fsm         = require "scripts.game.fsm"
+local direction   = require "scripts.enums.direction"
+local role_manager = require "scripts.manager.role_manager"
+local item_manager = require "scripts.manager.item_manager"
+local equipment   = require "scripts.components.equipment"
+local animation   = require "scripts.components.animation"
 
 ---@class Role : game_object 角色对象
 ---@field stats table<string,number> 玩家属性列表
@@ -14,24 +14,24 @@ local Animation   = require "scripts.components.animation"
 ---@field items table<number,number> 道具列表
 ---@field equips table<string,number> 装备列表
 ---@field bodys table<string,number> 身体组件列表
----@field equipment Equipment 装备组件
----@field animation Animation 动画组件
-local Role        = Class('Role', GameObject)
+---@field equipment equipment 装备组件
+---@field animation animation 动画组件
+local role        = Class('Role', game_object)
 
 ---构造函数
 ---@param roleId number
 ---@param x number
 ---@param y number
-function Role:initialize(roleId, x, y)
-    GameObject.initialize(self, x, y)
-    self:setState(State.idle)
-    self.animation = Animation:new(self)
-    self.equipment = Equipment:new(self)
+function role:initialize(roleId, x, y)
+    game_object.initialize(self, x, y)
+    self:set_state(state.idle)
+    self.animation = animation:new(self)
+    self.equipment = equipment:new(self)
     self.skills = {}
     self.items = {}
     self.stats = {}
     self.equips = {}
-    local role = RoleManager:getRole(roleId or 1)
+    local role = role_manager:getRole(roleId or 1)
     for k, v in pairs(role) do
         if type(v) ~= "table" and k ~= "hair" then
             self[k] = v
@@ -71,9 +71,9 @@ end
 ---元受伤函数
 ---@param obj game_object 伤害来源
 ---@param atk number 攻击力
-function Role:damage(obj, atk)
+function role:damage(obj, atk)
     --如果已经处于死亡或已经在受伤状态，则不会再受伤
-    if self.state == State.death or self.state == State.damage then
+    if self.state == state.death or self.state == state.damage then
         return
     end
     local stats = self.stats
@@ -88,7 +88,7 @@ function Role:damage(obj, atk)
     end
     stats["hp"] = hp
     if hp == 0 then
-        self:setState(State.death)
+        self:set_state(state.death)
     end
     self:onDamage(obj, atk)
 end
@@ -96,18 +96,18 @@ end
 ---抽象受伤函数
 ---@param obj game_object 伤害来源
 ---@param atk number 攻击力
-function Role:onDamage(obj, atk) end
+function role:onDamage(obj, atk) end
 
 ---设置状态
 ---@param state State
-function Role:setState(state)
-    FSM.change(self, state)
+function role:set_state(state)
+    fsm.change(self, state)
 end
 
 ---改变属性值
 ---@param key string 属性名
 ---@param value number 属性值
-function Role:changeStats(key, value)
+function role:changeStats(key, value)
     --如果是hp则不能超过hpMax,也不能低于0
     local curr = self.stats[key] or 0
     local newValue = curr + value
@@ -126,17 +126,17 @@ end
 ---@param dir direction 移动方向
 ---@param filter fun(item:table,other:table):filter
 ---@return table cols, number cols_len
-function Role:move(dt, dir, filter)
+function role:move(dt, dir, filter)
     local speed = self.stats.speed
     local dx, dy = 0, 0
     --获取移动
-    if dir == Direction.Left then
+    if dir == direction.Left then
         dx = -speed * dt
-    elseif dir == Direction.Right then
+    elseif dir == direction.Right then
         dx = speed * dt
-    elseif dir == Direction.Up then
+    elseif dir == direction.Up then
         dy = -speed * dt
-    elseif dir == Direction.Down then
+    elseif dir == direction.Down then
         dy = speed * dt
     end
 
@@ -154,19 +154,19 @@ end
 ---添加道具
 ---@param id number 道具id
 ---@param num? number 道具数量
-function Role:addItem(id, num)
+function role:add_item(id, num)
     num = num or 1
     local curNum = self.items[id]
     curNum = curNum or 0
     self.items[id] = curNum + num
-    local item = ItemManager:getItem(id)
+    local item = item_manager:getItem(id)
     print("获得:" .. item.name .. "*" .. num)
 end
 
 ---去除道具
 ---@param id number 道具id
 ---@param num number 道具数量
-function Role:removeItem(id, num)
+function role:removeItem(id, num)
     local curNum = self.items[id]
     curNum = curNum == nil and 0 or curNum
     local newNum = curNum - num
@@ -177,4 +177,4 @@ function Role:removeItem(id, num)
     end
 end
 
-return Role
+return role

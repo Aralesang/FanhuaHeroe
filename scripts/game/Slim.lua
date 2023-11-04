@@ -26,7 +26,7 @@ end
 
 ---如果进入闲置状态
 function slim:idle_state()
-    if self.animation:getAnimName() ~= "闲置_史莱姆" then
+    if self.animation:get_anim_name() ~= "闲置_史莱姆" then
         self.animation:play("闲置_史莱姆")
     end
     if self.target == nil then
@@ -38,7 +38,7 @@ function slim:idle_state()
     --目标进入视野，则向玩家移动
     if distance < self.sight then
         --print("目标进入视野！")
-        self:setState(state.walking)
+        self:set_state(state.walking)
     end
 end
 
@@ -47,14 +47,14 @@ function slim:walkState(dt)
     local distance = self:get_distance(self.target)
     --目标已丢失
     if distance > self.sight then
-        self:setState(state.idle)
+        self:set_state(state.idle)
         return
     end
 
     --目标进入射程
     if distance < self.range then
         --print("目标进入射程！")
-        self:setState(state.attack)
+        self:set_state(state.attack)
         return
     end
 
@@ -81,7 +81,7 @@ function slim:attackState()
             end
         end
     end, function()
-        self:setState(state.idle)
+        self:set_state(state.idle)
     end)
 end
 
@@ -100,12 +100,12 @@ end
 ---@param atk number
 function slim:onDamage(obj, atk)
     print(self.name .. "受到了" .. obj.name .. "的" .. atk .. "点攻击")
-    self:setState(state.damage)
+    self:set_state(state.damage)
 end
 
 ---死亡
 function slim:deathState()
-    if self.animation:getAnimName() ~= "死亡_史莱姆" then
+    if self.animation:get_anim_name() ~= "死亡_史莱姆" then
         self.animation:play("死亡_史莱姆", nil, function()
             --在死亡位置创建一个掉落物
             math.randomseed(os.time())
@@ -127,7 +127,7 @@ end
 function slim:damageState()
     self.animation:play("受伤_史莱姆", nil, function()
         --print("史莱姆挨打结束")
-        self:setState(state.idle)
+        self:set_state(state.idle)
     end)
 end
 

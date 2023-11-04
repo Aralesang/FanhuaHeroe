@@ -79,7 +79,7 @@ end
 ---对象销毁
 function game_object:destroy()
     self:on_destroy()
-    Game:removeGameObject(self)
+    Game:remove_game_object(self)
 end
 
 ---设置对象方向

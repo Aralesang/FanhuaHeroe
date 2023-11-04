@@ -52,7 +52,7 @@ function love.load()
     Game.world = bump.newWorld()
     map:bump_init(Game.world)
     --实例化角色对象
-    ---@type Player
+    ---@type player
     player = player_class:new(300,100)
     player.name = ""
     Game.camera = camera(0,0,3)
