@@ -8,7 +8,7 @@
 local Skill = Class('Skill')
 
 ---使用技能
----@param target Role 技能的目标
+---@param target role 技能的目标
 function Skill:use(target)
     print("发动:"..self.name)
     if self.stats then

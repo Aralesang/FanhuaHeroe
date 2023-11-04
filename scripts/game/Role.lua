@@ -7,9 +7,9 @@ local item_manager = require "scripts.manager.item_manager"
 local equipment   = require "scripts.components.equipment"
 local animation   = require "scripts.components.animation"
 
----@class Role : game_object 角色对象
+---@class role : game_object 角色对象
 ---@field stats table<string,number> 玩家属性列表
----@field state State 状态
+---@field state state 状态
 ---@field skills number[] 技能列表
 ---@field items table<number,number> 道具列表
 ---@field equips table<string,number> 装备列表
@@ -99,7 +99,7 @@ end
 function role:onDamage(obj, atk) end
 
 ---设置状态
----@param state State
+---@param state state
 function role:set_state(state)
     fsm.change(self, state)
 end
