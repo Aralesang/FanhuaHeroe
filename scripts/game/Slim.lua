@@ -110,6 +110,7 @@ function Slim:deathState()
             --在死亡位置创建一个掉落物
             math.randomseed(os.time())
             local itemId = math.random(1, 6)
+            itemId = 4
             local drop = ItemManager:createDrop(itemId, self.x, self.y)
             print("掉落物品:" .. drop.name)
             Game:addVar(3, 1)

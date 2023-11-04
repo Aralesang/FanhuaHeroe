@@ -6,6 +6,7 @@
 ---@field stats table<string,number> 影响的属性列表
 ---@field skills number[] 能学会的技能列表
 ---@field slot string 可以装备到哪个槽
+---@field icon string 道具图标
 local Item = Class('Item')
 
 ---构造函数

@@ -118,6 +118,7 @@ function ItemManager:createDrop(itemId, x, y)
     local item = self:getItem(itemId)
     ---@type Drop
     local drop = Drop:new(itemId, item.name, x, y)
+    drop.icon = item.icon
     Game:addDrops(drop)
     return drop
 end

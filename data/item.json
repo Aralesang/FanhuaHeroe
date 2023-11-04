@@ -23,7 +23,8 @@
         "id": 4,
         "name": "工作装",
         "description": "这种结实的背带装,轻便,整洁,外形也十分不错",
-        "slot":"上衣"
+        "slot":"上衣",
+        "icon":"image/icon/item/工作装.png" 
     },
     {
         "id": 5,

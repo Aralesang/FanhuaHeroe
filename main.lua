@@ -18,7 +18,6 @@ local Lubi         = require "scripts.game.npc.Ruby"
 
 local map
 local player
-
 function love.load()
     -- if love.system.getOS() == "Windows" then
     --     print("将终端字体设置为65001")
