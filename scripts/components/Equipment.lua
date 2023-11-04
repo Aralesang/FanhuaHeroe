@@ -142,7 +142,7 @@ function Equipment:equip(itemId)
             end
             local item = ItemManager:getItem(itemId)
             if item then
-                item:equip(self.gameObject --[[@as Role]])
+                item:equip(self.gameObject --[[@as Rolex]])
             end
             slot.itemId = itemId
             return

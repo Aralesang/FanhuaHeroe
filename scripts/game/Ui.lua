@@ -1,22 +1,22 @@
 
 ---@class Ui : class 交互界面基类
 ---@field visible boolean 是否可见
-local Ui = Class('Ui')
+local ui = Class('Ui')
 
-function Ui:show()
+function ui:show()
     
 end
 
-function Ui:drwa()
+function ui:drwa()
     
 end
 
-function Ui:load()
+function ui:load()
     
 end
 
-function Ui:update(dt)
+function ui:update(dt)
     
 end
 
-return Ui
+return ui

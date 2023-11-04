@@ -1,5 +1,5 @@
 ---@enum State 状态
-local State = {
+local state = {
     idle = 1,    --闲置
     walking = 2, --移动中
     attack = 3,  --攻击
@@ -7,4 +7,4 @@ local State = {
     death = 5   --死亡
 }
 
-return State
+return state
