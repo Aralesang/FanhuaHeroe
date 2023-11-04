@@ -98,13 +98,13 @@ end
 ---受到伤害
 ---@param obj game_object
 ---@param atk number
-function slim:onDamage(obj, atk)
+function slim:on_damage(obj, atk)
     print(self.name .. "受到了" .. obj.name .. "的" .. atk .. "点攻击")
     self:set_state(state.damage)
 end
 
 ---死亡
-function slim:deathState()
+function slim:death_state()
     if self.animation:get_anim_name() ~= "死亡_史莱姆" then
         self.animation:play("死亡_史莱姆", nil, function()
             --在死亡位置创建一个掉落物
@@ -119,12 +119,12 @@ function slim:deathState()
     end
 end
 
-function slim:onDestroy()
+function slim:on_destroy()
     print(self.name .. "死了")
 end
 
 ---受伤状态
-function slim:damageState()
+function slim:damage_state()
     self.animation:play("受伤_史莱姆", nil, function()
         --print("史莱姆挨打结束")
         self:set_state(state.idle)
