@@ -137,7 +137,7 @@ end
 function player:death_state()
     self.animation:play("死亡", nil, function()
         self:destroy()
-        print(self.nicknickname .. "已死")
+        print(self.nickname .. "已死")
     end)
 end
 

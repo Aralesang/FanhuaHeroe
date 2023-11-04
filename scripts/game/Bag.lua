@@ -1,9 +1,9 @@
-local ItemManager = require "scripts.manager.item_manager"
-local Ui          = require "scripts.game.ui"
+local item_manager = require "scripts.manager.item_manager"
+local ui          = require "scripts.game.ui"
 
----@class bag:Ui 背包
+---@class bag:ui 背包
 ---@field cells table<number,number> 格子<格子id,道具id>
-local Bag = Class("Bag",Ui)
+local Bag = Class("Bag",ui)
 
 local img
 local quad
@@ -51,7 +51,7 @@ function Bag:show()
     print("=======背包======")
     for cellId, itemId in pairs(self.cells) do
         if itemId > 0 then
-            local item = ItemManager:getItem(itemId)
+            local item = item_manager:getItem(itemId)
             local name = item.name
             if player.equips[item.slot] == item.id then
                 name = name .. "E"
