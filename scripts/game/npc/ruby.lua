@@ -1,4 +1,4 @@
-local npc = require "scripts.game.npc.npc_"
+local npc = require "scripts.game.npc.npc"
 local Direction = require "scripts.enums.direction"
 
 ---@class Ruby : npc 露比
