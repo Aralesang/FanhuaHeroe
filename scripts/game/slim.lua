@@ -109,8 +109,8 @@ function slim:death_state()
         self.animation:play("死亡_史莱姆", nil, function()
             --在死亡位置创建一个掉落物
             math.randomseed(os.time())
-            --local itemId = math.random(1, 6)
-            local itemId = 1
+            local itemId = math.random(1, 6)
+            --local itemId = 1
             local drop = item_manager:createDrop(itemId, self.x, self.y)
             print("掉落物品:" .. drop.name)
             Game:addVar(3, 1)

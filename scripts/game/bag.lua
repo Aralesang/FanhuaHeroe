@@ -92,9 +92,6 @@ function bag:drwa()
         if item_id > 0 then
             local item = ItemManager:getItem(item_id)
             local icon = item.icon
-            if not icon then
-                icon = "image/icon/item/默认.png"
-            end
             local item_img = love.graphics.newImage(icon)
             love.graphics.draw(item_img, cell_x + 6, y + 12, 0, Config.scale)
             local player = Game.player

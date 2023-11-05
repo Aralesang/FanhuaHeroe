@@ -29,6 +29,10 @@ function item_manager:init()
         for key, value in pairs(v) do
             item[key] = value
         end
+        --如果没有设置icon，则使用默认icon
+        if not item["icon"] then
+            item["icon"] = "image/icon/item/默认.png"
+        end
         self.items[item.id] = item
     end
 

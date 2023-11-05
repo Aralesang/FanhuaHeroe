@@ -31,6 +31,7 @@
         "id": 5,
         "name": "短裤",
         "description": "1、2、3、4...emmm只有24个像素吗,但如果和工作装组合在一起,确实很像是短裤呢",
+        "icon": "image/icon/item/短裤.png",
         "slot":"下装"
     },
     {
@@ -38,6 +39,7 @@
         "name": "生锈的铁剑",
         "description": "从坟头上捡来的,似乎诉说了某人的传说,虽有所不敬,但你此刻真的需要它",
         "slot":"武器",
+        "icon": "image/icon/item/生锈的铁剑.png",
         "stats":{
             "atk":5
         }
