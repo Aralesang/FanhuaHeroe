@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="11">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="14">
  <editorsettings>
-  <export target="../scenes/测试地图.lua" format="lua"/>
+  <export target="../scenes/test_map.lua" format="lua"/>
  </editorsettings>
  <tileset firstgid="1" name="meadow" tilewidth="16" tileheight="16" tilecount="40" columns="10">
   <image source="../image/earth/meadow.png" width="160" height="64"/>
@@ -111,6 +111,9 @@
    </objectgroup>
   </tile>
  </tileset>
+ <objectgroup id="10" name="对象">
+  <object id="12" name="player" x="304.532" y="208.386" width="14.4007" height="13.9771"/>
+ </objectgroup>
  <layer id="2" name="地面" width="40" height="23" locked="1">
   <data encoding="csv">
 37,40,40,36,36,37,38,37,40,37,40,40,38,38,39,38,38,39,36,36,38,40,36,40,40,36,37,40,39,39,40,37,36,39,38,39,40,37,37,39,

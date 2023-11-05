@@ -1,20 +1,21 @@
-Class      = require "scripts.utils.middleclass"
-Game = require "scripts.game.game"
-Tool = require "scripts.utils.Tool"
-local sti = require "scripts.utils.sti"
-local player_class = require "scripts.game.player"
-local bump = require "scripts.utils.bump"
-local debug = require "scripts.utils.debug"
-local slim = require "scripts.game.slim"
-local anim_manager = require "scripts.manager.anim_manager"
-local item_manager = require "scripts.manager.item_manager"
-local role_manager = require "scripts.manager.role_manager"
-local fsm         = require "scripts.game.fsm"
-local timer = require "scripts.utils.hump.timer"
-local camera = require "scripts.utils.hump.camera"
+Class               = require "scripts.utils.middleclass"
+Game                = require "scripts.game.game"
+Tool                = require "scripts.utils.Tool"
+local sti           = require "scripts.utils.sti"
+local player_class  = require "scripts.game.player"
+local bump          = require "scripts.utils.bump"
+local debug         = require "scripts.utils.debug"
+local slim          = require "scripts.game.slim"
+local anim_manager  = require "scripts.manager.anim_manager"
+local item_manager  = require "scripts.manager.item_manager"
+local role_manager  = require "scripts.manager.role_manager"
+local fsm           = require "scripts.game.fsm"
+local timer         = require "scripts.utils.hump.timer"
+local camera        = require "scripts.utils.hump.camera"
 local skill_manager = require "scripts.manager.skill_manager"
 local ui_manager    = require "scripts.manager.ui_manager"
-local ruby         = require "scripts.game.npc.ruby"
+local ruby          = require "scripts.game.npc.ruby"
+local test_map      = require "scenes.test_map"
 
 ---@type map
 local map
@@ -39,27 +40,40 @@ function love.load()
     role_manager:init()
     skill_manager:init()
     ui_manager:init()
-    
+
     --加载有限状态机
     fsm.init()
 
     --加载场景
     print("加主场景...")
 
-    map = sti("scenes/测试地图.lua",{"bump"})
+    map = sti("scenes/test_map.lua", { "bump" })
 
     --创建物理世界
     Game.world = bump.newWorld()
     map:bump_init(Game.world)
-    --实例化角色对象
-    ---@type player
-    player = player_class:new(300,100)
-    player.name = ""
-    Game.camera = camera(0,0,3)
-    ---@type slim
-    slim:new(390,40)
 
-    ruby:new(300,50)
+    --构造地图对象
+    for _, value in pairs(test_map.layers) do
+        local objects = value.objects
+        if objects then
+            for _, object in pairs(objects) do
+                if object.name == "player" then
+                    --实例化角色对象
+                    ---@type player
+                    player = player_class:new(object.x, object.y)
+                    player.name = "player"
+                end
+            end
+        end
+    end
+
+
+    Game.camera = camera(0, 0, 3)
+    ---@type slim
+    slim:new(390, 40)
+
+    ruby:new(300, 50)
     print("游戏初始化完毕!")
 end
 
@@ -68,7 +82,7 @@ end
 function love.update(dt)
     timer.update(dt)
     map:update(dt)
-    Game.camera:lockPosition(player.x,player.y)
+    Game.camera:lockPosition(player.x, player.y)
     --触发对象更新
     for _, gameObject in pairs(Game.gameObjects) do
         --首先触发对象本身的更新
@@ -80,7 +94,7 @@ function love.update(dt)
             gameObject:update(dt)
             --如果是角色对象,触发有限状态机
             if gameObject["state"] then
-                fsm.call(gameObject --[[@as role]],dt)
+                fsm.call(gameObject --[[@as role]], dt)
             end
         end
         ---@cast gameObject role
@@ -105,7 +119,7 @@ function love.draw()
     Game.camera:attach()
     --绘制地图
     --map:draw(Game.camera.x / 3, Game.camera.y / 3, 3)
-    map:draw(1280 / 6  - player.x, 720/6 - player.y,3)
+    map:draw(1280 / 6 - player.x, 720 / 6 - player.y, 3)
     --map:draw(0, 0,1)
     --绘制对象
     for _, gameObject in pairs(Game.gameObjects) do

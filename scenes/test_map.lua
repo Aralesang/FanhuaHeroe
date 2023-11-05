@@ -474,7 +474,7 @@ return {
       type = "objectgroup",
       draworder = "topdown",
       id = 10,
-      name = "对象层",
+      name = "对象",
       class = "",
       visible = true,
       opacity = 1,
