@@ -1,4 +1,4 @@
-local JSON = require "scripts.utils.json_"
+local JSON = require "scripts.utils.json"
 local Item = require "scripts.game.item"
 local Drop = require "scripts.game.drop"
 

@@ -1,4 +1,4 @@
-local JSON = require "scripts.utils.json_"
+local JSON = require "scripts.utils.json"
 local Skill = require "scripts.game.skill"
 
 ---@class SkillManager 技能管理器
