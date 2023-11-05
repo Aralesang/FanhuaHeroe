@@ -1,4 +1,4 @@
-local JSON = require "scripts.utils.JSON"
+local JSON = require "scripts.utils.json_"
 local Anim = require "scripts.base.anim"
 
 ---@class AnimJsonData 动画json结构体

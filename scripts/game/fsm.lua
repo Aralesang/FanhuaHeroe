@@ -1,4 +1,4 @@
-local JSON = require "scripts.utils.JSON"
+local JSON = require "scripts.utils.json_"
 
 ---@class FSM 有限状态机
 ---@field states state[] 状态列表

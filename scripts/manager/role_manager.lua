@@ -1,4 +1,4 @@
-local JSON = require "scripts.utils.JSON"
+local JSON = require "scripts.utils.json_"
 
 ---@class RoleJsonData 角色模板
 local RoleJsonData = {}
