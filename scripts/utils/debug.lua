@@ -21,7 +21,7 @@ end
 
 ---显示帧率到屏幕
 function Debug.showFPS()
-    if not Config.ShowFps then
+    if not Config.show_fps then
         return
     end
     local text = "FPS:" .. love.timer.getFPS() .. "\n"

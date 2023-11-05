@@ -8,9 +8,11 @@ end
 
 Config = {
     --是否显示fps
-    ShowFps = true,
+    show_fps = true,
     --是否显示碰撞区域
-    ShowCollision = true,
+    show_collision = false,
     --是否显示中心点
-    ShowCentral = false
+    show_central = false,
+    --放大倍率
+    scale = 3
 }

@@ -1,19 +1,37 @@
 local item_manager = require "scripts.manager.item_manager"
-local ui          = require "scripts.game.ui"
+local ui           = require "scripts.game.ui"
 
 ---@class bag:ui 背包
 ---@field cells table<number,number> 格子<格子id,道具id>
-local Bag = Class("Bag",ui)
+local bag          = Class("Bag", ui)
+---背景图片
+---@type love.Image
+local bg_img
+---格子图片
+---@type love.Image
+local cell_img
 
-local img
-local quad
-function Bag:show()
+function bag:show()
+    self.visible = true
+end
+
+function bag:update(dt)
+    if not self.visible then
+        return
+    end
+    if bg_img == nil then
+        bg_img = love.graphics.newImage("image/ui/BagBg.png")
+    end
+    if cell_img == nil then
+        cell_img = love.graphics.newImage("image/ui/grid.png")
+    end
+
     local player = Game.player
     --将玩家库存转换到背包
-    local items = Game.player.items
+    local items = player.items
     if self.cells == nil then
         self.cells = {}
-        for i = 1, 10, 1 do
+        for i = 1, 9, 1 do
             self.cells[i] = 0
         end
     end
@@ -47,32 +65,43 @@ function Bag:show()
             end
         end
     end
-
-    print("=======背包======")
-    for cellId, itemId in pairs(self.cells) do
-        if itemId > 0 then
-            local item = item_manager:getItem(itemId)
-            local name = item.name
-            if player.equips[item.slot] == item.id then
-                name = name .. "E"
-            end
-            local num = player.items[itemId]
-            print(name, num)
-        end
-    end
-    self.visible = true
 end
 
-function Bag:drwa()
-    self.visible = true
+function bag:drwa()
     if not self.visible then
         return
     end
-    if img == nil then
-        img = love.graphics.newImage("image/ui/BagBg.png")
+
+    --图像宽度
+    local width = bg_img:getWidth()
+    local high = bg_img:getHeight()
+    local screen_width = love.graphics.getWidth()
+    local screen_high = love.graphics.getHeight()
+    --将背包栏置于屏幕的中心
+    local x = screen_width / 2 - width * Config.scale / 2
+    local y = 640
+    love.graphics.draw(bg_img, x, y, 0, Config.scale)
+
+    for cell_id, item_id in ipairs(self.cells) do
+        local cell_width = cell_img:getWidth() * Config.scale
+        local cell_high = cell_img:getHeight() * Config.scale
+        local cell_x = x + 6 + (cell_id - 1) * cell_width
+        --构建道具格子
+        love.graphics.draw(cell_img, cell_x, y + 6, 0, Config.scale)
+        --构建格子内的道具
+        if item_id > 0 then
+            local item = ItemManager:getItem(item_id)
+            local icon = item.icon
+            if not icon then
+                icon = "image/icon/item/默认.png"
+            end
+            local item_img = love.graphics.newImage(icon)
+            love.graphics.draw(item_img, cell_x + 6, y + 12, 0, Config.scale)
+            local player = Game.player
+            local item_num = player.items[item_id]
+            love.graphics.print(tostring(item_num), cell_x + cell_width - 15, y + cell_high - 15)
+        end
     end
-    quad = love.graphics.newQuad(0,0,img:getWidth(),img:getHeight(),img:getDimensions())
-    love.graphics.draw(img,quad,640,630,0,4,4,8,0)
 end
 
-return Bag
+return bag

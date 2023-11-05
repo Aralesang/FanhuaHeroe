@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 11,
-  nextobjectid = 14,
+  nextobjectid = 17,
   properties = {},
   tilesets = {
     {
@@ -486,13 +486,39 @@ return {
       objects = {
         {
           id = 12,
-          name = "player",
-          type = "",
+          name = "露比",
+          type = "ruby",
           shape = "rectangle",
-          x = 304.532,
-          y = 208.386,
-          width = 14.4007,
-          height = 13.9771,
+          x = 336.569,
+          y = 207.554,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 15,
+          name = "玩家",
+          type = "player",
+          shape = "rectangle",
+          x = 299.843,
+          y = 207.49,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 16,
+          name = "史莱姆",
+          type = "slim",
+          shape = "rectangle",
+          x = 303.413,
+          y = 161.983,
+          width = 16,
+          height = 16,
           rotation = 0,
           visible = true,
           properties = {}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="14">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="17">
  <editorsettings>
   <export target="../scenes/test_map.lua" format="lua"/>
  </editorsettings>
@@ -112,7 +112,9 @@
   </tile>
  </tileset>
  <objectgroup id="10" name="对象">
-  <object id="12" name="player" x="304.532" y="208.386" width="14.4007" height="13.9771"/>
+  <object id="12" template="role.tx" name="露比" type="ruby" x="336.569" y="207.554"/>
+  <object id="15" template="role.tx" type="player" x="299.843" y="207.49"/>
+  <object id="16" template="role.tx" name="史莱姆" type="slim" x="303.413" y="161.983"/>
  </objectgroup>
  <layer id="2" name="地面" width="40" height="23" locked="1">
   <data encoding="csv">

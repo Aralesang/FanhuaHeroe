@@ -17,7 +17,7 @@ function Item:new()
 end
 
 ---使用该物品
----@param target Role 使用道具的对象
+---@param target role 使用道具的对象
 function Item:use(target)
     --增加记述在道具上的属性
     local stats = self.stats
@@ -38,7 +38,7 @@ function Item:use(target)
 end
 
 ---装备该物品时
----@param target Role 装备的对象
+---@param target role 装备的对象
 function Item:equip(target)
     --如果没有装备槽则无法装备
     if not self.slot then
@@ -52,7 +52,7 @@ function Item:equip(target)
 end
 
 ---卸载该物品时
----@param target Role 卸载道具的对象
+---@param target role 卸载道具的对象
 function Item:unequip(target)
     --如果没有装备槽则无法装备
     if not self.slot then

@@ -7,7 +7,7 @@ local bump          = require "scripts.utils.bump"
 local debug         = require "scripts.utils.debug"
 local slim          = require "scripts.game.slim"
 local anim_manager  = require "scripts.manager.anim_manager"
-local item_manager  = require "scripts.manager.item_manager"
+ItemManager         = require "scripts.manager.item_manager"
 local role_manager  = require "scripts.manager.role_manager"
 local fsm           = require "scripts.game.fsm"
 local timer         = require "scripts.utils.hump.timer"
@@ -36,7 +36,7 @@ function love.load()
 
     --加载系统管理器
     anim_manager:init()
-    item_manager:init()
+    ItemManager:init()
     role_manager:init()
     skill_manager:init()
     ui_manager:init()
@@ -58,22 +58,22 @@ function love.load()
         local objects = value.objects
         if objects then
             for _, object in pairs(objects) do
-                if object.name == "player" then
+                if object.type == "player" then
                     --实例化角色对象
                     ---@type player
                     player = player_class:new(object.x, object.y)
-                    player.name = "player"
+                elseif object.type == "ruby" then
+                    ruby:new(object.x, object.y)
+                elseif object.type == "slim" then
+                    slim:new(object.x, object.y)
                 end
             end
         end
     end
-
-
-    Game.camera = camera(0, 0, 3)
-    ---@type slim
-    slim:new(390, 40)
-
-    ruby:new(300, 50)
+    --构造主摄像机
+    Game.camera = camera(0, 0, Config.scale)
+    --道具快捷栏
+    ui_manager:show("bag")
     print("游戏初始化完毕!")
 end
 
@@ -133,7 +133,7 @@ function love.draw()
             gameObject.equipment:draw()
         end
     end
-    if Config.ShowCollision then
+    if Config.show_collision then
         --绘制碰撞体积
         map:bump_draw()
     end
