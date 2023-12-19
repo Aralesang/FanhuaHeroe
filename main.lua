@@ -153,6 +153,11 @@ function love.keypressed(key)
     for _, value in pairs(Game.gameObjects) do
         value:keypressed(key)
     end
+    --触发ui按键事件
+    local uis = ui_manager.uis
+    for _, ui in pairs(uis) do
+        ui:keypressed(key)
+    end
 end
 
 --按键释放

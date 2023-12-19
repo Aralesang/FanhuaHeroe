@@ -101,4 +101,15 @@ function bag:drwa()
     end
 end
 
+---键盘按下
+---@param key number 键盘键入值
+function bag:keypressed(key)
+    if tonumber(key) then
+        local item_id = self.cells[tonumber(key)]
+        if item_id then
+            item_manager:use(item_id, Game.player)
+        end
+    end
+end
+
 return bag

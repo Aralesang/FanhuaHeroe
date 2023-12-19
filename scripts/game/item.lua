@@ -1,6 +1,7 @@
 
 ---@class item : class 道具
 ---@field id number 道具id
+---@field type number 道具类型
 ---@field name string 道具名称
 ---@field description string 道具描述
 ---@field stats table<string,number> 影响的属性列表

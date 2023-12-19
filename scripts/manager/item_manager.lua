@@ -69,7 +69,7 @@ function item_manager:getItem(id)
     end
     local item = self.items[id]
     if item == nil then
-        error(string.format("目标id的道具不存在:%d",id))
+        error(string.format("目标id的道具不存在:%d", id))
     end
     return item
 end
@@ -93,7 +93,7 @@ end
 ---@param use? fun(item:item,target:game_object) 使用道具的逻辑
 ---@param equip? fun(item:item,target:game_object) 装备道具的逻辑
 ---@param unequip? fun(item:item,target: game_object) 卸下道具的逻辑
-function item_manager:register(id, use, equip,unequip)
+function item_manager:register(id, use, equip, unequip)
     if self.items[id] == nil then
         error("注册道具时出错,目标id不存在:" .. id)
     end
@@ -110,7 +110,7 @@ end
 
 ---注册道具特殊效果
 function item_manager:batchItems()
-    
+
 end
 
 ---创建一个掉落物
@@ -121,7 +121,7 @@ end
 function item_manager:createDrop(itemId, x, y)
     local item = self:getItem(itemId)
     ---@type Drop
-    local drop = drop:new(itemId, item.name, x, y,item.icon)
+    local drop = drop:new(itemId, item.name, x, y, item.icon)
     Game:addDrops(drop)
     return drop
 end
@@ -129,17 +129,27 @@ end
 ---使用道具
 ---@param id number 道具id
 ---@param target role 使用对象
-function item_manager:use(id,target)
+function item_manager:use(id, target)
     --库存中寻找目标道具
     if not target.items[id] then
         print("未拥有物品:" .. id)
         return false
     end
     local item = item_manager:getItem(id)
-     --调用目标物品的使用函数
-     item:use(target)
-     target:removeItem(id,1)
-    
+    if item.type == 1 then
+        --调用目标物品的使用函数
+        item:use(target)
+        target:removeItem(id, 1)
+    end
+    if item.type == 2 then
+        --检查玩家是否已经装备着这种装备了
+        local equip_id = target.equips[item.slot]
+        if equip_id == id then --已经装备的情况下就脱下
+            target.equipment:unequip(item.slot)
+        else --未装备的情况下装备上
+            target.equipment:equip(id)
+        end
+    end
 end
 
 return item_manager
