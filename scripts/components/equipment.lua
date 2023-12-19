@@ -5,11 +5,11 @@ local item_manager = require "scripts.manager.item_manager"
 ---@class equipment:component 装备组件
 ---@field slots table<string,slot> 装备槽
 ---@field animation animation | nil 动画组件
-local equipment = Class('Equipment',component)
+local equipment = Class('Equipment', component)
 
 ---构造函数
 function equipment:initialize(target)
-    component.initialize(self,target)
+    component.initialize(self, target)
     self.game_object = target
     self.animation = target.animation
     self.slots = {}
@@ -72,13 +72,13 @@ function equipment:draw_equip(name)
         return
     end
     local image = anim.image
-        local quad = anim.quad
-        local game_object = self.game_object
-        local x = game_object.x - self.game_object.central.x * self.game_object.scale.x
-        local y = game_object.y - self.game_object.central.y * self.game_object.scale.y
-        x = math.floor(x)
-        y = math.floor(y)
-        love.graphics.draw(image, quad, x, y, game_object.rotate, game_object.scale.x, game_object.scale.y, 0, 0, 0, 0)
+    local quad = anim.quad
+    local game_object = self.game_object
+    local x = game_object.x - self.game_object.central.x * self.game_object.scale.x
+    local y = game_object.y - self.game_object.central.y * self.game_object.scale.y
+    x = math.floor(x)
+    y = math.floor(y)
+    love.graphics.draw(image, quad, x, y, game_object.rotate, game_object.scale.x, game_object.scale.y, 0, 0, 0, 0)
 end
 
 ---@alias slot_alias
@@ -145,6 +145,8 @@ function equipment:equip(itemId)
                 item:equip(self.game_object --[[@as role]])
             end
             slot.itemId = itemId
+            --重新构造装备图像
+            slot:reset_anim()
             return
         end
     end

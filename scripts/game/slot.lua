@@ -50,6 +50,8 @@ function Slot:get_anim(name)
             end
             return
         end
+        print("构造动画" .. imgPath)
+
         local img = love.graphics.newImage(imgPath)
         if img == nil then
             error("目标装备动画不存在:" .. imgPath)
@@ -57,9 +59,46 @@ function Slot:get_anim(name)
         local animTemp = AnimManager.getAnim(name)
         ---@type anim
         anim = Anim(animTemp.name, img, animTemp.frame)
-        self.anims[anim.name] = anim
+        self.anims[name] = anim
     end
     return anim
+end
+
+---重设动画
+function Slot:reset_anim()
+    if not self.anims then
+        return
+    end
+    --获取玩家能使用的所有动画
+    for key, value in pairs(self.anims) do
+        local name = value.name
+        local equName --装备名称
+        local itemId = self.itemId
+        if self.type == "装备" then
+            equName = ItemManager:getItem(itemId).name
+        elseif self.type == "身体部件" then
+            equName = ItemManager:getHair(itemId).name
+        end
+        if not equName then
+            return nil
+        end
+        --动画图片路径组合规则:以装备id为文件夹区分，以动画id为最小单位
+        local imgPath = "image/anim/" .. equName .. "/" .. name .. ".png"
+        if self.exclude[imgPath] or not love.filesystem.getInfo(imgPath) then
+            if not self.exclude[imgPath] then
+                self.exclude[imgPath] = true
+            end
+            return
+        end
+        local img = love.graphics.newImage(imgPath)
+        if img == nil then
+            error("目标装备动画不存在:" .. imgPath)
+        end
+        local animTemp = AnimManager.getAnim(name)
+        ---@type anim
+        local anim = Anim(animTemp.name, img, animTemp.frame)
+        self.anims[name] = anim
+    end
 end
 
 return Slot
