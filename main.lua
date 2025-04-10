@@ -76,7 +76,7 @@ end
 
 --每帧逻辑处理
 ---@param dt number 距离上一帧的间隔时间
-function love.update(dt)    
+function love.update(dt)
     timer.update(dt)
     map:update(dt)
     Game.camera:lockPosition(player.x, player.y)
@@ -89,10 +89,6 @@ function love.update(dt)
         end
         if gameObject.update then
             gameObject:update(dt)
-            --如果是角色对象,触发有限状态机
-            if gameObject["state"] then
-                fsm.call(gameObject --[[@as role]], dt)
-            end
         end
         ---@cast gameObject role
         if gameObject.animation then
@@ -167,6 +163,7 @@ function love.keyreleased(key)
 end
 
 function love.run()
+    ---@diagnostic disable-next-line: undefined-field, redundant-parameter
     if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
 
     -- 初始化 FPS 控制
@@ -183,7 +180,7 @@ function love.run()
         -- 如果还没到下一帧的时间，就 sleep 剩余时间
         if deltaTime < frameTime then
             love.timer.sleep(frameTime - deltaTime)
-            return  -- 跳过这帧，等待下一帧
+            return -- 跳过这帧，等待下一帧
         end
 
         -- 更新 lastTime（固定步长，避免累积误差）
@@ -194,10 +191,12 @@ function love.run()
             love.event.pump()
             for name, a, b, c, d, e, f in love.event.poll() do
                 if name == "quit" then
+                    ---@diagnostic disable-next-line: undefined-field
                     if not love.quit or not love.quit() then
                         return a or 0
                     end
                 end
+                ---@diagnostic disable-next-line: undefined-field
                 love.handlers[name](a, b, c, d, e, f)
             end
         end

@@ -50,11 +50,13 @@ end
 ---@param state state 目标状态
 ---@return boolean result 是否成功
 function FSM.change(role,state)
+    --print("改变状态:"..state)
     --获取目标当前状态
     local curState = role.state
     --如果目前没有任何状态,则无视条件成功
     if curState == nil then
         role.state = state
+        FSM.call(role,0)
         return true
     end
     --判断是否可以进入目标分支
@@ -63,6 +65,7 @@ function FSM.change(role,state)
         return false
     end
     role.state = state
+    FSM.call(role,0)
     return true
 end
 

@@ -1,15 +1,15 @@
-local role         = require "scripts.game.role"
-local state        = require "scripts.enums.state"
+local role          = require "scripts.game.role"
+local state         = require "scripts.enums.state"
 local skill_manager = require "scripts.manager.skill_manager"
 local item_manager  = require "scripts.manager.item_manager"
 ---@type bag
-local bag          = require "scripts.game.bag"
+local bag           = require "scripts.game.bag"
 
 ---@class player : role 玩家对象
 ---@field nickname string 角色名称
 ---@field key_list string[] 按键记录
 ---@field range number 射程
-local player       = Class('Player', role)
+local player        = Class('Player', role)
 
 function player:initialize(x, y)
     role.initialize(self, 1, x, y)
@@ -20,8 +20,8 @@ function player:initialize(x, y)
 end
 
 function player:load()
-    --播放默认动画
-    self.animation:play("闲置")
+    --设置默认状态
+    self:set_state(state.idle)
 end
 
 function player:update(dt)
@@ -31,33 +31,19 @@ function player:update(dt)
     if self.equipment == nil then
         error("角色未找到装备组件")
     end
-    
+    --如果处于移动状态
+    if self.state == state.walking then
+        self:walk_state(dt)
+    end
 end
 
 ---如果进入闲置状态
 function player:idle_state()
     self.animation:play("闲置")
-    --处于闲置状态下，此时如果检测到方向键被按下，则进入移动
-    --寻找最后一个按住的方向键
-    for i = #self.key_list, 1, -1 do
-        local key = self.key_list[i]
-        --如果按了任何方向键，进入移动状态
-        if key == "up" or key == "down" or
-            key == "left" or key == "right" then
-            self:set_state(state.walking)
-            break
-        end
-        if key == "x" then
-            self:set_state(state.attack)
-            self:attack_state()
-            break
-        end
-    end
 end
 
 --如果进入移动状态
 function player:walk_state(dt)
-    local isMove = false
     --寻找最后一个按住的方向键
     for i = #self.key_list, 1, -1 do
         local key = self.key_list[i]
@@ -92,25 +78,16 @@ function player:walk_state(dt)
                     Game:remove_game_object(drop)
                 end
             end
-            isMove = true
             break
         end
-        if key == "x" then
-            if self:set_state(state.attack) then
-                self:attack_state()
-            end
-            break
-        end
-    end
-    --没有按住任何有功能的按键,回到闲置
-    if isMove == false then
-        self:set_state(state.idle)
     end
 end
 
 ---普通攻击
 function player:attack_state()
     print("普通攻击")
+    local sound = love.audio.newSource("audio/sfx/Hit 1.wav", "stream")
+    love.audio.play(sound)
     self.animation:play("挥击", function(index)
         if index == 3 then
             print("触发伤害帧!")
@@ -148,7 +125,12 @@ end
 ---按键检测
 ---@param key string
 function player:keypressed(key)
-    table.insert(self.key_list, key)
+    --print("按键:" .. key)
+    if key == "up" or key == "down" or
+        key == "left" or key == "right" then
+        self:set_state(state.walking)
+        table.insert(self.key_list, key)
+    end
     if key == "q" then
         item_manager:use(1, self)
     end
@@ -187,6 +169,9 @@ function player:keypressed(key)
             touch:talk(self)
         end
     end
+    if key == "x" then
+        self:set_state(state.attack)
+    end
 end
 
 ---按键释放
@@ -197,6 +182,13 @@ function player:keyreleased(key)
             table.remove(self.key_list, k)
             break
         end
+    end
+    --假设松开的是方向键，且确实处于移动中，且所有方向键均已松开
+    if key == "up" or key == "down" or
+        key == "left" or key == "right" then
+       if self.state == state.walking and #self.key_list == 0 then
+           self:set_state(state.idle)
+       end
     end
 end
 

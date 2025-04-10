@@ -24,7 +24,6 @@ local role        = Class('Role', game_object)
 ---@param y number
 function role:initialize(roleId, x, y)
     game_object.initialize(self, x, y)
-    self:set_state(state.idle)
     self.animation = animation:new(self)
     self.equipment = equipment:new(self)
     self.skills = {}
@@ -90,13 +89,13 @@ function role:damage(obj, atk)
     if hp == 0 then
         self:set_state(state.death)
     end
-    self:onDamage(obj, atk)
+    self:on_damage(obj, atk)
 end
 
 ---抽象受伤函数
 ---@param obj game_object 伤害来源
 ---@param atk number 攻击力
-function role:onDamage(obj, atk) end
+function role:on_damage(obj, atk) end
 
 ---设置状态
 ---@param state state

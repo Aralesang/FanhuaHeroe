@@ -105,6 +105,9 @@ end
 
 ---死亡
 function slim:death_state()
+    print(self.name .. "死了")
+    local sound = love.audio.newSource("audio/sfx/explosion.wav", "stream")
+    love.audio.play(sound)
     if self.animation:get_anim_name() ~= "死亡_史莱姆" then
         self.animation:play("死亡_史莱姆", nil, function()
             --在死亡位置创建一个掉落物
@@ -119,12 +122,10 @@ function slim:death_state()
     end
 end
 
-function slim:on_destroy()
-    print(self.name .. "死了")
-end
-
 ---受伤状态
 function slim:damage_state()
+    local sound = love.audio.newSource("audio/sfx/hitHurt.wav", "stream")
+    love.audio.play(sound)
     self.animation:play("受伤_史莱姆", nil, function()
         --print("史莱姆挨打结束")
         self:set_state(state.idle)

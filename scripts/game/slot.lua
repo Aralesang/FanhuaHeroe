@@ -50,7 +50,7 @@ function Slot:get_anim(name)
             end
             return
         end
-        print("构造动画" .. imgPath)
+        --print("构造动画" .. imgPath)
 
         local img = love.graphics.newImage(imgPath)
         if img == nil then
