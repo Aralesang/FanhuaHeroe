@@ -20,11 +20,8 @@ local test_map      = require "scenes.test_map"
 ---@type map
 local map
 local player
+
 function love.load()
-    -- if love.system.getOS() == "Windows" then
-    --     print("将终端字体设置为65001")
-    --     os.execute("chcp 65001") -- 设置代码页为UTF-8
-    -- end
     print("游戏初始化...")
     --加载中文字体(启动会很缓慢)
     print("加载中文字体...")
@@ -79,7 +76,7 @@ end
 
 --每帧逻辑处理
 ---@param dt number 距离上一帧的间隔时间
-function love.update(dt)
+function love.update(dt)    
     timer.update(dt)
     map:update(dt)
     Game.camera:lockPosition(player.x, player.y)
@@ -166,5 +163,57 @@ function love.keyreleased(key)
     --触发对象输入事件
     for _, value in pairs(Game.gameObjects) do
         value:keyreleased(key)
+    end
+end
+
+function love.run()
+    if love.load then love.load(love.arg.parseGameArguments(arg), arg) end
+
+    -- 初始化 FPS 控制
+    local desiredFPS = 60
+    local frameTime = 1 / desiredFPS
+    local lastTime = love.timer.getTime()
+
+    -- 主循环
+    return function()
+        -- 计算当前帧的时间差
+        local currentTime = love.timer.getTime()
+        local deltaTime = currentTime - lastTime
+
+        -- 如果还没到下一帧的时间，就 sleep 剩余时间
+        if deltaTime < frameTime then
+            love.timer.sleep(frameTime - deltaTime)
+            return  -- 跳过这帧，等待下一帧
+        end
+
+        -- 更新 lastTime（固定步长，避免累积误差）
+        lastTime = lastTime + frameTime
+
+        -- 处理事件
+        if love.event then
+            love.event.pump()
+            for name, a, b, c, d, e, f in love.event.poll() do
+                if name == "quit" then
+                    if not love.quit or not love.quit() then
+                        return a or 0
+                    end
+                end
+                love.handlers[name](a, b, c, d, e, f)
+            end
+        end
+
+        -- 更新游戏逻辑（传入固定 dt）
+        if love.update then love.update(frameTime) end
+
+        -- 绘制
+        if love.graphics and love.graphics.isActive() then
+            love.graphics.clear(love.graphics.getBackgroundColor())
+            love.graphics.origin()
+            if love.draw then love.draw() end
+            love.graphics.present()
+        end
+
+        -- 控制帧率（防止超快循环）
+        love.timer.step()
     end
 end

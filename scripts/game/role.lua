@@ -100,8 +100,9 @@ function role:onDamage(obj, atk) end
 
 ---设置状态
 ---@param state state
+---@return boolean 是否成功切换
 function role:set_state(state)
-    fsm.change(self, state)
+    return fsm.change(self, state)
 end
 
 ---改变属性值

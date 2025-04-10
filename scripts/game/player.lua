@@ -49,6 +49,7 @@ function player:idle_state()
         end
         if key == "x" then
             self:set_state(state.attack)
+            self:attack_state()
             break
         end
     end
@@ -95,7 +96,9 @@ function player:walk_state(dt)
             break
         end
         if key == "x" then
-            self:set_state(state.attack)
+            if self:set_state(state.attack) then
+                self:attack_state()
+            end
             break
         end
     end
@@ -107,6 +110,7 @@ end
 
 ---普通攻击
 function player:attack_state()
+    print("普通攻击")
     self.animation:play("挥击", function(index)
         if index == 3 then
             print("触发伤害帧!")
